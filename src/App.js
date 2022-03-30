@@ -1,25 +1,35 @@
-import logo from './logo.svg';
 import './App.css';
+import {List, ListItem, ListItemText, styled} from "@mui/material";
+import {useEffect, useState} from "react";
+
+const Content = styled('div')({
+    display: 'flex',
+    flexDirection: 'row'
+})
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [xml, setXml] = useState(undefined);
+    useEffect(() => {
+        async function load() {
+            const res = await fetch('/.netlify/functions/feed');
+            if (res.ok) {
+                setXml(await res.text());
+            }
+        }
+        load();
+    }, []);
+    return (
+        <Content>
+            <List>
+                <ListItem>
+                    <ListItemText primary="The Clean Code Blog" secondary="http://blog.cleancoder.com/atom.xml"/>
+                </ListItem>
+            </List>
+            <div>
+                {xml}
+            </div>
+        </Content>
+    );
 }
 
 export default App;

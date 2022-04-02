@@ -2,25 +2,12 @@ import './App.css';
 import {List, ListItem, ListItemText, styled} from "@mui/material";
 import {useEffect, useState} from "react";
 import htmlParse from 'html-react-parser';
+import RssEntries from "./RssEntries";
 
 const Content = styled('div')({
     display: 'flex',
     flexDirection: 'row'
-})
-
-function getEntry(entry) {
-    return (
-        <ListItem key={entry.id}>
-            <ListItemText primary={entry.title} secondary={entry.updated}/>
-        </ListItem>
-    );
-}
-
-function getEntries(entries) {
-    return (<List>
-        {entries.map(e => getEntry(e))}
-    </List>);
-}
+});
 
 function getEntryContent(entries) {
     return (
@@ -49,8 +36,11 @@ function App() {
                 <ListItem>
                     <ListItemText primary="The Clean Code Blog" secondary="http://blog.cleancoder.com/atom.xml"/>
                 </ListItem>
+                <ListItem>
+                    <ListItemText primary="RWieruch" secondary="https://www.robinwieruch.de/index.xml"/>
+                </ListItem>
             </List>
-            {getEntries(entries)}
+            <RssEntries entries={entries}/>
             <div>
                 {getEntryContent(entries)}
             </div>

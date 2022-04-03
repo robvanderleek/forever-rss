@@ -5,7 +5,11 @@ import reportWebVitals from './reportWebVitals';
 import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import ReactDOMClient from "react-dom/client";
 
-const theme = createTheme({palette: {mode: "dark"}});
+const theme = createTheme({
+    palette: {
+        mode: "dark"
+    }
+});
 const rootElement = document.getElementById('root');
 ReactDOMClient.createRoot(rootElement).render(<React.StrictMode>
     <ThemeProvider theme={theme}>

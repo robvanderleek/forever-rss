@@ -1,7 +1,7 @@
 import {List, ListItem, ListItemButton, ListItemText} from "@mui/material";
 import {useState} from "react";
 
-export default function RssEntries(props) {
+export default function Entries(props) {
     const {entries} = props;
     const [selectedIndex, setSelectedIndex] = useState(-1);
 
@@ -14,7 +14,6 @@ export default function RssEntries(props) {
             </ListItem>
         );
     }
-
 
     return (
         <List>

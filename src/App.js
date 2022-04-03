@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import htmlParse from 'html-react-parser';
 import Entries from "./Entries";
 import Feeds from "./Feeds";
-import {HotKeys} from "react-hotkeys";
+import {useHotkeys} from "react-hotkeys-hook";
 
 const Main = styled('div')({
     height: '100%',
@@ -14,7 +14,8 @@ const Main = styled('div')({
 });
 
 const Section = styled('div')((props) => ({
-    border: props.active ? 'solid' : 'none',
+    borderStyle: props.active ? 'solid' : 'none',
+    borderWidth: '1px',
     padding: props.active ? '0px' : '1px'
 }));
 
@@ -48,27 +49,17 @@ function App() {
     const [activeSection, setActiveSection] = useState(0);
     const [entries, setEntries] = useState([]);
 
-    const keyMap = {
-        ARROW_LEFT: "left",
-        ARROW_RIGHT: "right"
-    };
-
-    function arrowLeft() {
+    useHotkeys('left', () => {
         if (activeSection > 0) {
             setActiveSection(activeSection - 1);
         }
-    }
+    }, [activeSection]);
 
-    function arrowRight() {
+    useHotkeys('right', () => {
         if (activeSection < 2) {
             setActiveSection(activeSection + 1);
         }
-    }
-
-    const handlers = {
-        ARROW_LEFT: arrowLeft,
-        ARROW_RIGHT: arrowRight
-    };
+    }, [activeSection]);
 
     useEffect(() => {
         async function load() {
@@ -82,7 +73,7 @@ function App() {
         load();
     }, []);
     return (
-        <HotKeys keyMap={keyMap} handlers={handlers} component={Main} allowChanges={true}>
+        <Main>
             <FeedsSection active={+(activeSection === 0)}>
                 <Feeds feeds={feeds}/>
             </FeedsSection>
@@ -92,7 +83,7 @@ function App() {
             <ContentSection active={+(activeSection === 2)}>
                 {getEntryContent(entries)}
             </ContentSection>
-        </HotKeys>
+        </Main>
     );
 }
 

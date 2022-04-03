@@ -1,9 +1,22 @@
 import {List, ListItem, ListItemButton, ListItemText} from "@mui/material";
 import {useState} from "react";
+import {useHotkeys} from "react-hotkeys-hook";
 
 export default function Feeds(props) {
     const {feeds} = props;
-    const [selectedIndex, setSelectedIndex] = useState(-1);
+    const [selectedIndex, setSelectedIndex] = useState(0);
+
+    useHotkeys('up', () => {
+        if (selectedIndex > 0) {
+            setSelectedIndex(selectedIndex - 1);
+        }
+    }, [selectedIndex]);
+
+    useHotkeys('down', () => {
+        if (selectedIndex < feeds.length - 1) {
+            setSelectedIndex(selectedIndex + 1);
+        }
+    }, [selectedIndex]);
 
     function getFeed(entry, index) {
         return (

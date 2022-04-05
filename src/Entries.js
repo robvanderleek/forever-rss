@@ -1,8 +1,9 @@
 import {List, ListItem, ListItemButton, ListItemText} from "@mui/material";
 import {useState} from "react";
+import {useFeeds} from "./FeedsContext";
 
-export default function Entries(props) {
-    const {entries} = props;
+export default function Entries() {
+    const {entries} = useFeeds();
     const [selectedIndex, setSelectedIndex] = useState(-1);
 
     function getEntry(entry, index) {

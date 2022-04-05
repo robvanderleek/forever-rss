@@ -40,11 +40,6 @@ function getEntryContent(entries) {
 }
 
 
-const feeds = [
-    {title: 'The Clean Code Blog', url: 'http://blog.cleancoder.com/atom.xml'},
-    {title: 'RWieruch', url: 'https://www.robinwieruch.de/index.xml'}
-];
-
 function App() {
     const [activeSection, setActiveSection] = useState(0);
     const [entries, setEntries] = useState([]);
@@ -63,7 +58,7 @@ function App() {
 
     useEffect(() => {
         async function load() {
-            const res = await fetch('/.netlify/functions/feed');
+            const res = await fetch('/.netlify/functions/feed?url=' + encodeURIComponent('http://blog.cleancoder.com/atom.xml'));
             if (res.ok) {
                 const json = await res.json();
                 setEntries(json.message);
@@ -75,10 +70,10 @@ function App() {
     return (
         <Main>
             <FeedsSection active={+(activeSection === 0)}>
-                <Feeds feeds={feeds}/>
+                <Feeds/>
             </FeedsSection>
             <EntriesSection active={+(activeSection === 1)}>
-                <Entries entries={entries}/>
+                <Entries/>
             </EntriesSection>
             <ContentSection active={+(activeSection === 2)}>
                 {getEntryContent(entries)}

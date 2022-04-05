@@ -4,6 +4,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import ReactDOMClient from "react-dom/client";
+import {FeedsContextProvider} from "./FeedsContext";
 
 const theme = createTheme({
     palette: {
@@ -14,7 +15,9 @@ const rootElement = document.getElementById('root');
 ReactDOMClient.createRoot(rootElement).render(<React.StrictMode>
     <ThemeProvider theme={theme}>
         <CssBaseline/>
-        <App/>
+        <FeedsContextProvider>
+            <App/>
+        </FeedsContextProvider>
     </ThemeProvider>
 </React.StrictMode>);
 reportWebVitals();

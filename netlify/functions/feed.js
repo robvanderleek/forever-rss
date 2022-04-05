@@ -2,7 +2,8 @@ const fetch = require("node-fetch");
 const {XMLParser} = require("fast-xml-parser");
 
 exports.handler = async function (event, context) {
-    const response = await fetch('http://blog.cleancoder.com/atom.xml');
+    const url = event.queryStringParameters.url;
+    const response = await fetch(url);
     const result = [];
     if (response.ok) {
         const text = await response.text();

@@ -1,28 +1,26 @@
 import {List, ListItem, ListItemButton, ListItemText} from "@mui/material";
-import {useState} from "react";
 import {useHotkeys} from "react-hotkeys-hook";
 import {useFeeds} from "./FeedsContext";
 
-export default function Feeds(props) {
-    const {allFeeds} = useFeeds();
-    const [selectedIndex, setSelectedIndex] = useState(0);
+export default function Feeds() {
+    const {allFeeds, selectedFeed, setSelectedFeed} = useFeeds();
 
     useHotkeys('up', () => {
-        if (selectedIndex > 0) {
-            setSelectedIndex(selectedIndex - 1);
+        if (selectedFeed > 0) {
+            setSelectedFeed(selectedFeed - 1);
         }
-    }, [selectedIndex]);
+    }, [selectedFeed]);
 
     useHotkeys('down', () => {
-        if (selectedIndex < allFeeds.length - 1) {
-            setSelectedIndex(selectedIndex + 1);
+        if (selectedFeed < allFeeds.length - 1) {
+            setSelectedFeed(selectedFeed + 1);
         }
-    }, [selectedIndex]);
+    }, [selectedFeed, allFeeds]);
 
     function getFeed(entry, index) {
         return (
             <ListItem key={index}>
-                <ListItemButton selected={selectedIndex === index} onClick={() => setSelectedIndex(index)}>
+                <ListItemButton selected={selectedFeed === index} onClick={() => setSelectedFeed(index)}>
                     <ListItemText primary={entry.title} secondary={entry.url}/>
                 </ListItemButton>
             </ListItem>

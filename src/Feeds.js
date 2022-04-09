@@ -1,4 +1,4 @@
-import {List, ListItem, ListItemButton, ListItemText, styled} from "@mui/material";
+import {List, ListItem, ListItemButton, ListItemText} from "@mui/material";
 import {useHotkeys} from "react-hotkeys-hook";
 import {useFeeds} from "./FeedsContext";
 import {useEffect, useRef} from "react";

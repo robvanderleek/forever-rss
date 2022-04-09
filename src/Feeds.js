@@ -1,7 +1,8 @@
-import {List, ListItem, ListItemButton, ListItemText} from "@mui/material";
+import {List, ListItem, ListItemButton, ListItemText, styled} from "@mui/material";
 import {useHotkeys} from "react-hotkeys-hook";
 import {useFeeds} from "./FeedsContext";
 import {useEffect, useRef} from "react";
+import {Area} from "./styles";
 
 export default function Feeds(props) {
     const {active} = props;
@@ -26,7 +27,7 @@ export default function Feeds(props) {
         if (active) {
             refDiv.current.focus();
         }
-    }, [refDiv.current, active]);
+    }, [active, refUp, refDown]);
 
     function getFeed(entry, index) {
         return (
@@ -39,10 +40,10 @@ export default function Feeds(props) {
     }
 
     return (
-        <div tabIndex={-1} ref={refDiv}>
+        <Area tabIndex={-1} ref={refDiv}>
             <List>
                 {allFeeds.map((e, i) => getFeed(e, i))}
             </List>
-        </div>
+        </Area>
     );
 }

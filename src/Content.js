@@ -1,21 +1,22 @@
 import htmlParse from "html-react-parser";
 import {useFeeds} from "./FeedsContext";
 import {useEffect, useRef} from "react";
+import {Area} from "./styles";
 
 export default function Content(props) {
     const {active} = props;
-    const {entries} = useFeeds();
+    const {entries, selectedEntry} = useFeeds();
     const refDiv = useRef(null);
 
     useEffect(() => {
         if (active) {
             refDiv.current.focus();
         }
-    }, [refDiv.current, active]);
+    }, [active]);
 
     return (
-        <div tabIndex={-1} ref={refDiv}>
-            {entries.length >= 1 && htmlParse(entries[0].content)}
-        </div>
+        <Area tabIndex={-1} ref={refDiv}>
+            {entries.length >= 1 && htmlParse(entries[selectedEntry].content)}
+        </Area>
     );
 }

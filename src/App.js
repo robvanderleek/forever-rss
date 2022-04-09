@@ -16,15 +16,16 @@ const Main = styled('div')({
 const Section = styled('div')((props) => ({
     borderStyle: props.active ? 'solid' : 'none',
     borderWidth: '1px',
-    padding: props.active ? '0px' : '1px'
+    padding: props.active ? '0px' : '1px',
+    overflow: 'auto'
 }));
 
 const FeedsSection = styled(Section)({
-    width: '20%',
+    width: '20%'
 });
 
 const EntriesSection = styled(Section)({
-    width: '25%',
+    width: '25%'
 });
 
 const ContentSection = styled(Section)({

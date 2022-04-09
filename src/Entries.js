@@ -1,19 +1,25 @@
 import {List, ListItem, ListItemButton, ListItemText} from "@mui/material";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useRef} from "react";
 import {useFeeds} from "./FeedsContext";
 import {useHotkeys} from "react-hotkeys-hook";
+import {Area} from "./styles";
 
 export default function Entries(props) {
     const {active} = props;
-    const {entries} = useFeeds();
-    const [selectedIndex, setSelectedIndex] = useState(-1);
+    const {entries, selectedEntry, setSelectedEntry} = useFeeds();
     const refDiv = useRef(null);
 
-    const refUp = useHotkeys('up', (e) => {
-    }, []);
+    const refUp = useHotkeys('up', () => {
+        if (selectedEntry > 0) {
+            setSelectedEntry(selectedEntry - 1);
+        }
+    }, [selectedEntry]);
 
-    const refDown = useHotkeys('down', (e) => {
-    }, []);
+    const refDown = useHotkeys('down', () => {
+        if (selectedEntry < entries.length - 1) {
+            setSelectedEntry(selectedEntry + 1);
+        }
+    }, [selectedEntry, entries]);
 
     useEffect(() => {
         refUp.current = refDiv.current;
@@ -21,12 +27,12 @@ export default function Entries(props) {
         if (active) {
             refDiv.current.focus();
         }
-    }, [refDiv.current, active]);
+    }, [active, refUp, refDown]);
 
     function getEntry(entry, index) {
         return (
             <ListItem key={index}>
-                <ListItemButton selected={selectedIndex === index} onClick={() => setSelectedIndex(index)}>
+                <ListItemButton selected={selectedEntry === index} onClick={() => setSelectedEntry(index)}>
                     <ListItemText primary={entry.title} secondary={entry.updated}/>
                 </ListItemButton>
             </ListItem>
@@ -34,10 +40,10 @@ export default function Entries(props) {
     }
 
     return (
-        <div tabIndex={-1} ref={refDiv}>
+        <Area tabIndex={-1} ref={refDiv}>
             <List>
                 {entries.map((e, i) => getEntry(e, i))}
             </List>
-        </div>
+        </Area>
     );
 }

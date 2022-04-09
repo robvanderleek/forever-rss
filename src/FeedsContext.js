@@ -6,6 +6,7 @@ export function FeedsContextProvider({children}) {
     const [allFeeds, setAllFeeds] = useState([]);
     const [selectedFeed, setSelectedFeed] = useState(0);
     const [entries, setEntries] = useState([]);
+    const [selectedEntry, setSelectedEntry] = useState(0);
 
     useEffect(() => {
         const feeds = [
@@ -21,15 +22,24 @@ export function FeedsContextProvider({children}) {
             if (res.ok) {
                 const json = await res.json();
                 setEntries(json.message);
+                setSelectedEntry(0);
             }
         }
+
         if (allFeeds.length > 0) {
             load();
         }
     }, [allFeeds, selectedFeed]);
 
     return (
-        <FeedsContext.Provider value={{allFeeds, entries, selectedFeed, setSelectedFeed}}>{children}</FeedsContext.Provider>
+        <FeedsContext.Provider value={{
+            allFeeds,
+            entries,
+            selectedFeed,
+            setSelectedFeed,
+            selectedEntry,
+            setSelectedEntry
+        }}>{children}</FeedsContext.Provider>
     )
 }
 

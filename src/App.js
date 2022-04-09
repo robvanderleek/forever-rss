@@ -1,10 +1,10 @@
 import './App.css';
 import {styled} from "@mui/material";
-import {useEffect, useState} from "react";
-import htmlParse from 'html-react-parser';
+import {useState} from "react";
 import Entries from "./Entries";
 import Feeds from "./Feeds";
 import {useHotkeys} from "react-hotkeys-hook";
+import Content from "./Content";
 
 const Main = styled('div')({
     height: '100%',
@@ -31,18 +31,8 @@ const ContentSection = styled(Section)({
     width: '55%'
 });
 
-function getEntryContent(entries) {
-    return (
-        <div>
-            {entries.length >= 1 && htmlParse(entries[0].content)}
-        </div>
-    );
-}
-
-
 function App() {
     const [activeSection, setActiveSection] = useState(0);
-    const [entries, setEntries] = useState([]);
 
     useHotkeys('left', () => {
         if (activeSection > 0) {
@@ -56,27 +46,16 @@ function App() {
         }
     }, [activeSection]);
 
-    useEffect(() => {
-        async function load() {
-            const res = await fetch('/.netlify/functions/feed?url=' + encodeURIComponent('http://blog.cleancoder.com/atom.xml'));
-            if (res.ok) {
-                const json = await res.json();
-                setEntries(json.message);
-            }
-        }
-
-        load();
-    }, []);
     return (
         <Main>
             <FeedsSection active={+(activeSection === 0)}>
-                <Feeds/>
+                <Feeds active={activeSection === 0}/>
             </FeedsSection>
             <EntriesSection active={+(activeSection === 1)}>
-                <Entries/>
+                <Entries active={activeSection === 1}/>
             </EntriesSection>
             <ContentSection active={+(activeSection === 2)}>
-                {getEntryContent(entries)}
+                <Content active={activeSection === 2}/>
             </ContentSection>
         </Main>
     );

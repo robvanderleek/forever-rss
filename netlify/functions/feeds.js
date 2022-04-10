@@ -1,9 +1,11 @@
 const fs = require("fs");
 const {XMLParser} = require("fast-xml-parser");
+const path = require("path");
 
 
 exports.handler = function (event, context) {
-    const opml = fs.readFileSync(require.resolve('./my.opml'), 'utf8');
+    const opmlPath = path.join(__dirname, 'my.opml');
+    const opml = fs.readFileSync(opmlPath, 'utf8');
     const options = {ignoreAttributes: false};
     const xmlParser = new XMLParser(options);
     const obj = xmlParser.parse(opml);

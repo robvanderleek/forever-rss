@@ -10,15 +10,20 @@ export function FeedsContextProvider({children}) {
     const [selectedEntry, setSelectedEntry] = useState(0);
 
     useEffect(() => {
-        const feeds = [{title: 'The Clean Code Blog', url: 'http://blog.cleancoder.com/atom.xml'}, {
-            title: 'RWieruch', url: 'https://www.robinwieruch.de/index.xml'
-        }];
-        setAllFeeds(feeds);
+        async function loadFeeds() {
+            const res = await fetch('/.netlify/functions/feeds');
+            if (res.ok) {
+                const feeds = await res.json();
+                setAllFeeds(feeds);
+            }
+        }
+
+        loadFeeds();
     }, []);
 
     useEffect(() => {
         async function loadEntries() {
-            const res = await fetch('/.netlify/functions/feed?url=' + encodeURIComponent(allFeeds[selectedFeed].url));
+            const res = await fetch('/.netlify/functions/entries?url=' + encodeURIComponent(allFeeds[selectedFeed].url));
             if (res.ok) {
                 const json = await res.json();
                 setEntries(json.message);

@@ -1,2 +1,2 @@
 [functions]
-  included_files = ["/**.opml"]
+  included_files = ["netlify/functions/**.opml"]

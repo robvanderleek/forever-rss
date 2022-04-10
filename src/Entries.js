@@ -2,11 +2,12 @@ import {List, ListItem, ListItemButton, ListItemText} from "@mui/material";
 import {useEffect, useRef} from "react";
 import {useFeeds} from "./FeedsContext";
 import {useHotkeys} from "react-hotkeys-hook";
-import {Area} from "./styles";
+import {Area, CenteredArea} from "./styles";
+import Loader from "react-loaders";
 
 export default function Entries(props) {
     const {active} = props;
-    const {entries, selectedEntry, setSelectedEntry} = useFeeds();
+    const {entries, entriesLoading, selectedEntry, setSelectedEntry} = useFeeds();
     const refDiv = useRef(null);
 
     const refUp = useHotkeys('up', () => {
@@ -39,11 +40,21 @@ export default function Entries(props) {
         );
     }
 
-    return (
-        <Area tabIndex={-1} ref={refDiv}>
-            <List>
-                {entries.map((e, i) => getEntry(e, i))}
-            </List>
-        </Area>
-    );
+    if (entriesLoading) {
+        return (
+            <Area tabIndex={-1} ref={refDiv}>
+                <CenteredArea>
+                    <Loader type="line-scale-pulse-out"  active/>
+                </CenteredArea>
+            </Area>
+        )
+    } else {
+        return (
+            <Area tabIndex={-1} ref={refDiv}>
+                <List>
+                    {entries.map((e, i) => getEntry(e, i))}
+                </List>
+            </Area>
+        );
+    }
 }

@@ -1,4 +1,5 @@
 import './App.css';
+import 'loaders.css';
 import {styled} from "@mui/material";
 import {useState} from "react";
 import Entries from "./Entries";

@@ -6,20 +6,7 @@ import Entries from "./Entries";
 import Feeds from "./Feeds";
 import {useHotkeys} from "react-hotkeys-hook";
 import Content from "./Content";
-
-const Main = styled('div')({
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    outline: 'none'
-});
-
-const Section = styled('div')((props) => ({
-    borderStyle: props.active ? 'solid' : 'none',
-    borderWidth: '1px',
-    padding: props.active ? '0px' : '1px',
-    overflow: 'auto'
-}));
+import {Main, Section} from "./styles";
 
 const FeedsSection = styled(Section)({
     width: '20%'

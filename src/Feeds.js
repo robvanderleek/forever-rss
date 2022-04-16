@@ -11,20 +11,17 @@ import {useHotkeys} from "react-hotkeys-hook";
 import {useFeeds} from "./FeedsContext";
 import {useEffect, useRef} from "react";
 import {Area} from "./styles";
+import {RssFeed} from "@mui/icons-material";
 
-// #ac93d4
-const ListItem = styled(MuiListItem)({
-    filter: 'invert(78%) sepia(31%) saturate(2282%) hue-rotate(201deg) brightness(89%) contrast(85%)',
-    // filter: 'grayscale(100%)',
-    '&:hover': {
-        filter: 'none'
-    }
-});
+const ListItem = styled(MuiListItem)(props => ({
+    color: props.active ? '#ac93d4' : 'none'
+}));
 
-const Avatar = styled(MuiAvatar)({
+const Avatar = styled(MuiAvatar)(props => ({
     width: '24px',
     height: '24px',
-});
+    backgroundColor: props.active ? '#ac93d4' : 'none'
+}));
 
 export default function Feeds(props) {
     const {active} = props;
@@ -53,15 +50,15 @@ export default function Feeds(props) {
 
     function getFeed(entry, index) {
         return (
-            <ListItem key={index}>
-                {/*<Tooltip title={entry.url} enterDelay={1000}>*/}
+            <ListItem key={index} active={+(selectedFeed === index)}>
                 <ListItemButton selected={selectedFeed === index} onClick={() => setSelectedFeed(index)}>
                     <ListItemAvatar>
-                        <Avatar src={entry.favicon}/>
+                        <Avatar active={+(selectedFeed === index)}>
+                            <RssFeed fontSize="inherit"/>
+                        </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary={entry.title}/>
                 </ListItemButton>
-                {/*</Tooltip>*/}
             </ListItem>
         );
     }

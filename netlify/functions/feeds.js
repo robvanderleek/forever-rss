@@ -36,7 +36,6 @@ async function getFavIconUrl(htmlUrl) {
         if (response.ok) {
             return faviconUrl;
         }
-        console.log('NOT OK');
     }
     return undefined;
 }

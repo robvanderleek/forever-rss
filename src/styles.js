@@ -1,4 +1,4 @@
-import {styled} from "@mui/material";
+import {Avatar, styled} from "@mui/material";
 
 export const Main = styled('div')({
     height: '100%',
@@ -7,11 +7,10 @@ export const Main = styled('div')({
     outline: 'none'
 });
 
-// #ac93d4
 export const Section = styled('div')((props) => ({
     borderStyle: props.active ? 'solid' : 'none',
     borderWidth: '2px',
-    borderColor: '#c25096',
+    borderImage: 'linear-gradient(to bottom, #c25096, #808ecd) 1',
     padding: props.active ? '0px' : '2px',
     overflow: 'auto'
 }));
@@ -28,3 +27,9 @@ export const CenteredArea = styled('div')({
     justifyContent: 'center',
     outline: 'none'
 });
+
+export const ItemAvatar = styled(Avatar)(props => ({
+    width: '24px',
+    height: '24px',
+    backgroundColor: props.active ? '#808ecd' : 'none'
+}));

@@ -1,28 +1,12 @@
-import {
-    Avatar as MuiAvatar,
-    List,
-    ListItem as MuiListItem,
-    ListItemAvatar,
-    ListItemButton,
-    ListItemText,
-    styled
-} from "@mui/material";
+import {List, ListItem as MuiListItem, ListItemAvatar, ListItemButton, ListItemText, styled} from "@mui/material";
 import {useHotkeys} from "react-hotkeys-hook";
 import {useFeeds} from "./FeedsContext";
 import {useEffect, useRef} from "react";
-import {Area} from "./styles";
+import {Area, ItemAvatar} from "./styles";
 import {RssFeed} from "@mui/icons-material";
-
-// #c25096
 
 const ListItem = styled(MuiListItem)(props => ({
     color: props.active ? '#808ecd' : 'none'
-}));
-
-const Avatar = styled(MuiAvatar)(props => ({
-    width: '24px',
-    height: '24px',
-    backgroundColor: props.active ? '#808ecd' : 'none'
 }));
 
 export default function Feeds(props) {
@@ -50,14 +34,19 @@ export default function Feeds(props) {
         }
     }, [active, refUp, refDown]);
 
+    function handleClick(index) {
+        setSelectedFeed(index);
+        refDiv.current.focus();
+    }
+
     function getFeed(entry, index) {
         return (
             <ListItem key={index} active={+(selectedFeed === index)}>
-                <ListItemButton selected={selectedFeed === index} onClick={() => setSelectedFeed(index)}>
+                <ListItemButton selected={selectedFeed === index} onClick={() => handleClick(index)}>
                     <ListItemAvatar>
-                        <Avatar active={+(selectedFeed === index)}>
+                        <ItemAvatar active={+(selectedFeed === index)}>
                             <RssFeed fontSize="inherit"/>
-                        </Avatar>
+                        </ItemAvatar>
                     </ListItemAvatar>
                     <ListItemText primary={entry.title}/>
                 </ListItemButton>

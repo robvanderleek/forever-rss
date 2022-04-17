@@ -1,9 +1,11 @@
-import {List, ListItem, ListItemButton, ListItemText} from "@mui/material";
+import {List, ListItem, ListItemAvatar, ListItemButton, ListItemText} from "@mui/material";
 import {useEffect, useRef} from "react";
 import {useFeeds} from "./FeedsContext";
 import {useHotkeys} from "react-hotkeys-hook";
-import {Area, CenteredArea} from "./styles";
+import {Area, CenteredArea, ItemAvatar} from "./styles";
 import Loader from "react-loaders";
+import {Article} from "@mui/icons-material";
+import moment from "moment";
 
 export default function Entries(props) {
     const {active} = props;
@@ -30,11 +32,26 @@ export default function Entries(props) {
         }
     }, [active, refUp, refDown]);
 
+    function handleClick(index) {
+        setSelectedEntry(index);
+        refDiv.current.focus();
+    }
+
+    function formatDate(dateString) {
+        const date = moment(dateString);
+        return date.format('MMM Do YYYY');
+    }
+
     function getEntry(entry, index) {
         return (
             <ListItem key={index}>
-                <ListItemButton selected={selectedEntry === index} onClick={() => setSelectedEntry(index)}>
-                    <ListItemText primary={entry.title} secondary={entry.updated}/>
+                <ListItemButton selected={selectedEntry === index} onClick={() => handleClick(index)}>
+                    <ListItemAvatar>
+                        <ItemAvatar active={+(selectedEntry === index)}>
+                            <Article fontSize="inherit"/>
+                        </ItemAvatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={entry.title} secondary={formatDate(entry.updated)}/>
                 </ListItemButton>
             </ListItem>
         );
@@ -51,7 +68,7 @@ export default function Entries(props) {
     } else {
         return (
             <Area tabIndex={-1} ref={refDiv}>
-                <List>
+                <List dense={true}>
                     {entries.map((e, i) => getEntry(e, i))}
                 </List>
             </Area>

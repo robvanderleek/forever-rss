@@ -7,10 +7,12 @@ export const Main = styled('div')({
     outline: 'none'
 });
 
+// #ac93d4
 export const Section = styled('div')((props) => ({
     borderStyle: props.active ? 'solid' : 'none',
-    borderWidth: '1px',
-    padding: props.active ? '0px' : '1px',
+    borderWidth: '2px',
+    borderColor: '#c25096',
+    padding: props.active ? '0px' : '2px',
     overflow: 'auto'
 }));
 

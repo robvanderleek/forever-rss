@@ -16,15 +16,14 @@ exports.handler = async function (event, context) {
         }
     }
     return {
-        statusCode: 200,
-        body: JSON.stringify({message: result}),
+        statusCode: 200, body: JSON.stringify({message: result}),
     };
 }
 
 function parseFeedEntries(o) {
     const result = [];
     for (const e of o.feed.entry) {
-        result.push({'id': e.id, 'title': e.title, 'updated': e.updated, 'content': e.content});
+        result.push({'id': e.id, 'title': e.title, 'updated': e.updated, 'link': e['link'], 'content': e.content});
     }
     return result;
 }
@@ -32,7 +31,7 @@ function parseFeedEntries(o) {
 function parseRssEntries(o) {
     const result = [];
     for (const e of o.rss.channel.item) {
-        result.push({'id': e.guid, 'title': e.title, 'updated': e.pubDate, 'content': e.description});
+        result.push({'id': e.guid, 'title': e.title, 'updated': e.pubDate, 'link': e.link, 'content': e.description});
     }
     return result;
 }

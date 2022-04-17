@@ -13,14 +13,16 @@ import {useEffect, useRef} from "react";
 import {Area} from "./styles";
 import {RssFeed} from "@mui/icons-material";
 
+// #c25096
+
 const ListItem = styled(MuiListItem)(props => ({
-    color: props.active ? '#ac93d4' : 'none'
+    color: props.active ? '#808ecd' : 'none'
 }));
 
 const Avatar = styled(MuiAvatar)(props => ({
     width: '24px',
     height: '24px',
-    backgroundColor: props.active ? '#ac93d4' : 'none'
+    backgroundColor: props.active ? '#808ecd' : 'none'
 }));
 
 export default function Feeds(props) {

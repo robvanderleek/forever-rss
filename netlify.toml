@@ -1,3 +1,2 @@
 [functions]
     directory = "src/functions/"
-    included_files = ["!src/functions/*.test.js"]

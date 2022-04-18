@@ -1,4 +1,4 @@
-import {parseResponseText} from "./entries";
+import {parseResponseText} from "../functions/entries";
 
 test('parse XML RSS feed, single item', () => {
     const text = `

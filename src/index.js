@@ -8,7 +8,13 @@ import {FeedsContextProvider} from "./FeedsContext";
 
 const theme = createTheme({
     palette: {
-        mode: "dark"
+        mode: "dark",
+        primary: {
+            main: '#808ecd'
+        },
+        secondary: {
+            main: '#c25096'
+        }
     }
 });
 const rootElement = document.getElementById('root');

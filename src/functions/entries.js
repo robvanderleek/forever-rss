@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 const {XMLParser} = require("fast-xml-parser");
 
-async function handler(event, context) {
+async function handler(event, context) {    
     const url = event.queryStringParameters.url;
     const response = await fetch(url, {redirect: 'follow'});
     let result = [];

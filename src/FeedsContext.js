@@ -5,7 +5,7 @@ const FeedsContext = createContext();
 export function FeedsContextProvider({children}) {
     const [feedsLoading, setFeedsLoading] = useState(true);
     const [allFeeds, setAllFeeds] = useState([]);
-    const [selectedFeed, setSelectedFeed] = useState(0);
+    const [selectedFeed, setSelectedFeed] = useState(-1);
     const [entriesLoading, setEntriesLoading] = useState(false);
     const [entries, setEntries] = useState([]);
     const [selectedEntry, setSelectedEntry] = useState(0);
@@ -34,7 +34,7 @@ export function FeedsContextProvider({children}) {
             }
         }
 
-        if (allFeeds.length > 0) {
+        if (allFeeds.length > 0 && selectedFeed >= 0) {
             setEntriesLoading(true);
             loadEntries();
         }

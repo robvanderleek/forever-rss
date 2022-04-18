@@ -2,6 +2,11 @@ import htmlParse from "html-react-parser";
 import {useFeeds} from "./FeedsContext";
 import {useEffect, useRef} from "react";
 import {Area} from "./styles";
+import {styled} from "@mui/material";
+
+const ContentArea = styled(Area)({
+    padding: '20px'
+});
 
 export default function Content(props) {
     const {active} = props;
@@ -14,9 +19,17 @@ export default function Content(props) {
         }
     }, [active]);
 
-    return (
-        <Area tabIndex={-1} ref={refDiv}>
-            {entries.length >= 1 && htmlParse(entries[selectedEntry].content)}
-        </Area>
-    );
+    const entry = entries[selectedEntry];
+    if (!entry) {
+        return null;
+    } else {
+        return (
+            <ContentArea tabIndex={-1} ref={refDiv}>
+                <a href={entry.link}>
+                    <h1>{entry.title}</h1>
+                </a>
+                {entries.length >= 1 && htmlParse(entry.content)}
+            </ContentArea>
+        );
+    }
 }

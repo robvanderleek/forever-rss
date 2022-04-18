@@ -2,8 +2,9 @@ import {List, ListItem as MuiListItem, ListItemAvatar, ListItemButton, ListItemT
 import {useHotkeys} from "react-hotkeys-hook";
 import {useFeeds} from "./FeedsContext";
 import {useEffect, useRef} from "react";
-import {Area, ItemAvatar} from "./styles";
+import {Area, CenteredArea, ItemAvatar} from "./styles";
 import {RssFeed} from "@mui/icons-material";
+import Loader from "react-loaders";
 
 const ListItem = styled(MuiListItem)(props => ({
     color: props.active ? '#808ecd' : 'none'
@@ -11,7 +12,7 @@ const ListItem = styled(MuiListItem)(props => ({
 
 export default function Feeds(props) {
     const {active} = props;
-    const {allFeeds, selectedFeed, setSelectedFeed} = useFeeds();
+    const {feedsLoading, allFeeds, selectedFeed, setSelectedFeed} = useFeeds();
     const refDiv = useRef(null);
 
     const refUp = useHotkeys('up', () => {
@@ -54,11 +55,21 @@ export default function Feeds(props) {
         );
     }
 
-    return (
-        <Area tabIndex={-1} ref={refDiv}>
-            <List dense={true}>
-                {allFeeds.map((e, i) => getFeed(e, i))}
-            </List>
-        </Area>
-    );
+    if (feedsLoading) {
+        return (
+            <Area tabIndex={-1} ref={refDiv}>
+                <CenteredArea>
+                    <Loader type="line-scale-pulse-out"  active/>
+                </CenteredArea>
+            </Area>
+        )
+    } else {
+        return (
+            <Area tabIndex={-1} ref={refDiv}>
+                <List dense={true}>
+                    {allFeeds.map((e, i) => getFeed(e, i))}
+                </List>
+            </Area>
+        );
+    }
 }

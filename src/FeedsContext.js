@@ -3,6 +3,7 @@ import {createContext, useContext, useEffect, useState} from "react";
 const FeedsContext = createContext();
 
 export function FeedsContextProvider({children}) {
+    const [feedsLoading, setFeedsLoading] = useState(true);
     const [allFeeds, setAllFeeds] = useState([]);
     const [selectedFeed, setSelectedFeed] = useState(0);
     const [entriesLoading, setEntriesLoading] = useState(false);
@@ -15,6 +16,7 @@ export function FeedsContextProvider({children}) {
             if (res.ok) {
                 const feeds = await res.json();
                 setAllFeeds(feeds);
+                setFeedsLoading(false);
             }
         }
 
@@ -39,7 +41,7 @@ export function FeedsContextProvider({children}) {
     }, [allFeeds, selectedFeed]);
 
     return (<FeedsContext.Provider value={{
-        allFeeds, entries, selectedFeed, setSelectedFeed, entriesLoading, selectedEntry, setSelectedEntry
+        feedsLoading, allFeeds, entries, selectedFeed, setSelectedFeed, entriesLoading, selectedEntry, setSelectedEntry
     }}>{children}</FeedsContext.Provider>)
 }
 

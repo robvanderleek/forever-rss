@@ -1,0 +1,22 @@
+name: CICD
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+    steps:
+    - name: 'Checkout sources'
+      uses: actions/checkout@v2
+    - name: 'Setup Node'
+      uses: actions/setup-node@v1
+      with:
+        node-version: 16.x
+    - name: 'Install packages'
+      run: yarn install
+    - name: 'Run unit-tests'
+      run: yarn test

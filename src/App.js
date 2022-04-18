@@ -9,7 +9,7 @@ import Content from "./Content";
 import {Main, Section} from "./styles";
 
 const FeedsSection = styled(Section)({
-    width: '20%'
+    width: '25%'
 });
 
 const EntriesSection = styled(Section)({
@@ -17,7 +17,7 @@ const EntriesSection = styled(Section)({
 });
 
 const ContentSection = styled(Section)({
-    width: '55%'
+    width: '50%'
 });
 
 function App() {

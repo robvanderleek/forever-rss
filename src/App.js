@@ -2,7 +2,7 @@ import './App.css';
 import 'loaders.css';
 import {styled} from "@mui/material";
 import {useState} from "react";
-import Feeds from "./Feeds";
+import Controls from "./Controls";
 import {useHotkeys} from "react-hotkeys-hook";
 import Content from "./Content";
 import {Main, Section} from "./styles";
@@ -33,7 +33,7 @@ function App() {
     return (
         <Main>
             <FeedsSection active={+(activeSection === 0)}>
-                <Feeds active={activeSection === 0}/>
+                <Controls active={activeSection === 0}/>
             </FeedsSection>
             <ContentSection active={+(activeSection === 1)}>
                 <Content active={activeSection === 1}/>

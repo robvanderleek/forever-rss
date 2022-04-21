@@ -3,10 +3,9 @@ import {createContext, useContext, useEffect, useState} from "react";
 const FeedsContext = createContext();
 
 export function FeedsContextProvider({children}) {
-    const [feedsLoading, setFeedsLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [allFeeds, setAllFeeds] = useState([]);
     const [selectedFeed, setSelectedFeed] = useState(-1);
-    const [entriesLoading, setEntriesLoading] = useState(false);
     const [entries, setEntries] = useState([]);
     const [selectedEntry, setSelectedEntry] = useState(0);
 
@@ -16,7 +15,7 @@ export function FeedsContextProvider({children}) {
             if (res.ok) {
                 const feeds = await res.json();
                 setAllFeeds(feeds);
-                setFeedsLoading(false);
+                setLoading(false);
             }
         }
 
@@ -30,18 +29,18 @@ export function FeedsContextProvider({children}) {
                 const json = await res.json();
                 setEntries(json.message);
                 setSelectedEntry(0);
-                setEntriesLoading(false);
+                setLoading(false);
             }
         }
 
         if (allFeeds.length > 0 && selectedFeed >= 0) {
-            setEntriesLoading(true);
+            setLoading(true);
             loadEntries();
         }
     }, [allFeeds, selectedFeed]);
 
     return (<FeedsContext.Provider value={{
-        feedsLoading, allFeeds, entries, selectedFeed, setSelectedFeed, entriesLoading, selectedEntry, setSelectedEntry
+        loading, allFeeds, entries, selectedFeed, setSelectedFeed, selectedEntry, setSelectedEntry
     }}>{children}</FeedsContext.Provider>)
 }
 

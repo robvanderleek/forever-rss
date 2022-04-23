@@ -26,7 +26,9 @@ export default function EntriesList(props) {
         </ListItem>);
     }
 
-    return (<List dense={true}>
-        {entries.map((e, i) => getEntry(e, i))}
-    </List>);
+    return (
+        <List dense={true}>
+            {entries.map((e, i) => getEntry(e, i))}
+        </List>
+    );
 }

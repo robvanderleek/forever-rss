@@ -1,10 +1,12 @@
 import {useHotkeys} from "react-hotkeys-hook";
 import {useFeeds} from "./FeedsContext";
-import {useEffect, useRef, useState} from "react";
-import {Area, CenteredArea} from "./styles";
+import {Fragment, useEffect, useRef, useState} from "react";
+import {Area, CenteredArea, ContentArea} from "./styles";
 import Loader from "react-loaders";
 import FeedsList from "./components/FeedsList";
 import EntriesList from "./components/EntriesList";
+import {Divider, Toolbar} from "@mui/material";
+import {RssFeed} from "@mui/icons-material";
 
 export default function Controls(props) {
     const {active} = props;
@@ -55,10 +57,10 @@ export default function Controls(props) {
         refDown.current = refDiv.current;
         refLeft.current = refDiv.current;
         refEnter.current = refDiv.current;
-        if (active) {
+        if (active && refDiv.current) {
             refDiv.current.focus();
         }
-    }, [active, refUp, refDown, refLeft, refEnter]);
+    }, [active, refDiv, refUp, refDown, refLeft, refEnter]);
 
     function handleFeedsClick(index) {
         setSelectedFeed(index);
@@ -71,6 +73,40 @@ export default function Controls(props) {
         refDiv.current.focus();
     }
 
+    function getHeader() {
+        if (selectedFeed >= 0) {
+            return (
+                <Fragment>
+                    <Toolbar>
+                        <RssFeed fontSize="medium"/>
+                        <span style={{marginLeft: '10px'}}>{allFeeds[selectedFeed].title}</span>
+                    </Toolbar>
+                    <Divider/>
+                </Fragment>
+            );
+        } else {
+            return (
+                <Fragment>
+                    <Toolbar>
+                        <RssFeed fontSize="medium"/>
+                    </Toolbar>
+                    <Divider/>
+                </Fragment>
+            );
+        }
+    }
+
+    function getFooter() {
+        return (
+            <Fragment>
+                <Divider/>
+                <Toolbar>
+                    <RssFeed fontSize="medium"/>
+                </Toolbar>
+            </Fragment>
+        );
+    }
+
     function getContent() {
         if (loading) {
             return (
@@ -80,18 +116,24 @@ export default function Controls(props) {
             );
         } else if (selectedFeed >= 0) {
             return (
-                <EntriesList handleClick={handleEntriesClick}/>
+                <ContentArea>
+                    <EntriesList handleClick={handleEntriesClick}/>
+                </ContentArea>
             );
         } else {
             return (
-                <FeedsList highlightedFeed={highlightedFeed} handleClick={handleFeedsClick}/>
+                <ContentArea>
+                    <FeedsList highlightedFeed={highlightedFeed} handleClick={handleFeedsClick}/>
+                </ContentArea>
             );
         }
     }
 
     return (
         <Area tabIndex={-1} ref={refDiv}>
+            {getHeader()}
             {getContent()}
+            {getFooter()}
         </Area>
     );
 }

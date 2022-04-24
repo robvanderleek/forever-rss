@@ -1,22 +1,15 @@
 import './App.css';
 import 'loaders.css';
-import {styled} from "@mui/material";
+import {useMediaQuery} from "@mui/material";
 import {useState} from "react";
 import Controls from "./Controls";
 import {useHotkeys} from "react-hotkeys-hook";
 import Content from "./Content";
 import {Main, Section} from "./styles";
 
-const FeedsSection = styled(Section)({
-    width: '25%'
-});
-
-const ContentSection = styled(Section)({
-    width: '75%'
-});
-
 function App() {
     const [activeSection, setActiveSection] = useState(0);
+    const wideScreen = useMediaQuery('(min-width:900px)');
 
     useHotkeys('left', () => {
         if (activeSection > 0) {
@@ -30,16 +23,26 @@ function App() {
         }
     }, [activeSection]);
 
-    return (
-        <Main>
-            <FeedsSection active={+(activeSection === 0)}>
-                <Controls active={activeSection === 0}/>
-            </FeedsSection>
-            <ContentSection active={+(activeSection === 1)}>
-                <Content active={activeSection === 1}/>
-            </ContentSection>
-        </Main>
-    );
+    if (wideScreen) {
+        return (
+            <Main>
+                <Section sx={{width: '30%'}} active={+(activeSection === 0)}>
+                    <Controls active={activeSection === 0}/>
+                </Section>
+                <Section sx={{width: '70%'}} active={+(activeSection === 1)}>
+                    <Content active={activeSection === 1}/>
+                </Section>
+            </Main>
+        );
+    } else {
+        return (
+            <Main>
+                <Section sx={{width: '100%'}} active={1}>
+                    <Controls active={true} showContent={true}/>
+                </Section>
+            </Main>
+        );
+    }
 }
 
 export default App;

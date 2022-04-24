@@ -14,7 +14,7 @@ export default function Content(props) {
     const refDiv = useRef(null);
 
     useEffect(() => {
-        if (active) {
+        if (active && refDiv.current) {
             refDiv.current.focus();
         }
     }, [active]);

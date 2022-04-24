@@ -10,20 +10,22 @@ export function formatDate(dateString) {
 }
 
 export default function EntriesList(props) {
-    const {handleClick} = props;
+    const {highlightedEntry, handleClick} = props;
     const {entries, selectedEntry} = useFeeds();
 
     function getEntry(entry, index) {
-        return (<ListItem key={index}>
-            <ListItemButton selected={selectedEntry === index} onClick={() => handleClick(index)}>
-                <ListItemAvatar>
-                    <ItemAvatar active={+(selectedEntry === index)}>
-                        <Article fontSize="inherit"/>
-                    </ItemAvatar>
-                </ListItemAvatar>
-                <ListItemText primary={entry.title} secondary={formatDate(entry.updated)}/>
-            </ListItemButton>
-        </ListItem>);
+        return (
+            <ListItem key={index} active={+(highlightedEntry === index)}>
+                <ListItemButton selected={highlightedEntry === index} onClick={() => handleClick(index)}>
+                    <ListItemAvatar>
+                        <ItemAvatar active={+(selectedEntry === index)}>
+                            <Article fontSize="inherit"/>
+                        </ItemAvatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={entry.title} secondary={formatDate(entry.updated)}/>
+                </ListItemButton>
+            </ListItem>
+        );
     }
 
     return (

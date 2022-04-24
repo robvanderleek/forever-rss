@@ -7,7 +7,7 @@ export function FeedsContextProvider({children}) {
     const [allFeeds, setAllFeeds] = useState([]);
     const [selectedFeed, setSelectedFeed] = useState(-1);
     const [entries, setEntries] = useState([]);
-    const [selectedEntry, setSelectedEntry] = useState(0);
+    const [selectedEntry, setSelectedEntry] = useState(-1);
 
     useEffect(() => {
         async function loadFeeds() {
@@ -28,7 +28,6 @@ export function FeedsContextProvider({children}) {
             if (res.ok) {
                 const json = await res.json();
                 setEntries(json.message);
-                setSelectedEntry(0);
                 setLoading(false);
             }
         }

@@ -7,50 +7,90 @@ import FeedsList from "./components/FeedsList";
 import EntriesList from "./components/EntriesList";
 import {Divider, Toolbar} from "@mui/material";
 import {RssFeed} from "@mui/icons-material";
+import Content from "./Content";
 
 export default function Controls(props) {
-    const {active} = props;
+    const {active, showContent = false} = props;
     const {loading, allFeeds, selectedFeed, setSelectedFeed, entries, selectedEntry, setSelectedEntry} = useFeeds();
     const [highlightedFeed, setHighlightedFeed] = useState(0);
+    const [highlightedEntry, setHighlightedEntry] = useState(0);
     const refDiv = useRef(null);
+    const modeLoading = Symbol('loading');
+    const modeFeeds = Symbol('feeds');
+    const modeEntries = Symbol('entries');
+    const modeContent = Symbol('content');
 
-    const entriesMode = () => selectedFeed >= 0;
+    const mode = () => {
+        if (loading) {
+            return modeLoading;
+        } else if (selectedFeed >= 0) {
+            if (selectedEntry >= 0 && showContent) {
+                return modeContent;
+            } else {
+                return modeEntries;
+            }
+        } else {
+            return modeFeeds;
+        }
+    }
 
     const refUp = useHotkeys('up', () => {
-        if (entriesMode()) {
-            if (selectedEntry > 0) {
-                setSelectedEntry(selectedEntry - 1);
-            }
-        } else {
-            if (highlightedFeed > 0) {
-                setHighlightedFeed(highlightedFeed - 1);
-            }
+        switch (mode()) {
+            case modeEntries:
+                if (highlightedEntry > 0) {
+                    setHighlightedEntry(highlightedEntry - 1);
+                }
+                break;
+            case modeFeeds:
+                if (highlightedFeed > 0) {
+                    setHighlightedFeed(highlightedFeed - 1);
+                }
+                break;
+            default:
         }
-    }, [highlightedFeed, selectedEntry]);
+    }, [highlightedEntry, highlightedFeed]);
 
     const refDown = useHotkeys('down', () => {
-        if (entriesMode()) {
-            if (selectedEntry < entries.length - 1) {
-                setSelectedEntry(selectedEntry + 1);
-            }
-        } else {
-            if (highlightedFeed < allFeeds.length - 1) {
-                setHighlightedFeed(highlightedFeed + 1);
-            }
+        switch (mode()) {
+            case modeEntries:
+                if (highlightedEntry < entries.length - 1) {
+                    setHighlightedEntry(highlightedEntry + 1);
+                }
+                break;
+            case modeFeeds:
+                if (highlightedFeed < allFeeds.length - 1) {
+                    setHighlightedFeed(highlightedFeed + 1);
+                }
+                break;
+            default:
         }
-    }, [highlightedFeed, allFeeds, selectedEntry, entries]);
+    }, [highlightedFeed, allFeeds, highlightedEntry, entries]);
 
     const refLeft = useHotkeys('left', () => {
-        if (entriesMode()) {
-            setSelectedFeed(-1);
+        switch (mode()) {
+            case modeEntries:
+                setHighlightedFeed(0);
+                setSelectedFeed(-1);
+                return;
+            case modeContent:
+                setHighlightedEntry(0);
+                setSelectedEntry(-1);
+                return;
+            default:
         }
-    }, [selectedFeed]);
+    }, [selectedFeed, selectedEntry, highlightedFeed, highlightedEntry]);
 
     const refEnter = useHotkeys('enter', () => {
-        if (!entriesMode()) {
-            setSelectedFeed(highlightedFeed);
+        switch (mode()) {
+            case modeFeeds:
+                setSelectedFeed(highlightedFeed);
+                break;
+            case modeEntries:
+                setSelectedEntry(highlightedEntry);
+                break;
+            default:
         }
-    }, [highlightedFeed]);
+    }, [highlightedFeed, highlightedEntry]);
 
     useEffect(() => {
         refUp.current = refDiv.current;
@@ -108,24 +148,33 @@ export default function Controls(props) {
     }
 
     function getContent() {
-        if (loading) {
-            return (
-                <CenteredArea>
-                    <Loader type="line-scale-pulse-out" active/>
-                </CenteredArea>
-            );
-        } else if (selectedFeed >= 0) {
-            return (
-                <ContentArea>
-                    <EntriesList handleClick={handleEntriesClick}/>
-                </ContentArea>
-            );
-        } else {
-            return (
-                <ContentArea>
-                    <FeedsList highlightedFeed={highlightedFeed} handleClick={handleFeedsClick}/>
-                </ContentArea>
-            );
+        switch (mode()) {
+            default:
+            case modeLoading:
+                return (
+                    <CenteredArea>
+                        <Loader type="line-scale-pulse-out" active/>
+                    </CenteredArea>
+                );
+            case modeFeeds:
+                return (
+                    <ContentArea>
+                        <FeedsList highlightedFeed={highlightedFeed} handleClick={handleFeedsClick}/>
+                    </ContentArea>
+                );
+            case modeEntries:
+                return (
+                    <ContentArea>
+                        <EntriesList highlightedEntry={highlightedEntry} handleClick={handleEntriesClick}/>
+                    </ContentArea>
+                );
+            case modeContent:
+                return (
+                    <ContentArea>
+                        <Content active={false}/>
+                    </ContentArea>
+                )
+
         }
     }
 

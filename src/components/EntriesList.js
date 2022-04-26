@@ -2,7 +2,7 @@ import moment from "moment";
 import {List, ListItem, ListItemAvatar, ListItemButton, ListItemText} from "@mui/material";
 import {ItemAvatar} from "../styles";
 import {Article} from "@mui/icons-material";
-import {useFeeds} from "../FeedsContext";
+import {useFeeds} from "../context/FeedsContext";
 
 export function formatDate(dateString) {
     const date = moment(dateString);

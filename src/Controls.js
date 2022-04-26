@@ -1,17 +1,19 @@
 import {useHotkeys} from "react-hotkeys-hook";
-import {useFeeds} from "./FeedsContext";
+import {useFeeds} from "./context/FeedsContext";
 import {Fragment, useEffect, useRef, useState} from "react";
 import {Area, CenteredArea, ContentArea} from "./styles";
 import Loader from "react-loaders";
 import FeedsList from "./components/FeedsList";
 import EntriesList from "./components/EntriesList";
-import {Divider, Toolbar} from "@mui/material";
+import {Button, Divider, Toolbar} from "@mui/material";
 import {RssFeed} from "@mui/icons-material";
 import Content from "./Content";
+import {useAuth} from "./context/AuthContext";
 
 export default function Controls(props) {
     const {active, showContent = false} = props;
     const {loading, allFeeds, selectedFeed, setSelectedFeed, entries, selectedEntry, setSelectedEntry} = useFeeds();
+    const {isAuthenticated, user, authenticate, logout} = useAuth();
     const [highlightedFeed, setHighlightedFeed] = useState(0);
     const [highlightedEntry, setHighlightedEntry] = useState(0);
     const refDiv = useRef(null);
@@ -136,17 +138,6 @@ export default function Controls(props) {
         }
     }
 
-    function getFooter() {
-        return (
-            <Fragment>
-                <Divider/>
-                <Toolbar>
-                    <RssFeed fontSize="medium"/>
-                </Toolbar>
-            </Fragment>
-        );
-    }
-
     function getContent() {
         switch (mode()) {
             default:
@@ -174,9 +165,23 @@ export default function Controls(props) {
                         <Content active={false}/>
                     </ContentArea>
                 )
-
         }
     }
+
+    function getFooter() {
+        return (
+            <Fragment>
+                <Divider/>
+                <Toolbar>
+                    <RssFeed fontSize="medium"/>
+                    {!isAuthenticated && <Button onClick={authenticate}>Login</Button>}
+                    {isAuthenticated && <Button onClick={logout}>Logout</Button>}
+                </Toolbar>
+            </Fragment>
+        );
+    }
+
+    console.log(`Logged in: ${isAuthenticated}`);
 
     return (
         <Area tabIndex={-1} ref={refDiv}>

@@ -1,5 +1,5 @@
 import htmlParse from "html-react-parser";
-import {useFeeds} from "./FeedsContext";
+import {useFeeds} from "./context/FeedsContext";
 import {useEffect, useRef} from "react";
 import {Area} from "./styles";
 import {styled} from "@mui/material";

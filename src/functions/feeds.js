@@ -3,6 +3,7 @@ const fetch = require("node-fetch");
 
 
 exports.handler = async function (event, context) {
+    const { identity, user } = context.clientContext;
     const response = await fetch('https://raw.githubusercontent.com/robvanderleek/robvanderleek/main/my-awesome.opml');
     if (response.ok) {
         const opml = await response.text();

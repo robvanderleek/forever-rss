@@ -1,4 +1,6 @@
 import {createContext, useContext, useEffect, useState} from "react";
+import {apiFetch} from "../utils";
+import {useAuth} from "./AuthContext";
 
 const FeedsContext = createContext();
 
@@ -8,28 +10,23 @@ export function FeedsContextProvider({children}) {
     const [selectedFeed, setSelectedFeed] = useState(-1);
     const [entries, setEntries] = useState([]);
     const [selectedEntry, setSelectedEntry] = useState(-1);
+    const {user} = useAuth();
 
     useEffect(() => {
         async function loadFeeds() {
-            const res = await fetch('/.netlify/functions/feeds');
-            if (res.ok) {
-                const feeds = await res.json();
-                setAllFeeds(feeds);
-                setLoading(false);
-            }
+            const feeds = await apiFetch('feeds', user);
+            setAllFeeds(feeds);
+            setLoading(false);
         }
 
         loadFeeds();
-    }, []);
+    }, [user]);
 
     useEffect(() => {
         async function loadEntries() {
-            const res = await fetch('/.netlify/functions/entries?url=' + encodeURIComponent(allFeeds[selectedFeed].url));
-            if (res.ok) {
-                const json = await res.json();
-                setEntries(json.message);
-                setLoading(false);
-            }
+            const json = await apiFetch('entries?url=' + encodeURIComponent(allFeeds[selectedFeed].url));
+            setEntries(json.message);
+            setLoading(false);
         }
 
         if (allFeeds.length > 0 && selectedFeed >= 0) {

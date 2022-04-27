@@ -5,10 +5,11 @@ import {Area, CenteredArea, ContentArea} from "./styles";
 import Loader from "react-loaders";
 import FeedsList from "./components/FeedsList";
 import EntriesList from "./components/EntriesList";
-import {Button, Divider, Toolbar} from "@mui/material";
-import {RssFeed} from "@mui/icons-material";
+import {Button, Divider, IconButton, styled, Toolbar} from "@mui/material";
+import {ArrowBack, Article, RssFeed} from "@mui/icons-material";
 import Content from "./Content";
 import {useAuth} from "./context/AuthContext";
+import {useSwipeable} from "react-swipeable";
 
 export default function Controls(props) {
     const {active, showContent = false} = props;
@@ -35,6 +36,30 @@ export default function Controls(props) {
             return modeFeeds;
         }
     }
+
+    const gotoFeeds = () => {
+        setHighlightedFeed(0);
+        setSelectedFeed(-1);
+    }
+
+    const gotoEntries = () => {
+        setHighlightedEntry(0);
+        setSelectedEntry(-1);
+    }
+
+    const handleBack = () => {
+        switch (mode()) {
+            case modeContent:
+                gotoEntries();
+                break;
+            case modeEntries:
+                gotoFeeds();
+                break;
+            default:
+        }
+    }
+
+    const handlers = useSwipeable({ onSwipedRight: handleBack });
 
     const refUp = useHotkeys('up', () => {
         switch (mode()) {
@@ -71,13 +96,11 @@ export default function Controls(props) {
     const refLeft = useHotkeys('left', () => {
         switch (mode()) {
             case modeEntries:
-                setHighlightedFeed(0);
-                setSelectedFeed(-1);
-                return;
+                gotoFeeds();
+                break;
             case modeContent:
-                setHighlightedEntry(0);
-                setSelectedEntry(-1);
-                return;
+                gotoEntries();
+                break;
             default:
         }
     }, [selectedFeed, selectedEntry, highlightedFeed, highlightedEntry]);
@@ -104,6 +127,12 @@ export default function Controls(props) {
         }
     }, [active, refDiv, refUp, refDown, refLeft, refEnter]);
 
+    const refPassthrough = (el) => {
+        handlers.ref(el);
+        refDiv.current = el;
+    }
+
+
     function handleFeedsClick(index) {
         setSelectedFeed(index);
         setHighlightedFeed(index);
@@ -115,26 +144,48 @@ export default function Controls(props) {
         refDiv.current.focus();
     }
 
+    const FeedTitle = styled('div')({
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center'
+    });
+
     function getHeader() {
-        if (selectedFeed >= 0) {
-            return (
-                <Fragment>
-                    <Toolbar>
-                        <RssFeed fontSize="medium"/>
-                        <span style={{marginLeft: '10px'}}>{allFeeds[selectedFeed].title}</span>
-                    </Toolbar>
-                    <Divider/>
-                </Fragment>
-            );
-        } else {
-            return (
-                <Fragment>
+        switch (mode()) {
+            case modeFeeds:
+                return (<Fragment>
                     <Toolbar>
                         <RssFeed fontSize="medium"/>
                     </Toolbar>
                     <Divider/>
-                </Fragment>
-            );
+                </Fragment>);
+            case modeEntries:
+                return (<Fragment>
+                    <Toolbar>
+                        <IconButton onClick={handleBack}>
+                            <ArrowBack fontSize="medium"/>
+                        </IconButton>
+                        <FeedTitle>
+                            <RssFeed fontSize="medium"/>
+                            <span style={{marginLeft: '10px'}}>{allFeeds[selectedFeed].title}</span>
+                        </FeedTitle>
+                    </Toolbar>
+                    <Divider/>
+                </Fragment>);
+            case modeContent:
+                return (<Fragment>
+                    <Toolbar>
+                        <IconButton onClick={handleBack}>
+                            <ArrowBack fontSize="medium"/>
+                        </IconButton>
+                        <FeedTitle>
+                            <Article fontSize="medium"/>
+                            <span style={{marginLeft: '10px'}}>{entries[selectedEntry].title}</span>
+                        </FeedTitle>
+                    </Toolbar>
+                    <Divider/>
+                </Fragment>);
+            default:
         }
     }
 
@@ -142,50 +193,38 @@ export default function Controls(props) {
         switch (mode()) {
             default:
             case modeLoading:
-                return (
-                    <CenteredArea>
-                        <Loader type="line-scale-pulse-out" active/>
-                    </CenteredArea>
-                );
+                return (<CenteredArea>
+                    <Loader type="line-scale-pulse-out" active/>
+                </CenteredArea>);
             case modeFeeds:
-                return (
-                    <ContentArea>
-                        <FeedsList highlightedFeed={highlightedFeed} handleClick={handleFeedsClick}/>
-                    </ContentArea>
-                );
+                return (<ContentArea>
+                    <FeedsList highlightedFeed={highlightedFeed} handleClick={handleFeedsClick}/>
+                </ContentArea>);
             case modeEntries:
-                return (
-                    <ContentArea>
-                        <EntriesList highlightedEntry={highlightedEntry} handleClick={handleEntriesClick}/>
-                    </ContentArea>
-                );
+                return (<ContentArea>
+                    <EntriesList highlightedEntry={highlightedEntry} handleClick={handleEntriesClick}/>
+                </ContentArea>);
             case modeContent:
-                return (
-                    <ContentArea>
-                        <Content active={false}/>
-                    </ContentArea>
-                )
+                return (<ContentArea>
+                    <Content active={false}/>
+                </ContentArea>)
         }
     }
 
     function getFooter() {
-        return (
-            <Fragment>
-                <Divider/>
-                <Toolbar>
-                    <RssFeed fontSize="medium"/>
-                    {!isAuthenticated && <Button onClick={() => authenticate()}>Login</Button>}
-                    {isAuthenticated && <Button onClick={() => logout()}>Logout</Button>}
-                </Toolbar>
-            </Fragment>
-        );
+        return (<Fragment>
+            <Divider/>
+            <Toolbar>
+                <RssFeed fontSize="medium"/>
+                {!isAuthenticated && <Button onClick={() => authenticate()}>Login</Button>}
+                {isAuthenticated && <Button onClick={() => logout()}>Logout</Button>}
+            </Toolbar>
+        </Fragment>);
     }
 
-    return (
-        <Area tabIndex={-1} ref={refDiv}>
-            {getHeader()}
-            {getContent()}
-            {getFooter()}
-        </Area>
-    );
+    return (<Area tabIndex={-1} ref={refPassthrough}>
+        {getHeader()}
+        {getContent()}
+        {getFooter()}
+    </Area>);
 }

@@ -13,7 +13,7 @@ import {useAuth} from "./context/AuthContext";
 export default function Controls(props) {
     const {active, showContent = false} = props;
     const {loading, allFeeds, selectedFeed, setSelectedFeed, entries, selectedEntry, setSelectedEntry} = useFeeds();
-    const {isAuthenticated, user, authenticate, logout} = useAuth();
+    const {isAuthenticated, authenticate, logout} = useAuth();
     const [highlightedFeed, setHighlightedFeed] = useState(0);
     const [highlightedEntry, setHighlightedEntry] = useState(0);
     const refDiv = useRef(null);
@@ -174,14 +174,12 @@ export default function Controls(props) {
                 <Divider/>
                 <Toolbar>
                     <RssFeed fontSize="medium"/>
-                    {!isAuthenticated && <Button onClick={authenticate}>Login</Button>}
-                    {isAuthenticated && <Button onClick={logout}>Logout</Button>}
+                    {!isAuthenticated && <Button onClick={() => authenticate()}>Login</Button>}
+                    {isAuthenticated && <Button onClick={() => logout()}>Logout</Button>}
                 </Toolbar>
             </Fragment>
         );
     }
-
-    console.log(`Logged in: ${isAuthenticated}`);
 
     return (
         <Area tabIndex={-1} ref={refDiv}>

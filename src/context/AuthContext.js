@@ -21,7 +21,7 @@ export function AuthContextProvider({children}) {
         netlifyIdentity.open();
         netlifyIdentity.on('login', user => {
             setUser(user);
-            setIsAuthenticated(true)
+            setIsAuthenticated(true);
             if (callback) {
                 callback(user);
             }

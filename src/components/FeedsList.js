@@ -17,7 +17,7 @@ const ListItem = styled(MuiListItem)(props => ({
 
 export default function FeedsList(props) {
     const {highlightedFeed, handleClick} = props;
-    const {allFeeds, selectedFeed} = useFeeds();
+    const {feeds, selectedFeed} = useFeeds();
 
     function getFeed(entry, index) {
         return (
@@ -38,7 +38,7 @@ export default function FeedsList(props) {
 
     return (
         <List dense={true}>
-            {allFeeds.map((e, i) => getFeed(e, i))}
+            {feeds.map((e, i) => getFeed(e, i))}
         </List>
     )
 }

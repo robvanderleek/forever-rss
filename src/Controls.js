@@ -1,41 +1,24 @@
 import {useHotkeys} from "react-hotkeys-hook";
-import {useFeeds} from "./context/FeedsContext";
+import {modeContent, modeEntries, modeFeeds, modeLoading, useFeeds} from "./context/FeedsContext";
 import {Fragment, useEffect, useRef, useState} from "react";
 import {Area, CenteredArea, ContentArea} from "./styles";
 import Loader from "react-loaders";
 import FeedsList from "./components/FeedsList";
 import EntriesList from "./components/EntriesList";
-import {Button, Divider, IconButton, styled, Toolbar} from "@mui/material";
-import {ArrowBack, Article, RssFeed} from "@mui/icons-material";
+import {Button, Divider, Toolbar} from "@mui/material";
+import {RssFeed} from "@mui/icons-material";
 import Content from "./Content";
 import {useAuth} from "./context/AuthContext";
 import {useSwipeable} from "react-swipeable";
+import Header from "./Header";
 
 export default function Controls(props) {
-    const {active, showContent = false} = props;
-    const {loading, allFeeds, selectedFeed, setSelectedFeed, entries, selectedEntry, setSelectedEntry} = useFeeds();
+    const {active} = props;
+    const {mode, feeds, selectedFeed, setSelectedFeed, entries, selectedEntry, setSelectedEntry} = useFeeds();
     const {isAuthenticated, authenticate, logout} = useAuth();
     const [highlightedFeed, setHighlightedFeed] = useState(0);
     const [highlightedEntry, setHighlightedEntry] = useState(0);
     const refDiv = useRef(null);
-    const modeLoading = Symbol('loading');
-    const modeFeeds = Symbol('feeds');
-    const modeEntries = Symbol('entries');
-    const modeContent = Symbol('content');
-
-    const mode = () => {
-        if (loading) {
-            return modeLoading;
-        } else if (selectedFeed >= 0) {
-            if (selectedEntry >= 0 && showContent) {
-                return modeContent;
-            } else {
-                return modeEntries;
-            }
-        } else {
-            return modeFeeds;
-        }
-    }
 
     const gotoFeeds = () => {
         setHighlightedFeed(0);
@@ -59,7 +42,7 @@ export default function Controls(props) {
         }
     }
 
-    const handlers = useSwipeable({ onSwipedRight: handleBack });
+    const handlers = useSwipeable({onSwipedRight: handleBack});
 
     const refUp = useHotkeys('up', () => {
         switch (mode()) {
@@ -85,13 +68,13 @@ export default function Controls(props) {
                 }
                 break;
             case modeFeeds:
-                if (highlightedFeed < allFeeds.length - 1) {
+                if (highlightedFeed < feeds.length - 1) {
                     setHighlightedFeed(highlightedFeed + 1);
                 }
                 break;
             default:
         }
-    }, [highlightedFeed, allFeeds, highlightedEntry, entries]);
+    }, [highlightedFeed, feeds, highlightedEntry, entries]);
 
     const refLeft = useHotkeys('left', () => {
         switch (mode()) {
@@ -144,50 +127,6 @@ export default function Controls(props) {
         refDiv.current.focus();
     }
 
-    const FeedTitle = styled('div')({
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center'
-    });
-
-    function getHeader() {
-        switch (mode()) {
-            case modeFeeds:
-                return (<Fragment>
-                    <Toolbar>
-                        <RssFeed fontSize="medium"/>
-                    </Toolbar>
-                    <Divider/>
-                </Fragment>);
-            case modeEntries:
-                return (<Fragment>
-                    <Toolbar>
-                        <IconButton onClick={handleBack}>
-                            <ArrowBack fontSize="medium"/>
-                        </IconButton>
-                        <FeedTitle>
-                            <RssFeed fontSize="medium"/>
-                            <span style={{marginLeft: '10px'}}>{allFeeds[selectedFeed].title}</span>
-                        </FeedTitle>
-                    </Toolbar>
-                    <Divider/>
-                </Fragment>);
-            case modeContent:
-                return (<Fragment>
-                    <Toolbar>
-                        <IconButton onClick={handleBack}>
-                            <ArrowBack fontSize="medium"/>
-                        </IconButton>
-                        <FeedTitle>
-                            <Article fontSize="medium"/>
-                            <span style={{marginLeft: '10px'}}>{entries[selectedEntry].title}</span>
-                        </FeedTitle>
-                    </Toolbar>
-                    <Divider/>
-                </Fragment>);
-            default:
-        }
-    }
 
     function getContent() {
         switch (mode()) {
@@ -223,7 +162,7 @@ export default function Controls(props) {
     }
 
     return (<Area tabIndex={-1} ref={refPassthrough}>
-        {getHeader()}
+        <Header handleBack={handleBack}/>
         {getContent()}
         {getFooter()}
     </Area>);

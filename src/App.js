@@ -38,7 +38,7 @@ function App() {
         return (
             <Main>
                 <Section sx={{width: '100%'}} active={1}>
-                    <Controls active={true} showContent={true}/>
+                    <Controls active={true}/>
                 </Section>
             </Main>
         );

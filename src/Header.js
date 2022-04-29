@@ -3,6 +3,7 @@ import {Divider, IconButton, styled, Toolbar} from "@mui/material";
 import {ArrowBack} from "@mui/icons-material";
 import {modeContent, modeEntries, modeFeeds, useFeeds} from "./context/FeedsContext";
 import logo from './static/forever-rss-logo.svg';
+import {version} from "./version";
 
 const Title = styled('span')({
     marginLeft: '12px',
@@ -20,7 +21,7 @@ export default function Header(props) {
         return (<Fragment>
             <Toolbar>
                 <img src={logo} alt="logo" width={32} height={32} style={{borderRadius: '4px'}}/>
-                <Title>Forever RSS</Title>
+                <Title>Forever RSS ({version.revision})</Title>
             </Toolbar>
             <Divider/>
         </Fragment>);

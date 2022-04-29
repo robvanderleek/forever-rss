@@ -10,7 +10,7 @@ export const Main = styled('div')({
 export const Section = styled('div')((props) => ({
     borderStyle: props.active ? 'solid' : 'none',
     borderWidth: '2px',
-    borderImage: 'linear-gradient(to bottom, #c25096, #808ecd) 1',
+    borderImage: 'linear-gradient(to bottom, #808ecd, #c25096) 1',
     padding: props.active ? '0px' : '2px',
     overflow: 'auto'
 }));

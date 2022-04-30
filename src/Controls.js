@@ -5,7 +5,7 @@ import {Area, CenteredArea, ContentArea} from "./styles";
 import Loader from "react-loaders";
 import FeedsList from "./components/FeedsList";
 import EntriesList from "./components/EntriesList";
-import {Button, Divider, Toolbar} from "@mui/material";
+import {Button, Divider, Toolbar, useMediaQuery} from "@mui/material";
 import {RssFeed} from "@mui/icons-material";
 import Content from "./Content";
 import {useAuth} from "./context/AuthContext";
@@ -24,6 +24,7 @@ export default function Controls(props) {
     const [highlightedEntry, setHighlightedEntry] = useState(0);
     const refDiv = useRef(null);
     const [mode, setMode] = useState(modeFeeds);
+    const wideScreen = useMediaQuery('(min-width:900px)');
 
     const handleBack = () => {
         switch (mode) {
@@ -85,6 +86,9 @@ export default function Controls(props) {
                 break;
             case modeEntries:
                 setSelectedEntry(highlightedEntry);
+                if (!wideScreen) {
+                    setMode(modeContent);
+                }
                 break;
             default:
         }
@@ -114,9 +118,12 @@ export default function Controls(props) {
 
     function handleEntriesClick(index) {
         setSelectedEntry(index);
+        setHighlightedEntry(index)
+        if (!wideScreen) {
+            setMode(modeContent);
+        }
         refDiv.current.focus();
     }
-
 
     function getContent() {
         if (loading) {

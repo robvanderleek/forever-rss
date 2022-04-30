@@ -24,7 +24,7 @@ export default function FeedsList(props) {
             <ListItem key={index} active={+(highlightedFeed === index)}>
                 <ListItemButton selected={highlightedFeed === index} onClick={() => handleClick(index)}>
                     <ListItemAvatar>
-                        <Badge badgeContent={0} color="primary">
+                        <Badge badgeContent={1} color="secondary" variant="dot">
                             <ItemAvatar active={+(selectedFeed === index)}>
                                 <RssFeed fontSize="inherit"/>
                             </ItemAvatar>

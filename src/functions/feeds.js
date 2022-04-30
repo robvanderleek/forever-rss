@@ -1,9 +1,13 @@
 const {XMLParser} = require("fast-xml-parser");
 const fetch = require("node-fetch");
-
+const Redis = require("ioredis");
 
 exports.handler = async function (event, context) {
     const { identity, user } = context.clientContext;
+
+    const client = new Redis(process.env.FOREVER_RSS_UPSTASH);
+    client.set('mies', 'wim');
+
     const response = await fetch('https://raw.githubusercontent.com/robvanderleek/robvanderleek/main/my-awesome.opml');
     if (response.ok) {
         const opml = await response.text();

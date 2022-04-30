@@ -1,9 +1,10 @@
 import {Fragment} from "react";
 import {Divider, IconButton, styled, Toolbar} from "@mui/material";
 import {ArrowBack} from "@mui/icons-material";
-import {modeContent, modeEntries, modeFeeds, useFeeds} from "./context/FeedsContext";
+import {useFeeds} from "./context/FeedsContext";
 import logo from './static/forever-rss-logo.svg';
 import {version} from "./version";
+import {modeContent, modeEntries, modeFeeds} from "./Controls";
 
 const Title = styled('span')({
     marginLeft: '12px',
@@ -14,8 +15,8 @@ const Title = styled('span')({
 });
 
 export default function Header(props) {
-    const {handleBack} = props;
-    const {mode, feeds, selectedFeed, entries, selectedEntry} = useFeeds();
+    const {mode, handleBack} = props;
+    const {feeds, selectedFeed, entries, selectedEntry} = useFeeds();
 
     const feedsHeader = () => {
         return (<Fragment>
@@ -51,7 +52,7 @@ export default function Header(props) {
         </Fragment>);
     }
 
-    switch (mode()) {
+    switch (mode) {
         case modeEntries:
             return entriesHeader();
         case modeContent:
@@ -59,6 +60,5 @@ export default function Header(props) {
         case modeFeeds:
         default:
             return feedsHeader();
-
     }
 }

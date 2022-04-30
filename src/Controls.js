@@ -1,5 +1,5 @@
 import {useHotkeys} from "react-hotkeys-hook";
-import {modeContent, modeEntries, modeFeeds, modeLoading, useFeeds} from "./context/FeedsContext";
+import {useFeeds} from "./context/FeedsContext";
 import {Fragment, useEffect, useRef, useState} from "react";
 import {Area, CenteredArea, ContentArea} from "./styles";
 import Loader from "react-loaders";
@@ -12,31 +12,28 @@ import {useAuth} from "./context/AuthContext";
 import {useSwipeable} from "react-swipeable";
 import Header from "./Header";
 
+export const modeFeeds = Symbol('feeds');
+export const modeEntries = Symbol('entries');
+export const modeContent = Symbol('content');
+
 export default function Controls(props) {
     const {active} = props;
-    const {mode, feeds, selectedFeed, setSelectedFeed, entries, selectedEntry, setSelectedEntry} = useFeeds();
+    const {loading, feeds, selectedFeed, setSelectedFeed, entries, selectedEntry, setSelectedEntry} = useFeeds();
     const {isAuthenticated, authenticate, logout} = useAuth();
     const [highlightedFeed, setHighlightedFeed] = useState(0);
     const [highlightedEntry, setHighlightedEntry] = useState(0);
     const refDiv = useRef(null);
-
-    const gotoFeeds = () => {
-        setHighlightedFeed(0);
-        setSelectedFeed(-1);
-    }
-
-    const gotoEntries = () => {
-        setHighlightedEntry(0);
-        setSelectedEntry(-1);
-    }
+    const [mode, setMode] = useState(modeFeeds);
 
     const handleBack = () => {
-        switch (mode()) {
+        switch (mode) {
             case modeContent:
-                gotoEntries();
+                setMode(modeEntries);
                 break;
             case modeEntries:
-                gotoFeeds();
+                setSelectedEntry(-1);
+                setHighlightedEntry(0);
+                setMode(modeFeeds);
                 break;
             default:
         }
@@ -45,7 +42,7 @@ export default function Controls(props) {
     const handlers = useSwipeable({onSwipedRight: handleBack});
 
     const refUp = useHotkeys('up', () => {
-        switch (mode()) {
+        switch (mode) {
             case modeEntries:
                 if (highlightedEntry > 0) {
                     setHighlightedEntry(highlightedEntry - 1);
@@ -61,7 +58,7 @@ export default function Controls(props) {
     }, [highlightedEntry, highlightedFeed]);
 
     const refDown = useHotkeys('down', () => {
-        switch (mode()) {
+        switch (mode) {
             case modeEntries:
                 if (highlightedEntry < entries.length - 1) {
                     setHighlightedEntry(highlightedEntry + 1);
@@ -74,31 +71,24 @@ export default function Controls(props) {
                 break;
             default:
         }
-    }, [highlightedFeed, feeds, highlightedEntry, entries]);
+    }, [mode, highlightedFeed, feeds, highlightedEntry, entries]);
 
     const refLeft = useHotkeys('left', () => {
-        switch (mode()) {
-            case modeEntries:
-                gotoFeeds();
-                break;
-            case modeContent:
-                gotoEntries();
-                break;
-            default:
-        }
-    }, [selectedFeed, selectedEntry, highlightedFeed, highlightedEntry]);
+        handleBack();
+    }, [mode]);
 
     const refEnter = useHotkeys('enter', () => {
-        switch (mode()) {
+        switch (mode) {
             case modeFeeds:
                 setSelectedFeed(highlightedFeed);
+                setMode(modeEntries);
                 break;
             case modeEntries:
                 setSelectedEntry(highlightedEntry);
                 break;
             default:
         }
-    }, [highlightedFeed, highlightedEntry]);
+    }, [mode, highlightedFeed, selectedFeed, highlightedEntry, selectedEntry]);
 
     useEffect(() => {
         refUp.current = refDiv.current;
@@ -115,10 +105,10 @@ export default function Controls(props) {
         refDiv.current = el;
     }
 
-
     function handleFeedsClick(index) {
         setSelectedFeed(index);
         setHighlightedFeed(index);
+        setMode(modeEntries);
         refDiv.current.focus();
     }
 
@@ -129,12 +119,13 @@ export default function Controls(props) {
 
 
     function getContent() {
-        switch (mode()) {
+        if (loading) {
+            return (<CenteredArea>
+                <Loader type="line-scale-pulse-out" active/>
+            </CenteredArea>);
+        }
+        switch (mode) {
             default:
-            case modeLoading:
-                return (<CenteredArea>
-                    <Loader type="line-scale-pulse-out" active/>
-                </CenteredArea>);
             case modeFeeds:
                 return (<ContentArea>
                     <FeedsList highlightedFeed={highlightedFeed} handleClick={handleFeedsClick}/>
@@ -162,7 +153,7 @@ export default function Controls(props) {
     }
 
     return (<Area tabIndex={-1} ref={refPassthrough}>
-        <Header handleBack={handleBack}/>
+        <Header mode={mode} handleBack={handleBack}/>
         {getContent()}
         {getFooter()}
     </Area>);

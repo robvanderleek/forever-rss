@@ -14,7 +14,12 @@ const Title = styled('span')({
     fontSize: '18px'
 });
 
-export default function Header(props) {
+interface HeaderProps {
+    mode: any;
+    handleBack: () => void;
+}
+
+export default function Header(props: HeaderProps) {
     const {mode, handleBack} = props;
     const {feeds, selectedFeed, entries, selectedEntry} = useFeeds();
 

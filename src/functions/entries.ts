@@ -1,20 +1,26 @@
+import {Handler, HandlerContext, HandlerEvent} from "@netlify/functions";
+import {Entry} from "../entities/Entry";
+
 const fetch = require("node-fetch");
 const {XMLParser} = require("fast-xml-parser");
 
-async function handler(event, context) {
-    const url = event.queryStringParameters.url;
+const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
+    const url = event.queryStringParameters?.url;
     const response = await fetch(url, {redirect: 'follow'});
-    let result = [];
     if (response.ok) {
         const text = await response.text();
-        result = parseResponseText(text);
+        const result = parseResponseText(text);
+        return {
+            statusCode: 200, body: JSON.stringify({message: result}),
+        };
+    } else {
+        return {
+            statusCode: 204, body: JSON.stringify({message: []}),
+        };
     }
-    return {
-        statusCode: 200, body: JSON.stringify({message: result}),
-    };
 }
 
-function parseResponseText(text) {
+function parseResponseText(text: string): Array<Entry> {
     const xmlParser = new XMLParser();
     const obj = xmlParser.parse(text);
     if ('feed' in obj) {
@@ -26,17 +32,17 @@ function parseResponseText(text) {
     }
 }
 
-function parseFeedEntries(o) {
+function parseFeedEntries(xmlObject: any): Array<Entry> {
     const result = [];
-    for (const e of o.feed.entry) {
+    for (const e of xmlObject.feed.entry) {
         result.push({'id': e.id, 'title': e.title, 'updated': e.updated, 'link': e['link'], 'content': e.content});
     }
     return result;
 }
 
-function parseRssEntries(o) {
-    const result = [];
-    const isIterable = e => typeof e[Symbol.iterator] === 'function';
+function parseRssEntries(o: any): Array<Entry> {
+    const result: Array<Entry> = [];
+    const isIterable = (e: any) => typeof e[Symbol.iterator] === 'function';
     const entries = o.rss.channel.item;
     if (!entries) {
         return result;

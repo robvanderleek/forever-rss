@@ -4,8 +4,8 @@ import {useMediaQuery} from "@mui/material";
 import {useState} from "react";
 import Controls from "./Controls";
 import {useHotkeys} from "react-hotkeys-hook";
-import Content from "./Content";
 import {Main, Section} from "./styles";
+import Content from "./Content";
 
 function App() {
     const [activeSection, setActiveSection] = useState(0);

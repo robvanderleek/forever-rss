@@ -31,6 +31,7 @@ export const CenteredArea = styled('div')({
 });
 
 export const ContentArea = styled('div')({
+    height: '100%',
     overflow: 'auto'
 });
 

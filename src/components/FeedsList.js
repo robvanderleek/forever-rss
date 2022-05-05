@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import {ItemAvatar} from "../styles";
 import {RssFeed} from "@mui/icons-material";
-import {useFeeds} from "../context/FeedsContext";
+import {useFeeds} from "../contexts/FeedsContext";
 
 const ListItem = styled(MuiListItem)(props => ({
     color: props.active ? '#808ecd' : 'none'

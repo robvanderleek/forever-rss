@@ -4,8 +4,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import ReactDOMClient from "react-dom/client";
-import {FeedsContextProvider} from "./context/FeedsContext";
-import {AuthContextProvider} from "./context/AuthContext";
+import {FeedsContextProvider} from "./contexts/FeedsContext";
+import {AuthContextProvider} from "./contexts/AuthContext";
 
 const theme = createTheme({
     palette: {

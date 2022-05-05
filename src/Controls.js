@@ -1,40 +1,34 @@
 import {useHotkeys} from "react-hotkeys-hook";
-import {useFeeds} from "./context/FeedsContext";
+import {useFeeds} from "./contexts/FeedsContext";
 import {Fragment, useEffect, useRef, useState} from "react";
-import {Area, CenteredArea, ContentArea} from "./styles";
-import Loader from "react-loaders";
-import FeedsList from "./components/FeedsList";
-import EntriesList from "./components/EntriesList";
+import {Area} from "./styles";
 import {Button, Divider, Toolbar, useMediaQuery} from "@mui/material";
 import {RssFeed} from "@mui/icons-material";
-import Content from "./Content";
-import {useAuth} from "./context/AuthContext";
+import ControlsContent from "./ControlsContent";
+import {useAuth} from "./contexts/AuthContext";
 import {useSwipeable} from "react-swipeable";
 import Header from "./Header";
-
-export const modeFeeds = Symbol('feeds');
-export const modeEntries = Symbol('entries');
-export const modeContent = Symbol('content');
+import {Mode} from "./entities/Mode";
 
 export default function Controls(props) {
     const {active} = props;
-    const {loading, feeds, selectedFeed, setSelectedFeed, entries, selectedEntry, setSelectedEntry} = useFeeds();
+    const {feeds, selectedFeed, setSelectedFeed, entries, selectedEntry, setSelectedEntry} = useFeeds();
     const {isAuthenticated, authenticate, logout} = useAuth();
     const [highlightedFeed, setHighlightedFeed] = useState(0);
     const [highlightedEntry, setHighlightedEntry] = useState(0);
     const refDiv = useRef(null);
-    const [mode, setMode] = useState(modeFeeds);
+    const [mode, setMode] = useState(Mode.Feeds);
     const wideScreen = useMediaQuery('(min-width:900px)');
 
     const handleBack = () => {
         switch (mode) {
-            case modeContent:
-                setMode(modeEntries);
+            case Mode.Content:
+                setMode(Mode.Entries);
                 break;
-            case modeEntries:
+            case Mode.Entries:
                 setSelectedEntry(-1);
                 setHighlightedEntry(0);
-                setMode(modeFeeds);
+                setMode(Mode.Feeds);
                 break;
             default:
         }
@@ -44,12 +38,12 @@ export default function Controls(props) {
 
     const refUp = useHotkeys('up', () => {
         switch (mode) {
-            case modeEntries:
+            case Mode.Entries:
                 if (highlightedEntry > 0) {
                     setHighlightedEntry(highlightedEntry - 1);
                 }
                 break;
-            case modeFeeds:
+            case Mode.Feeds:
                 if (highlightedFeed > 0) {
                     setHighlightedFeed(highlightedFeed - 1);
                 }
@@ -60,12 +54,12 @@ export default function Controls(props) {
 
     const refDown = useHotkeys('down', () => {
         switch (mode) {
-            case modeEntries:
+            case Mode.Entries:
                 if (highlightedEntry < entries.length - 1) {
                     setHighlightedEntry(highlightedEntry + 1);
                 }
                 break;
-            case modeFeeds:
+            case Mode.Feeds:
                 if (highlightedFeed < feeds.length - 1) {
                     setHighlightedFeed(highlightedFeed + 1);
                 }
@@ -80,14 +74,14 @@ export default function Controls(props) {
 
     const refEnter = useHotkeys('enter', () => {
         switch (mode) {
-            case modeFeeds:
+            case Mode.Feeds:
                 setSelectedFeed(highlightedFeed);
-                setMode(modeEntries);
+                setMode(Mode.Entries);
                 break;
-            case modeEntries:
+            case Mode.Entries:
                 setSelectedEntry(highlightedEntry);
                 if (!wideScreen) {
-                    setMode(modeContent);
+                    setMode(Mode.Content);
                 }
                 break;
             default:
@@ -112,7 +106,7 @@ export default function Controls(props) {
     function handleFeedsClick(index) {
         setSelectedFeed(index);
         setHighlightedFeed(index);
-        setMode(modeEntries);
+        setMode(Mode.Entries);
         refDiv.current.focus();
     }
 
@@ -120,32 +114,9 @@ export default function Controls(props) {
         setSelectedEntry(index);
         setHighlightedEntry(index)
         if (!wideScreen) {
-            setMode(modeContent);
+            setMode(Mode.Content);
         }
         refDiv.current.focus();
-    }
-
-    function getContent() {
-        if (loading) {
-            return (<CenteredArea>
-                <Loader type="line-scale-pulse-out" active/>
-            </CenteredArea>);
-        }
-        switch (mode) {
-            default:
-            case modeFeeds:
-                return (<ContentArea>
-                    <FeedsList highlightedFeed={highlightedFeed} handleClick={handleFeedsClick}/>
-                </ContentArea>);
-            case modeEntries:
-                return (<ContentArea>
-                    <EntriesList highlightedEntry={highlightedEntry} handleClick={handleEntriesClick}/>
-                </ContentArea>);
-            case modeContent:
-                return (<ContentArea>
-                    <Content active={false}/>
-                </ContentArea>)
-        }
     }
 
     function getFooter() {
@@ -160,8 +131,10 @@ export default function Controls(props) {
     }
 
     return (<Area tabIndex={-1} ref={refPassthrough}>
-        <Header mode={mode} handleBack={handleBack}/>
-        {getContent()}
-        {getFooter()}
-    </Area>);
+            <Header mode={mode} handleBack={handleBack}/>
+            <ControlsContent mode={mode} highlightedFeed={highlightedFeed} handleFeedsClick={handleFeedsClick}
+                             highlightedEntry={highlightedEntry} handleEntriesClick={handleEntriesClick}/>
+            {getFooter()}
+        </Area>
+    );
 }

@@ -1,10 +1,10 @@
 import {Fragment} from "react";
 import {Divider, IconButton, styled, Toolbar} from "@mui/material";
 import {ArrowBack} from "@mui/icons-material";
-import {useFeeds} from "./context/FeedsContext";
+import {useFeeds} from "./contexts/FeedsContext";
 import logo from './static/forever-rss-logo.svg';
 import {version} from "./version";
-import {modeContent, modeEntries, modeFeeds} from "./Controls";
+import {Mode} from "./entities/Mode";
 
 const Title = styled('span')({
     marginLeft: '12px',
@@ -15,7 +15,7 @@ const Title = styled('span')({
 });
 
 interface HeaderProps {
-    mode: any;
+    mode: Mode;
     handleBack: () => void;
 }
 
@@ -58,11 +58,11 @@ export default function Header(props: HeaderProps) {
     }
 
     switch (mode) {
-        case modeEntries:
+        case Mode.Entries:
             return entriesHeader();
-        case modeContent:
+        case Mode.Content:
             return contentHeader();
-        case modeFeeds:
+        case Mode.Feeds:
         default:
             return feedsHeader();
     }

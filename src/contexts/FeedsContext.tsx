@@ -12,6 +12,10 @@ interface FeedsContextValue {
     entries: Array<Entry>;
     selectedEntry: number;
     setSelectedEntry: Function;
+    highlightedFeed: number;
+    setHighlightedFeed: Function;
+    highlightedEntry: number;
+    setHighlightedEntry: Function;
 }
 
 const FeedsContext = createContext({} as FeedsContextValue);
@@ -26,6 +30,8 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
     const [selectedFeed, setSelectedFeed] = useState(-1);
     const [entries, setEntries] = useState(Array<Entry>());
     const [selectedEntry, setSelectedEntry] = useState(-1);
+    const [highlightedFeed, setHighlightedFeed] = useState(0);
+    const [highlightedEntry, setHighlightedEntry] = useState(0);
     const {user} = useAuth();
 
     useEffect(() => {
@@ -57,7 +63,17 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
     }, [feeds, selectedFeed]);
 
     return (<FeedsContext.Provider value={{
-        loading, feeds, entries, selectedFeed, setSelectedFeed, selectedEntry, setSelectedEntry
+        loading,
+        feeds,
+        entries,
+        selectedFeed,
+        setSelectedFeed,
+        selectedEntry,
+        setSelectedEntry,
+        highlightedFeed,
+        setHighlightedFeed,
+        highlightedEntry,
+        setHighlightedEntry
     }}>{props.children}</FeedsContext.Provider>)
 }
 

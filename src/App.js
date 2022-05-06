@@ -1,27 +1,12 @@
 import './App.css';
 import 'loaders.css';
-import {useMediaQuery} from "@mui/material";
-import {useState} from "react";
 import Controls from "./Controls";
-import {useHotkeys} from "react-hotkeys-hook";
 import {Main, Section} from "./styles";
 import Content from "./Content";
+import {useAppMode} from "./contexts/AppModeContext";
 
-function App() {
-    const [activeSection, setActiveSection] = useState(0);
-    const wideScreen = useMediaQuery('(min-width:900px)');
-
-    useHotkeys('left', () => {
-        if (activeSection > 0) {
-            setActiveSection(activeSection - 1);
-        }
-    }, [activeSection]);
-
-    useHotkeys('right', () => {
-        if (activeSection < 1) {
-            setActiveSection(activeSection + 1);
-        }
-    }, [activeSection]);
+export default function App() {
+    const {activeSection, wideScreen} = useAppMode();
 
     if (wideScreen) {
         return (
@@ -44,5 +29,3 @@ function App() {
         );
     }
 }
-
-export default App;

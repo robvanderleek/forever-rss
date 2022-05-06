@@ -6,6 +6,7 @@ import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import ReactDOMClient from "react-dom/client";
 import {FeedsContextProvider} from "./contexts/FeedsContext";
 import {AuthContextProvider} from "./contexts/AuthContext";
+import {AppModeContextProvider} from "./contexts/AppModeContext";
 
 const theme = createTheme({
     palette: {
@@ -23,7 +24,9 @@ ReactDOMClient.createRoot(rootElement).render(<React.StrictMode>
         <CssBaseline/>
         <AuthContextProvider>
             <FeedsContextProvider>
-                <App/>
+                <AppModeContextProvider>
+                    <App/>
+                </AppModeContextProvider>
             </FeedsContextProvider>
         </AuthContextProvider>
     </ThemeProvider>

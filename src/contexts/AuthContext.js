@@ -8,13 +8,16 @@ export function AuthContextProvider({children}) {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        window.netlifyIdentity = netlifyIdentity;
-        netlifyIdentity.init();
-        const currentUser = netlifyIdentity.currentUser()
-        if (currentUser) {
-            setIsAuthenticated(true);
-            setUser(currentUser);
+        const init = async () => {
+            window.netlifyIdentity = netlifyIdentity;
+            netlifyIdentity.init();
+            const currentUser = netlifyIdentity.currentUser()
+            if (currentUser) {
+                setIsAuthenticated(true);
+                setUser(currentUser);
+            }
         }
+        init();
     }, []);
 
     const authenticate = (callback) => {
@@ -22,6 +25,7 @@ export function AuthContextProvider({children}) {
         netlifyIdentity.on('login', user => {
             setUser(user);
             setIsAuthenticated(true);
+            netlifyIdentity.close();
             if (callback) {
                 callback(user);
             }

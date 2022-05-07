@@ -1,5 +1,5 @@
 import {useFeeds} from "./contexts/FeedsContext";
-import {Fragment, useState} from "react";
+import {Fragment} from "react";
 import {Area} from "./styles";
 import {Button, Divider, Toolbar} from "@mui/material";
 import {RssFeed} from "@mui/icons-material";

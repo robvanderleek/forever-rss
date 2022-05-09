@@ -9,6 +9,7 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
     const response = await fetch(url, {redirect: 'follow'});
     if (response.ok) {
         const text = await response.text();
+        console.log(text);
         const result = parseResponseText(text);
         return {
             statusCode: 200, body: JSON.stringify({message: result}),
@@ -21,7 +22,8 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
 }
 
 function parseResponseText(text: string): Array<Entry> {
-    const xmlParser = new XMLParser();
+    const options = {ignoreAttributes: false};
+    const xmlParser = new XMLParser(options);
     const obj = xmlParser.parse(text);
     if ('feed' in obj) {
         return parseFeedEntries(obj);
@@ -48,24 +50,23 @@ function parseRssEntries(o: any): Array<Entry> {
         return result;
     } else if (isIterable(o.rss.channel.item)) {
         for (const e of o.rss.channel.item) {
-            result.push({
-                'id': e.guid,
-                'title': e.title,
-                'updated': e.pubDate,
-                'link': e.link,
-                'content': e.description
-            });
+            result.push(toEntry(e));
         }
     } else {
-        result.push({
-            'id': entries.guid,
-            'title': entries.title,
-            'updated': entries.pubDate,
-            'link': entries.link,
-            'content': entries.description
-        });
+        result.push(toEntry(entries));
     }
     return result;
+}
+
+function toEntry(obj: any): Entry {
+    return {
+        'id': obj['guid'],
+        'title': obj['title'],
+        'updated': obj['pubDate'],
+        'link': obj['link'],
+        'content': obj['description'],
+        'heroImage': obj['enclosure']?.['@_url']
+    }
 }
 
 module.exports = {

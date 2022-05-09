@@ -1,12 +1,12 @@
-import {Mode} from "./entities/Mode";
-import {CenteredArea, ContentArea} from "./styles";
+import {Mode} from "../entities/Mode";
+import {CenteredArea, ContentArea} from "../styles";
 import Loader from "react-loaders";
-import FeedsList from "./components/FeedsList";
-import EntriesList from "./components/EntriesList";
-import {useFeeds} from "./contexts/FeedsContext";
+import FeedsList from "./FeedsList";
+import EntriesList from "./EntriesList";
+import {useFeeds} from "../contexts/FeedsContext";
 import Content from "./Content";
 
-interface ContentProps {
+interface ControlsContentProps {
     mode: Mode;
     highlightedFeed: number;
     handleFeedsClick: (n: number) => void;
@@ -14,7 +14,7 @@ interface ContentProps {
     handleEntriesClick: (n: number) => void;
 }
 
-export default function ControlsContent(props: ContentProps) {
+export default function ControlsContent(props: ControlsContentProps) {
     const {loading} = useFeeds();
 
     if (loading) {

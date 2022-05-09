@@ -1,8 +1,8 @@
 import './App.css';
 import 'loaders.css';
-import Controls from "./Controls";
+import Controls from "./components/Controls";
 import {Main, Section} from "./styles";
-import Content from "./Content";
+import Content from "./components/Content";
 import {useAppMode} from "./contexts/AppModeContext";
 
 export default function App() {

@@ -22,7 +22,8 @@ export default function FeedsList(props) {
     function getFeed(entry, index) {
         return (
             <ListItem key={index} active={+(highlightedFeed === index)}>
-                <ListItemButton selected={highlightedFeed === index} onClick={() => handleClick(index)}>
+                <ListItemButton selected={highlightedFeed === index} onClick={() => handleClick(index)}
+                                autoFocus={highlightedFeed === index}>
                     <ListItemAvatar>
                         <Badge badgeContent={1} color="secondary" variant="dot">
                             <ItemAvatar active={+(selectedFeed === index)}>

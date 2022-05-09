@@ -16,7 +16,8 @@ export default function EntriesList(props) {
     function getEntry(entry, index) {
         return (
             <ListItem key={index} active={+(highlightedEntry === index)}>
-                <ListItemButton selected={highlightedEntry === index} onClick={() => handleClick(index)} autoFocus={highlightedEntry === index}>
+                <ListItemButton selected={highlightedEntry === index} onClick={() => handleClick(index)}
+                                autoFocus={highlightedEntry === index}>
                     <ListItemAvatar>
                         <ItemAvatar active={+(selectedEntry === index)}>
                             <Article fontSize="inherit"/>

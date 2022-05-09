@@ -45,3 +45,22 @@ test('parse empty feed', async () => {
     expect(result).toBeDefined();
     expect(result.length).toBe(0);
 });
+
+test('parse XML RSS feed with hero image', () => {
+    const text = `
+        <rss>
+            <channel>
+                <item>
+                    <title>Hello world</title>
+                    <description>This is a test</description>
+                    <enclosure url="https://foo.jpg" length="0" type="image/jpeg"/>
+                </item>
+            </channel>
+        </rss>
+    `;
+
+    const result = parseResponseText(text);
+
+    expect(result.length).toBe(1);
+    expect(result[0].heroImage).toBe('https://foo.jpg');
+});

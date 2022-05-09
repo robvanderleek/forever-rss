@@ -1,5 +1,5 @@
-import {Button, Divider, Toolbar} from "@mui/material";
-import {RssFeed} from "@mui/icons-material";
+import {Button, Divider, IconButton, Toolbar} from "@mui/material";
+import {Add, RssFeed} from "@mui/icons-material";
 import {Fragment} from "react";
 import {useAuth} from "../contexts/AuthContext";
 
@@ -13,6 +13,7 @@ export default function Footer() {
                 <RssFeed fontSize="medium"/>
                 {!isAuthenticated && <Button onClick={() => authenticate()}>Login</Button>}
                 {isAuthenticated && <Button onClick={() => logout()}>Logout</Button>}
+                <IconButton><Add/></IconButton>
             </Toolbar>
         </Fragment>
     );

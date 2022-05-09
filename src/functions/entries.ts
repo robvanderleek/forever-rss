@@ -9,7 +9,6 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
     const response = await fetch(url, {redirect: 'follow'});
     if (response.ok) {
         const text = await response.text();
-        console.log(text);
         const result = parseResponseText(text);
         return {
             statusCode: 200, body: JSON.stringify({message: result}),

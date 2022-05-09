@@ -45,7 +45,11 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
         switch (mode) {
             case Mode.Entries:
                 if (highlightedEntry > 0) {
-                    setHighlightedEntry(highlightedEntry - 1);
+                    const previousEntry = highlightedEntry - 1;
+                    setHighlightedEntry(previousEntry);
+                    if (selectedEntry >= 0) {
+                        setSelectedEntry(previousEntry);
+                    }
                 }
                 break;
             case Mode.Feeds:
@@ -55,13 +59,17 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
                 break;
             default:
         }
-    }, [highlightedEntry, highlightedFeed]);
+    }, [highlightedEntry, highlightedFeed, selectedEntry]);
 
     useHotkeys('down', () => {
         switch (mode) {
             case Mode.Entries:
                 if (highlightedEntry < entries.length - 1) {
-                    setHighlightedEntry(highlightedEntry + 1);
+                    const nextEntry = highlightedEntry + 1;
+                    setHighlightedEntry(nextEntry);
+                    if (selectedEntry >= 0) {
+                        setSelectedEntry(nextEntry);
+                    }
                 }
                 break;
             case Mode.Feeds:
@@ -71,7 +79,7 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
                 break;
             default:
         }
-    }, [mode, highlightedFeed, feeds, highlightedEntry, entries]);
+    }, [mode, highlightedFeed, feeds, highlightedEntry, selectedEntry, entries]);
 
     const handleBack = () => {
         switch (mode) {
@@ -98,6 +106,7 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
         switch (mode) {
             case Mode.Feeds:
                 setSelectedFeed(highlightedFeed);
+                setSelectedEntry(-1);
                 setMode(Mode.Entries);
                 break;
             case Mode.Entries:

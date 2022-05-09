@@ -28,7 +28,8 @@ export default function Content(props) {
                 <a href={entry.link}>
                     <h1>{entry.title}</h1>
                 </a>
-                {entry.heroImage && <img src={entry.heroImage}/>}
+                {entry.heroImage && <img src={entry.heroImage} alt="Headline"/>}
+
                 {entries.length >= 1 && htmlParse(entry.content)}
             </ContentArea>
         );

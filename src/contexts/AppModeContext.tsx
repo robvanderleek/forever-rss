@@ -10,6 +10,7 @@ interface AppModeContextValue {
     setMode: Function;
     wideScreen: boolean;
     handleBack: Function;
+    handleClick: Function;
 }
 
 const AppModeContext = createContext({} as AppModeContextValue);
@@ -23,7 +24,6 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
     const [mode, setMode] = useState(Mode.Feeds);
     const {
         feeds,
-        selectedFeed,
         setSelectedFeed,
         entries,
         selectedEntry,
@@ -102,7 +102,7 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
         handleBack();
     }, [mode, activeSection]);
 
-    useHotkeys('enter', () => {
+    const handleClick = () => {
         switch (mode) {
             case Mode.Feeds:
                 setSelectedFeed(highlightedFeed);
@@ -117,10 +117,10 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
                 break;
             default:
         }
-    }, [mode, highlightedFeed, selectedFeed, highlightedEntry, selectedEntry]);
+    }
 
     return (<AppModeContext.Provider value={{
-        activeSection, mode, setMode, wideScreen, handleBack
+        activeSection, mode, setMode, wideScreen, handleBack, handleClick
     }}>{props.children}</AppModeContext.Provider>)
 }
 

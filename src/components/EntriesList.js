@@ -13,6 +13,8 @@ export default function EntriesList(props) {
     const {highlightedEntry, handleClick} = props;
     const {entries, selectedEntry} = useFeeds();
 
+    console.log('SELECTED ENTRY: ' + selectedEntry);
+
     function getEntry(entry, index) {
         return (
             <ListItem key={index} active={+(highlightedEntry === index)}>

@@ -36,7 +36,7 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
 
     useEffect(() => {
         async function loadFeeds() {
-            const fetchedFeeds: Array<Feed> = await apiFetch('feeds', user);
+            const fetchedFeeds: Array<Feed> = await apiFetch('feeds-list', user);
             if (fetchedFeeds) {
                 const sortedFeeds = fetchedFeeds.sort((a, b) => ('' + a.title).localeCompare(b.title));
                 setFeeds(sortedFeeds);

@@ -1,4 +1,4 @@
-import {Dialog, DialogTitle} from "@mui/material";
+import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
 
 interface AddFeedDialogProps {
     open: boolean;
@@ -10,6 +10,16 @@ export default function AddFeedDialog(props: AddFeedDialogProps) {
     return (
         <Dialog open={open} onClose={onClose}>
             <DialogTitle>Add feed</DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    Feed URL
+                </DialogContentText>
+                <TextField autoFocus id="feedUrl" label="Feed URL" fullWidth variant="standard"/>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onClose}>Cancel</Button>
+                <Button>Add</Button>
+            </DialogActions>
         </Dialog>
     )
 }

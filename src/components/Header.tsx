@@ -16,7 +16,7 @@ const Title = styled('span')({
 
 const AppTitle = styled(Title)({
     fontSize: '24px',
-    fontFamily: 'Shojumaru, cursive',
+    fontFamily: 'Roboto, sans-serif',
     color: '#808ecd'
 });
 

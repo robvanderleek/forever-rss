@@ -20,7 +20,6 @@ const handler: Handler = async function (event: HandlerEvent, context: HandlerCo
     for (const d of data) {
         feeds.push(JSON.parse(d));
     }
-
 // const response = await fetch('https://raw.githubusercontent.com/robvanderleek/robvanderleek/main/my-awesome.opml');
 // if (response.ok) {
 //     const opml = await response.text();

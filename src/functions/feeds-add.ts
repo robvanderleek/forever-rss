@@ -10,9 +10,6 @@ const handler: Handler = async function (event: HandlerEvent, context: HandlerCo
     const url = event.queryStringParameters?.url;
     const user = context.clientContext['user'];
 
-    console.log(url);
-    console.log(user);
-
     // const response = await fetch(url, {redirect: 'follow'});
     // if (response.ok) {
     //     const text = await response.text();

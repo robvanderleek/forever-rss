@@ -1,5 +1,4 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
-import {apiFetch} from "../utils";
 import {useAuth} from "./AuthContext";
 import {Feed} from "../entities/Feed";
 import {Entry} from "../entities/Entry";
@@ -16,6 +15,7 @@ interface FeedsContextValue {
     setHighlightedFeed: Function;
     highlightedEntry: number;
     setHighlightedEntry: Function;
+    saveFeed: Function;
 }
 
 const FeedsContext = createContext({} as FeedsContextValue);
@@ -32,7 +32,7 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
     const [selectedEntry, setSelectedEntry] = useState(-1);
     const [highlightedFeed, setHighlightedFeed] = useState(0);
     const [highlightedEntry, setHighlightedEntry] = useState(0);
-    const {user} = useAuth();
+    const {user, apiFetch, apiPost} = useAuth();
 
     useEffect(() => {
         async function loadFeeds() {
@@ -62,6 +62,10 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
         }
     }, [feeds, selectedFeed]);
 
+    const saveFeed = async (url: string) => {
+        await apiPost('feeds-add', '', user);
+    }
+
     return (<FeedsContext.Provider value={{
         loading,
         feeds,
@@ -73,7 +77,8 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
         highlightedFeed,
         setHighlightedFeed,
         highlightedEntry,
-        setHighlightedEntry
+        setHighlightedEntry,
+        saveFeed
     }}>{props.children}</FeedsContext.Provider>)
 }
 

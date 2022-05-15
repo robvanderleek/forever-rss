@@ -15,7 +15,7 @@ interface FeedsContextValue {
     setHighlightedFeed: Function;
     highlightedEntry: number;
     setHighlightedEntry: Function;
-    saveFeed: Function;
+    saveFeed: (url: string) => Promise<void>;
 }
 
 const FeedsContext = createContext({} as FeedsContextValue);
@@ -47,7 +47,7 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
         }
 
         loadFeeds();
-    }, [user]);
+    }, [user, apiFetch]);
 
     useEffect(() => {
         async function loadEntries() {
@@ -60,10 +60,10 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
             setLoading(true);
             loadEntries();
         }
-    }, [feeds, selectedFeed]);
+    }, [feeds, selectedFeed, apiFetch]);
 
     const saveFeed = async (url: string) => {
-        await apiPost('feeds-add', '', user);
+        await apiPost('feeds-add', JSON.stringify({url: url}), user);
     }
 
     return (<FeedsContext.Provider value={{

@@ -61,10 +61,8 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
         const headers: HeadersInit = {};
         if (user) {
             const token = await user.token?.access_token;
-            console.log(`TOKEN: ${JSON.stringify(token)}`);
             headers['Authorization'] = `Bearer ${token}`
         }
-        console.log(headers);
         const response = await fetch(`/.netlify/functions/${endpoint}`, {headers});
         if (response.ok) {
             return await response.json();
@@ -74,7 +72,6 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
     }
 
     const apiPost = async (endpoint: string, body: string, user: User) => {
-        console.log(user);
         const headers: HeadersInit = {};
         if (user) {
             const token = await user.token?.access_token;

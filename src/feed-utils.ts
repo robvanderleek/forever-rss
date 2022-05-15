@@ -10,7 +10,6 @@ export function parseFeed(text: string): Feed | undefined {
         return {title: 'aaa', url: 'bbb'}
     } else if ('rss' in obj) {
         const channel = obj.rss.channel;
-        console.log(channel)
         return {title: channel.title, url: channel['atom:link']['@_href']};
     } else {
         return undefined;

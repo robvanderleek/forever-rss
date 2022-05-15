@@ -1,9 +1,9 @@
 import {Handler, HandlerContext, HandlerEvent} from "@netlify/functions";
 import Redis from "ioredis";
 import {Feed} from "../entities/Feed";
+import fetch from "node-fetch";
 
 // const {XMLParser} = require("fast-xml-parser");
-const fetch = require("node-fetch");
 
 const handler: Handler = async function (event: HandlerEvent, context: HandlerContext) {
     if (!context.clientContext || !context.clientContext.user) {

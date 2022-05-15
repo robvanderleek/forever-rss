@@ -1,31 +1,30 @@
 import {Handler, HandlerContext, HandlerEvent} from "@netlify/functions";
 import Redis from "ioredis";
-
-const fetch = require("node-fetch");
+import {parseFeed} from "../feed-utils";
+import fetch from "node-fetch";
 
 const handler: Handler = async function (event: HandlerEvent, context: HandlerContext) {
     if (!context.clientContext || !context.clientContext.user) {
         return {statusCode: 401};
     }
-    const url = event.queryStringParameters?.url;
+    if (!event.body) {
+        return {statusCode: 400}
+    }
+    const {url} = JSON.parse(event.body);
     const user = context.clientContext['user'];
-
-    // const response = await fetch(url, {redirect: 'follow'});
-    // if (response.ok) {
-    //     const text = await response.text();
-    //
-    // const client = getRedisClient();
-    // const feed =
-    // const data = await client.lrange(`user:${user.sub}:feeds`, 0, -1);
-    // const feeds = [];
-    // for (const d of data) {
-    //     feeds.push(JSON.parse(d));
-    // }
-
-    return {
-        statusCode: 200,
-        body: JSON.stringify([]),
-    };
+    const response = await fetch(url, {redirect: 'follow'});
+    if (response.ok) {
+        const text = await response.text();
+        const feed = parseFeed(text);
+        const client = getRedisClient();
+        await client.rpush(`user:${user.sub}:feeds`, JSON.stringify(feed));
+        return {
+            statusCode: 200,
+            body: JSON.stringify([]),
+        };
+    } else {
+        return {statusCode: 400}
+    }
 }
 
 function getRedisClient(): Redis {

@@ -1,16 +1,17 @@
 import {Entry} from "./entities/Entry";
 import {XMLParser} from "fast-xml-parser";
 import {Feed} from "./entities/Feed";
+import { v4 as uuidv4 } from 'uuid';
 
 export function parseFeed(text: string): Feed | undefined {
     const options = {ignoreAttributes: false};
     const xmlParser = new XMLParser(options);
     const obj = xmlParser.parse(text);
     if ('feed' in obj) {
-        return {title: 'aaa', url: 'bbb'}
+        return {uuid: uuidv4(), title: 'aaa', url: 'bbb'}
     } else if ('rss' in obj) {
         const channel = obj.rss.channel;
-        return {title: channel.title, url: channel['atom:link']['@_href']};
+        return {uuid: uuidv4(), title: channel.title, url: channel['atom:link']['@_href']};
     } else {
         return undefined;
     }

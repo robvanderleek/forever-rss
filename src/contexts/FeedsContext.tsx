@@ -16,6 +16,7 @@ interface FeedsContextValue {
     highlightedEntry: number;
     setHighlightedEntry: Function;
     saveFeed: (url: string) => Promise<void>;
+    deleteFeed: (uuid: string) => Promise<void>;
 }
 
 const FeedsContext = createContext({} as FeedsContextValue);
@@ -66,6 +67,10 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
         await apiPost('feeds-add', JSON.stringify({url: url}), user);
     }
 
+    const deleteFeed = async (uuid: string) => {
+        await apiPost('feeds-delete', JSON.stringify({uuid: uuid}), user);
+    }
+
     return (<FeedsContext.Provider value={{
         loading,
         feeds,
@@ -78,7 +83,8 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
         setHighlightedFeed,
         highlightedEntry,
         setHighlightedEntry,
-        saveFeed
+        saveFeed,
+        deleteFeed
     }}>{props.children}</FeedsContext.Provider>)
 }
 

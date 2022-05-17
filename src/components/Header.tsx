@@ -40,7 +40,7 @@ export default function Header(props: HeaderProps) {
                 <Tooltip title={`Forever RSS version ${version.revision}`}>
                     <img src={logo} alt="logo" width={32} height={32} style={{borderRadius: '4px'}}/>
                 </Tooltip>
-                <IconButton onClick={handleClick}>
+                <IconButton onClick={handleClick} color={isAuthenticated ? "secondary" : "primary"}>
                     <AccountBox fontSize="large"/>
                 </IconButton>
                 <Menu open={open} anchorEl={anchor} onClick={handleClose} onClose={handleClose}>

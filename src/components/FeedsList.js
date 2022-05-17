@@ -1,5 +1,6 @@
 import {
     Badge,
+    IconButton,
     List,
     ListItem as MuiListItem,
     ListItemAvatar,
@@ -8,7 +9,7 @@ import {
     styled
 } from "@mui/material";
 import {ItemAvatar} from "../styles";
-import {RssFeed} from "@mui/icons-material";
+import {Delete, RssFeed} from "@mui/icons-material";
 import {useFeeds} from "../contexts/FeedsContext";
 
 const ListItem = styled(MuiListItem)(props => ({
@@ -17,11 +18,19 @@ const ListItem = styled(MuiListItem)(props => ({
 
 export default function FeedsList(props) {
     const {highlightedFeed, handleClick} = props;
-    const {feeds, selectedFeed} = useFeeds();
+    const {feeds, selectedFeed, deleteFeed} = useFeeds();
 
-    function getFeed(entry, index) {
+    const deleteAction = (uuid) => {
         return (
-            <ListItem key={index} active={+(highlightedFeed === index)}>
+            <IconButton onClick={() => deleteFeed(uuid)}>
+                <Delete/>
+            </IconButton>
+        )
+    }
+
+    function getFeed(feed, index) {
+        return (
+            <ListItem key={index} active={+(highlightedFeed === index)} secondaryAction={deleteAction(feed.uuid)}>
                 <ListItemButton selected={highlightedFeed === index} onClick={() => handleClick(index)}
                                 autoFocus={highlightedFeed === index}>
                     <ListItemAvatar>
@@ -31,7 +40,7 @@ export default function FeedsList(props) {
                             </ItemAvatar>
                         </Badge>
                     </ListItemAvatar>
-                    <ListItemText primary={entry.title}/>
+                    <ListItemText primary={feed.title}/>
                 </ListItemButton>
             </ListItem>
         );

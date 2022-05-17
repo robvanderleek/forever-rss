@@ -30,4 +30,8 @@ export class RedisService {
         return this.client.rpush(`user:${userId}:feeds`, JSON.stringify(feed));
     }
 
+    async removeFeed(userId: string, feed: Feed) {
+        await this.client.lrem(`user:${userId}:feeds`, 1, JSON.stringify(feed));
+    }
+
 }

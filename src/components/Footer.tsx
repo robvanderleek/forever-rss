@@ -7,6 +7,7 @@ const FooterToolbar = styled(Toolbar)({
     display: 'flex',
     justifyContent: 'center'
 });
+
 export default function Footer() {
     const [showAddFeedDialog, setShowAddFeedDialog] = useState(false);
     return (

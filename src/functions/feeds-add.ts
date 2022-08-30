@@ -1,7 +1,7 @@
 import {Handler, HandlerContext, HandlerEvent} from "@netlify/functions";
 import {parseFeed} from "../feed-utils";
 import fetch from "node-fetch";
-import {RedisService} from "../services/RedisService";
+import {MongoDbService} from "../services/MongoDbService";
 
 const handler: Handler = async function (event: HandlerEvent, context: HandlerContext) {
     if (!context.clientContext || !context.clientContext.user) {
@@ -12,7 +12,7 @@ const handler: Handler = async function (event: HandlerEvent, context: HandlerCo
     }
     const {url} = JSON.parse(event.body);
     const user = context.clientContext['user'];
-    const redisService = new RedisService();
+    const redisService = new MongoDbService();
     const response = await fetch(url, {redirect: 'follow'});
     if (response.ok) {
         const text = await response.text();

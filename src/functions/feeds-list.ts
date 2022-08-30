@@ -1,7 +1,7 @@
 import {Handler, HandlerContext, HandlerEvent} from "@netlify/functions";
 import {Feed} from "../entities/Feed";
 import fetch from "node-fetch";
-import {RedisService} from "../services/RedisService";
+import {MongoDbService} from "../services/MongoDbService";
 import { v4 as uuidv4 } from 'uuid';
 
 // const {XMLParser} = require("fast-xml-parser");
@@ -15,7 +15,7 @@ const handler: Handler = async function (event: HandlerEvent, context: HandlerCo
         };
     }
     const user = context.clientContext['user'];
-    const redisService = new RedisService();
+    const redisService = new MongoDbService();
     const feeds = await redisService.getAllFeeds(user.sub);
 // const response = await fetch('https://raw.githubusercontent.com/robvanderleek/robvanderleek/main/my-awesome.opml');
 // if (response.ok) {

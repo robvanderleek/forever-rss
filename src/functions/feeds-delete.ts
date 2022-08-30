@@ -1,5 +1,5 @@
 import {Handler, HandlerContext, HandlerEvent} from "@netlify/functions";
-import {RedisService} from "../services/RedisService";
+import {MongoDbService} from "../services/MongoDbService";
 
 const handler: Handler = async function (event: HandlerEvent, context: HandlerContext) {
     if (!context.clientContext || !context.clientContext.user) {
@@ -10,12 +10,8 @@ const handler: Handler = async function (event: HandlerEvent, context: HandlerCo
     }
     const {uuid} = JSON.parse(event.body);
     const user = context.clientContext['user'];
-    const redisService = new RedisService();
-    const feeds = await redisService.getAllFeeds(user.sub);
-    const feed = feeds.find(f => f.uuid === uuid);
-    if (feed) {
-        await redisService.removeFeed(user.sub, feed);
-    }
+    const dbService = new MongoDbService();
+    await dbService.removeFeed(user.sub, uuid);
     return {statusCode: 200};
 }
 

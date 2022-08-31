@@ -6,11 +6,14 @@ import {
     ListItemAvatar,
     ListItemButton,
     ListItemText,
+    Menu,
+    MenuItem,
     styled
 } from "@mui/material";
 import {ItemAvatar} from "../styles";
-import {Delete, RssFeed} from "@mui/icons-material";
+import {MoreVert, RssFeed} from "@mui/icons-material";
 import {useFeeds} from "../contexts/FeedsContext";
+import React, {useState} from "react";
 
 const ListItem = styled(MuiListItem)(props => ({
     color: props.active ? '#808ecd' : 'none'
@@ -19,18 +22,27 @@ const ListItem = styled(MuiListItem)(props => ({
 export default function FeedsList(props) {
     const {highlightedFeed, handleClick} = props;
     const {feeds, selectedFeed, deleteFeed} = useFeeds();
+    const [editMenuAnchor, setEditMenuAnchor] = useState(undefined);
+    const open = Boolean(editMenuAnchor);
 
     const deleteAction = (uuid) => {
         return (
-            <IconButton onClick={() => deleteFeed(uuid)}>
-                <Delete/>
-            </IconButton>
+            <div>
+                <IconButton onClick={(e) => setEditMenuAnchor(e.currentTarget)}>
+                    <MoreVert/>
+                </IconButton>
+                <Menu anchorEl={editMenuAnchor} open={open} onClose={() => setEditMenuAnchor(null)}>
+                    <MenuItem onClick={() => deleteFeed(uuid)}>
+                        Delete
+                    </MenuItem>
+                </Menu>
+            </div>
         )
     }
 
     function getFeed(feed, index) {
         return (
-            <ListItem key={index} active={+(highlightedFeed === index)} secondaryAction={deleteAction(feed.uuid)}>
+            <ListItem key={index} active={+(highlightedFeed === index)} secondaryAction={deleteAction(feed.uuid)} disablePadding>
                 <ListItemButton selected={highlightedFeed === index} onClick={() => handleClick(index)}
                                 autoFocus={highlightedFeed === index}>
                     <ListItemAvatar>
@@ -47,7 +59,7 @@ export default function FeedsList(props) {
     }
 
     return (
-        <List dense={true}>
+        <List dense={false}>
             {feeds.map((e, i) => getFeed(e, i))}
         </List>
     )

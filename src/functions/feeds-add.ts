@@ -2,6 +2,7 @@ import {Handler, HandlerContext, HandlerEvent} from "@netlify/functions";
 import {parseFeed} from "../feed-utils";
 import fetch from "node-fetch";
 import {MongoDbService} from "../services/MongoDbService";
+import {logger} from "../logger";
 
 const handler: Handler = async function (event: HandlerEvent, context: HandlerContext) {
     if (!context.clientContext || !context.clientContext.user) {
@@ -12,13 +13,15 @@ const handler: Handler = async function (event: HandlerEvent, context: HandlerCo
     }
     const {url} = JSON.parse(event.body);
     const user = context.clientContext['user'];
-    const redisService = new MongoDbService();
+    const dbService = new MongoDbService();
     const response = await fetch(url, {redirect: 'follow'});
     if (response.ok) {
         const text = await response.text();
         const feed = parseFeed(text);
         if (feed) {
-            await redisService.addFeed(user.sub, feed);
+            await dbService.addFeed(user.sub, feed);
+        } else {
+            logger.warn(`Could not find RSS feed for URL: ${url}`);
         }
         return {
             statusCode: 200,

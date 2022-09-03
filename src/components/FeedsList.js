@@ -25,14 +25,23 @@ export default function FeedsList(props) {
     const [editMenuAnchor, setEditMenuAnchor] = useState(undefined);
     const open = Boolean(editMenuAnchor);
 
-    const deleteAction = (uuid) => {
+    const feedContextMenu = (uuid) => {
+        const handleClose = () => {
+            setEditMenuAnchor(null);
+        }
+
+        const handleClickDelete = () => {
+            handleClose();
+            deleteFeed(uuid);
+        }
+
         return (
             <div>
                 <IconButton onClick={(e) => setEditMenuAnchor(e.currentTarget)}>
                     <MoreVert/>
                 </IconButton>
-                <Menu anchorEl={editMenuAnchor} open={open} onClose={() => setEditMenuAnchor(null)}>
-                    <MenuItem onClick={() => deleteFeed(uuid)}>
+                <Menu anchorEl={editMenuAnchor} open={open} onClose={handleClose}>
+                    <MenuItem onClick={handleClickDelete}>
                         Delete
                     </MenuItem>
                 </Menu>
@@ -42,7 +51,7 @@ export default function FeedsList(props) {
 
     function getFeed(feed, index) {
         return (
-            <ListItem key={index} active={+(highlightedFeed === index)} secondaryAction={deleteAction(feed.uuid)} disablePadding>
+            <ListItem key={index} active={+(highlightedFeed === index)} secondaryAction={feedContextMenu(feed.uuid)} disablePadding>
                 <ListItemButton selected={highlightedFeed === index} onClick={() => handleClick(index)}
                                 autoFocus={highlightedFeed === index}>
                     <ListItemAvatar>

@@ -25,7 +25,7 @@ const handler: Handler = async function (event: HandlerEvent, context: HandlerCo
         }
         return {
             statusCode: 200,
-            body: JSON.stringify([]),
+            body: JSON.stringify(feed)
         };
     } else {
         return {statusCode: 400}

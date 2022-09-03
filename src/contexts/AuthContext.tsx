@@ -103,7 +103,11 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
         }
         const response = await fetch(`/.netlify/functions/${endpoint}`, {method: 'POST', body: body, headers});
         if (response.ok) {
-            return await response.json();
+            try {
+                return await response.json();
+            } catch {
+                return true;
+            }
         } else {
             return undefined;
         }

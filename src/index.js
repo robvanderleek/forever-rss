@@ -19,16 +19,18 @@ const theme = createTheme({
 });
 
 const rootElement = document.getElementById('root');
-ReactDOMClient.createRoot(rootElement).render(<React.StrictMode>
-    <ThemeProvider theme={theme}>
-        <CssBaseline/>
-        <AuthContextProvider>
-            <FeedsContextProvider>
-                <AppModeContextProvider>
-                    <App/>
-                </AppModeContextProvider>
-            </FeedsContextProvider>
-        </AuthContextProvider>
-    </ThemeProvider>
-</React.StrictMode>);
+ReactDOMClient.createRoot(rootElement).render(
+    <React.StrictMode>
+        <ThemeProvider theme={theme}>
+            <CssBaseline/>
+            <AuthContextProvider>
+                <FeedsContextProvider>
+                    <AppModeContextProvider>
+                        <App/>
+                    </AppModeContextProvider>
+                </FeedsContextProvider>
+            </AuthContextProvider>
+        </ThemeProvider>
+    </React.StrictMode>
+);
 reportWebVitals();

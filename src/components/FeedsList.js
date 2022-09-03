@@ -16,7 +16,7 @@ import {useFeeds} from "../contexts/FeedsContext";
 import React, {useState} from "react";
 
 const ListItem = styled(MuiListItem)(props => ({
-    color: props.active ? '#808ecd' : 'none'
+    color: props.active ? '#e6772b' : 'none'
 }));
 
 export default function FeedsList(props) {

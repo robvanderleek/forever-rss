@@ -10,10 +10,14 @@ import {AppModeContextProvider} from "./contexts/AppModeContext";
 
 const theme = createTheme({
     palette: {
-        mode: "dark", primary: {
-            main: '#808ecd'
+        mode: 'dark',
+        background: {
+            default: "#161b22"
+        },
+        primary: {
+            main: '#faf9fc'
         }, secondary: {
-            main: '#c25096'
+            main: '#e6772b'
         }
     }
 });

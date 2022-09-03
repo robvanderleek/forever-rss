@@ -1,9 +1,12 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import NetlifyIdentityWidget, {User} from "netlify-identity-widget";
+import md5 from "md5";
 
 interface AuthContextValue {
     isAuthenticated: boolean;
     user: User | null;
+    getUserFullName: Function;
+    getAvatarUrl: Function;
     authenticate: Function;
     logout: Function;
     apiFetch: Function;
@@ -33,6 +36,27 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
         }
         init();
     }, []);
+
+    const getUserFullName = () => {
+        getAvatarUrl();
+        if (user) {
+            const fullName = user.user_metadata?.full_name
+            if (fullName) {
+                return fullName;
+            } else {
+                return user.email;
+            }
+        } else {
+            return undefined;
+        }
+    }
+
+    const getAvatarUrl = () => {
+        if (user) {
+            const emailMd5 = md5(user.email);
+            return `https://www.gravatar.com/avatar/${emailMd5}`;
+        }
+    }
 
     const authenticate = (callback: (_: User) => void) => {
         NetlifyIdentityWidget.open();
@@ -86,7 +110,7 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
     }
 
     return (<AuthContext.Provider value={{
-        isAuthenticated, user, authenticate, logout, apiFetch, apiPost
+        isAuthenticated, user, getUserFullName, getAvatarUrl, authenticate, logout, apiFetch, apiPost
     }}>{props.children}</AuthContext.Provider>)
 }
 

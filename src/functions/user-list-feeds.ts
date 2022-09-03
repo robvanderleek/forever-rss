@@ -1,26 +1,22 @@
 import {Handler, HandlerContext, HandlerEvent} from "@netlify/functions";
-import Redis from "ioredis";
 import {Feed} from "../entities/Feed";
+import fetch from "node-fetch";
+import {MongoDbService} from "../services/MongoDbService";
+import { v4 as uuidv4 } from 'uuid';
 
 // const {XMLParser} = require("fast-xml-parser");
-const fetch = require("node-fetch");
 
 const handler: Handler = async function (event: HandlerEvent, context: HandlerContext) {
     if (!context.clientContext || !context.clientContext.user) {
-        const feed: Feed = {title: 'Coding Horror', url: 'http://feeds.feedburner.com/codinghorror'};
+        const feed: Feed = {uuid: uuidv4(), title: 'Coding Horror', url: 'http://feeds.feedburner.com/codinghorror'};
         return {
             statusCode: 200,
             body: JSON.stringify([feed])
         };
     }
     const user = context.clientContext['user'];
-    const client = getRedisClient();
-    const data = await client.lrange(`user:${user.sub}:feeds`, 0, -1);
-    const feeds = [];
-    for (const d of data) {
-        feeds.push(JSON.parse(d));
-    }
-
+    const dbService = new MongoDbService();
+    const feeds = await dbService.getAllUserFeeds(user.sub);
 // const response = await fetch('https://raw.githubusercontent.com/robvanderleek/robvanderleek/main/my-awesome.opml');
 // if (response.ok) {
 //     const opml = await response.text();
@@ -45,24 +41,17 @@ const handler: Handler = async function (event: HandlerEvent, context: HandlerCo
 // }
 }
 
-function getRedisClient(): Redis {
-    const env = process.env.FOREVER_RSS_REDIS;
-    if (env) {
-        return new Redis(env);
-    } else {
-        return new Redis();
-    }
-}
-
 async function outlineToFeed(o: any, withFavIcon = false): Promise<Feed> {
     if (withFavIcon) {
         return {
+            uuid: uuidv4(),
             title: o['@_title'],
             url: o['@_xmlUrl'],
             favicon: await getFavIconUrl(o['@_htmlUrl'])
         };
     } else {
         return {
+            uuid: uuidv4(),
             title: o['@_title'],
             url: o['@_xmlUrl']
         };

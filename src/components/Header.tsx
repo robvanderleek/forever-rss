@@ -1,10 +1,12 @@
-import {Fragment} from "react";
-import {Divider, IconButton, styled, Toolbar, Tooltip} from "@mui/material";
-import {ArrowBack} from "@mui/icons-material";
+import {Fragment, useState} from "react";
+import {Avatar, Divider, IconButton, Menu, MenuItem, styled, Toolbar, Tooltip} from "@mui/material";
+import {AccountBox, ArrowBack} from "@mui/icons-material";
 import {useFeeds} from "../contexts/FeedsContext";
 import logo from '../static/forever-rss-logo.svg';
 import {version} from "../version";
 import {Mode} from "../entities/Mode";
+import {useAuth} from "../contexts/AuthContext";
+import {getInitials} from "../utils";
 
 const Title = styled('span')({
     marginLeft: '12px',
@@ -12,13 +14,19 @@ const Title = styled('span')({
     overflow: 'hidden',
     whiteSpace: 'nowrap',
     fontSize: '18px',
+    fontFamily: 'Roboto, sans-serif'
 });
 
-const AppTitle = styled(Title)({
-    fontSize: '24px',
-    fontFamily: 'Shojumaru, cursive',
-    color: '#808ecd'
-});
+const HeaderToolbar = styled(Toolbar)`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const LogoImg = styled('img')`
+  border-radius: 4px;
+  margin-left: 16px;
+  margin-right: 16px;
+`;
 
 interface HeaderProps {
     mode: Mode;
@@ -28,13 +36,39 @@ interface HeaderProps {
 export default function Header(props: HeaderProps) {
     const {mode, handleBack} = props;
     const {feeds, selectedFeed, entries, selectedEntry} = useFeeds();
+    const {isAuthenticated, authenticate, logout, getUserFullName, getAvatarUrl} = useAuth();
+    const [anchor, setAnchor] = useState<HTMLElement | null>(null);
+    const open = Boolean(anchor);
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchor(event.currentTarget);
+    const handleClose = () => setAnchor(null);
+
+    const avatar = () => {
+        if (isAuthenticated) {
+            const avatarUrl = getAvatarUrl();
+            if (avatarUrl) {
+                return (<Avatar src={avatarUrl}/>);
+            } else {
+                return (<Avatar>{getInitials(getUserFullName())}</Avatar>);
+            }
+        } else {
+            return (<AccountBox fontSize="large"/>);
+        }
+    }
 
     const feedsHeader = () => {
         return (<Fragment>
-            <Toolbar>
-                <img src={logo} alt="logo" width={32} height={32} style={{borderRadius: '4px'}}/>
-                <Tooltip title={`${version.revision}`}><AppTitle>Forever RSS</AppTitle></Tooltip>
-            </Toolbar>
+            <HeaderToolbar disableGutters>
+                <Tooltip title={`Forever RSS version ${version.revision}`}>
+                    <LogoImg src={logo} alt="logo" width={32} height={32}/>
+                </Tooltip>
+                <IconButton onClick={handleClick} color={isAuthenticated ? "secondary" : "primary"}>
+                    {avatar()}
+                </IconButton>
+                <Menu open={open} anchorEl={anchor} onClick={handleClose} onClose={handleClose}>
+                    {!isAuthenticated && <MenuItem onClick={() => authenticate()}>Login</MenuItem>}
+                    {isAuthenticated && <MenuItem onClick={() => logout()}>Logout</MenuItem>}
+                </Menu>
+            </HeaderToolbar>
             <Divider/>
         </Fragment>);
     }

@@ -10,7 +10,7 @@ export const Main = styled('div')({
 export const Section = styled('div')((props) => ({
     borderStyle: props.active ? 'solid' : 'none',
     borderWidth: '2px',
-    borderImage: 'linear-gradient(to bottom, #808ecd, #c25096) 1',
+    // borderImage: 'linear-gradient(to bottom, #808ecd, #c25096) 1',
     padding: props.active ? '0px' : '2px',
     overflow: 'auto'
 }));
@@ -38,5 +38,5 @@ export const ContentArea = styled('div')({
 export const ItemAvatar = styled(Avatar)(props => ({
     width: '24px',
     height: '24px',
-    backgroundColor: props.active ? '#808ecd' : 'none'
+    backgroundColor: props.active ? '#faf9fc' : 'none'
 }));

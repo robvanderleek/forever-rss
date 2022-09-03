@@ -37,7 +37,7 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
 
     useEffect(() => {
         async function loadFeeds() {
-            const fetchedFeeds: Array<Feed> = await apiFetch('feeds-list', user);
+            const fetchedFeeds: Array<Feed> = await apiFetch('user-list-feeds', user);
             if (fetchedFeeds) {
                 const sortedFeeds = fetchedFeeds.sort((a, b) => ('' + a.title).localeCompare(b.title));
                 setFeeds(sortedFeeds);
@@ -63,7 +63,7 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
     }, [feeds, selectedFeed, apiFetch]);
 
     const saveFeed = async (url: string) => {
-        const addedFeed = await apiPost('feeds-add', JSON.stringify({url: url}), user);
+        const addedFeed = await apiPost('user-add-feed', JSON.stringify({url: url}), user);
         if (addedFeed) {
             const updatedFeeds = feeds.concat(addedFeed);
             const sortedFeeds = updatedFeeds.sort((a, b) => ('' + a.title).localeCompare(b.title));
@@ -73,7 +73,7 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
 
     const deleteFeed = async (uuid: string) => {
         setLoading(true);
-        const res = await apiPost('feeds-delete', JSON.stringify({uuid: uuid}), user);
+        const res = await apiPost('user-delete-feed', JSON.stringify({uuid: uuid}), user);
         if (res) {
             feeds.splice(feeds.findIndex(f => f.uuid === uuid));
             const newFeedsArray = feeds.map(x => x);

@@ -11,7 +11,7 @@ const handler: Handler = async function (event: HandlerEvent, context: HandlerCo
     const {uuid} = JSON.parse(event.body);
     const user = context.clientContext['user'];
     const dbService = new MongoDbService();
-    await dbService.removeFeed(user.sub, uuid);
+    await dbService.removeUserFeed(user.sub, uuid);
     return {statusCode: 200};
 }
 

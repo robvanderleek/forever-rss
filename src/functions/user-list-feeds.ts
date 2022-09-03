@@ -15,8 +15,8 @@ const handler: Handler = async function (event: HandlerEvent, context: HandlerCo
         };
     }
     const user = context.clientContext['user'];
-    const redisService = new MongoDbService();
-    const feeds = await redisService.getAllFeeds(user.sub);
+    const dbService = new MongoDbService();
+    const feeds = await dbService.getAllUserFeeds(user.sub);
 // const response = await fetch('https://raw.githubusercontent.com/robvanderleek/robvanderleek/main/my-awesome.opml');
 // if (response.ok) {
 //     const opml = await response.text();

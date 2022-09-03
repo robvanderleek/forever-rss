@@ -23,9 +23,9 @@ export class MongoDbService {
         return this.client.db('foreverrss');
     }
 
-    async getAllFeeds(userId: string): Promise<Array<Feed>> {
+    async getAllUserFeeds(userId: string): Promise<Array<Feed>> {
         const db = await this.getDatabase();
-        const collection = db.collection('feeds');
+        const collection = db.collection('user');
         const data = await collection.findOne({'user': userId});
         if (data) {
             return data.feeds;
@@ -34,16 +34,16 @@ export class MongoDbService {
         }
     }
 
-    async addFeed(userId: string, feed: Feed): Promise<number> {
+    async addUserFeed(userId: string, feed: Feed): Promise<number> {
         const db = await this.getDatabase();
-        const collection = db.collection('feeds');
+        const collection = db.collection('user');
         const result = await collection.updateOne({'user': userId}, {$push: {'feeds': feed}}, {upsert: true});
         return result.modifiedCount;
     }
 
-    async removeFeed(userId: string, uuid: string) {
+    async removeUserFeed(userId: string, uuid: string) {
         const db = await this.getDatabase();
-        const collection = db.collection('feeds');
+        const collection = db.collection('user');
         const result = await collection.updateOne({'user': userId}, {$pull: {'feeds': {'uuid': uuid}}});
         return result.modifiedCount;
     }

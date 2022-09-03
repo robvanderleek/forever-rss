@@ -20,14 +20,14 @@ afterEach(async () => {
 test('Add feed', async () => {
     const service = new MongoDbService(mongoServer.getUri());
 
-    let result = await service.getAllFeeds('robvanderleek');
+    let result = await service.getAllUserFeeds('robvanderleek');
 
     expect(result.length).toBe(0);
 
     const feed = {uuid: 'abcd1234', title: 'aap', url: 'noot'}
-    await service.addFeed('robvanderleek', feed);
+    await service.addUserFeed('robvanderleek', feed);
 
-    result = await service.getAllFeeds('robvanderleek');
+    result = await service.getAllUserFeeds('robvanderleek');
 
     expect(result.length).toBe(1);
 });
@@ -35,22 +35,22 @@ test('Add feed', async () => {
 test('Remove feed', async () => {
     const service = new MongoDbService(mongoServer.getUri());
 
-    let result = await service.getAllFeeds('robvanderleek');
+    let result = await service.getAllUserFeeds('robvanderleek');
 
     expect(result.length).toBe(0);
 
     let feed = {uuid: 'abcd1234', title: 'aap', url: 'noot'}
-    await service.addFeed('robvanderleek', feed);
+    await service.addUserFeed('robvanderleek', feed);
     feed = {uuid: '1234abcd', title: 'mies', url: 'wim'}
-    await service.addFeed('robvanderleek', feed);
+    await service.addUserFeed('robvanderleek', feed);
 
-    result = await service.getAllFeeds('robvanderleek');
+    result = await service.getAllUserFeeds('robvanderleek');
 
     expect(result.length).toBe(2);
 
-    await service.removeFeed('robvanderleek', 'abcd1234');
+    await service.removeUserFeed('robvanderleek', 'abcd1234');
 
-    result = await service.getAllFeeds('robvanderleek');
+    result = await service.getAllUserFeeds('robvanderleek');
 
     expect(result.length).toBe(1);
 });

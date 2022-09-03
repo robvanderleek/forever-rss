@@ -19,7 +19,7 @@ const handler: Handler = async function (event: HandlerEvent, context: HandlerCo
         const text = await response.text();
         const feed = parseFeed(text);
         if (feed) {
-            await dbService.addFeed(user.sub, feed);
+            await dbService.addUserFeed(user.sub, feed);
         } else {
             logger.warn(`Could not find RSS feed for URL: ${url}`);
         }

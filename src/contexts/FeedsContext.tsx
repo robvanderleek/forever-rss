@@ -46,6 +46,7 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
             }
             setLoading(false);
         }
+
         loadFeeds();
     }, [user, apiFetch]);
 

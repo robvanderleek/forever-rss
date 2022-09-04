@@ -30,6 +30,8 @@ test('Add feed', async () => {
     result = await service.getAllUserFeeds('robvanderleek');
 
     expect(result.length).toBe(1);
+
+    service.disconnect();
 });
 
 test('Remove feed', async () => {
@@ -53,6 +55,8 @@ test('Remove feed', async () => {
     result = await service.getAllUserFeeds('robvanderleek');
 
     expect(result.length).toBe(1);
+
+    service.disconnect();
 });
 
 export {}

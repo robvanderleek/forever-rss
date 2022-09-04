@@ -3,10 +3,14 @@ import {Add} from "@mui/icons-material";
 import {Fragment, useState} from "react";
 import AddFeedDialog from "../dialogs/AddFeedDialog";
 
-const FooterToolbar = styled(Toolbar)({
-    display: 'flex',
-    justifyContent: 'center'
-});
+const FooterToolbar = styled(Toolbar)`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const PlusButton = styled(IconButton)`
+  margin-right: 16px;
+`;
 
 export default function Footer() {
     const [showAddFeedDialog, setShowAddFeedDialog] = useState(false);
@@ -14,8 +18,8 @@ export default function Footer() {
         <Fragment>
             <AddFeedDialog open={showAddFeedDialog} onClose={() => setShowAddFeedDialog(false)}/>
             <Divider/>
-            <FooterToolbar>
-                <IconButton onClick={() => setShowAddFeedDialog(true)}><Add/></IconButton>
+            <FooterToolbar disableGutters>
+                <PlusButton onClick={() => setShowAddFeedDialog(true)}><Add/></PlusButton>
             </FooterToolbar>
         </Fragment>
     );

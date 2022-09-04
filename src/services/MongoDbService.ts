@@ -48,4 +48,8 @@ export class MongoDbService {
         return result.modifiedCount;
     }
 
+    disconnect() {
+        this.client?.close();
+    }
+
 }

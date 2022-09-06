@@ -39,8 +39,16 @@ export default function Header(props: HeaderProps) {
     const {isAuthenticated, authenticate, logout, getUserFullName, getAvatarUrl} = useAuth();
     const [anchor, setAnchor] = useState<HTMLElement | null>(null);
     const open = Boolean(anchor);
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchor(event.currentTarget);
-    const handleClose = () => setAnchor(null);
+
+    const handleAvatarClick = (event: React.MouseEvent<HTMLElement>) => {
+        if (!isAuthenticated) {
+            authenticate();
+        } else {
+            setAnchor(event.currentTarget);
+        }
+    }
+
+    const handleMenuClose = () => setAnchor(null);
 
     const avatar = () => {
         if (isAuthenticated) {
@@ -61,11 +69,10 @@ export default function Header(props: HeaderProps) {
                 <Tooltip title={`Forever RSS version ${version.revision}`}>
                     <LogoImg src={logo} alt="logo" width={32} height={32}/>
                 </Tooltip>
-                <IconButton onClick={handleClick} color={isAuthenticated ? "secondary" : "primary"}>
+                <IconButton onClick={handleAvatarClick} color={isAuthenticated ? "secondary" : "primary"}>
                     {avatar()}
                 </IconButton>
-                <Menu open={open} anchorEl={anchor} onClick={handleClose} onClose={handleClose}>
-                    {!isAuthenticated && <MenuItem onClick={() => authenticate()}>Login</MenuItem>}
+                <Menu open={open} anchorEl={anchor} onClick={handleMenuClose} onClose={handleMenuClose}>
                     {isAuthenticated && <MenuItem onClick={() => logout()}>Logout</MenuItem>}
                 </Menu>
             </HeaderToolbar>

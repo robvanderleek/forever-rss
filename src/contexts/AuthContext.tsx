@@ -1,13 +1,13 @@
-import React, {createContext, useContext, useEffect, useState} from "react";
-import NetlifyIdentityWidget, {User} from "netlify-identity-widget";
+import React, {createContext, useContext, useEffect} from "react";
 import md5 from "md5";
+import {useAuth0, User} from "@auth0/auth0-react";
 
 interface AuthContextValue {
     isAuthenticated: boolean;
-    user: User | null;
+    user: User | undefined;
     getUserFullName: Function;
     getAvatarUrl: Function;
-    authenticate: Function;
+    loginWithRedirect: Function;
     logout: Function;
     apiFetch: Function;
     apiPost: Function;
@@ -20,19 +20,26 @@ interface AuthContextProviderProps {
 }
 
 export function AuthContextProvider(props: AuthContextProviderProps) {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [user, setUser] = useState<User | null>(null);
+    const {
+        loginWithRedirect,
+        logout,
+        isAuthenticated,
+        isLoading,
+        user,
+        getAccessTokenSilently,
+        getAccessTokenWithPopup
+    } = useAuth0();
 
     useEffect(() => {
         const init = async () => {
             // @ts-ignore
-            window.netlifyIdentity = NetlifyIdentityWidget;
-            NetlifyIdentityWidget.init();
-            const currentUser = NetlifyIdentityWidget.currentUser()
-            if (currentUser) {
-                setIsAuthenticated(true);
-                setUser(currentUser);
-            }
+            // window.netlifyIdentity = NetlifyIdentityWidget;
+            // NetlifyIdentityWidget.init();
+            // const currentUser = NetlifyIdentityWidget.currentUser()
+            // if (currentUser) {
+            //     setIsAuthenticated(true);
+            //     setUser(currentUser);
+            // }
         }
         init();
     }, []);
@@ -40,7 +47,7 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
     const getUserFullName = () => {
         getAvatarUrl();
         if (user) {
-            const fullName = user.user_metadata?.full_name
+            const fullName = user.name
             if (fullName) {
                 return fullName;
             } else {
@@ -52,40 +59,19 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
     }
 
     const getAvatarUrl = () => {
-        if (user) {
+        if (user && user.email) {
             const emailMd5 = md5(user.email);
             return `https://www.gravatar.com/avatar/${emailMd5}`;
         }
     }
 
-    const authenticate = (callback: (_: User) => void) => {
-        NetlifyIdentityWidget.open();
-        NetlifyIdentityWidget.on('login', user => {
-            setUser(user);
-            setIsAuthenticated(true);
-            NetlifyIdentityWidget.close();
-            if (callback) {
-                callback(user);
-            }
-        });
-    }
-
-    const logout = (callback: () => void) => {
-        NetlifyIdentityWidget.logout();
-        NetlifyIdentityWidget.on('logout', () => {
-            setUser(null);
-            setIsAuthenticated(false);
-            if (callback) {
-                callback();
-            }
-        });
-    }
-
     const apiFetch = async (endpoint: string, user: User) => {
         const headers: HeadersInit = {};
         if (user) {
-            const token = await user.token?.access_token;
-            headers['Authorization'] = `Bearer ${token}`
+            const accessToken = await getAccessTokenSilently({
+                audience: 'https://development.api.foreverrss'
+            });
+            headers['Authorization'] = `Bearer ${accessToken}`
         }
         const response = await fetch(`/.netlify/functions/${endpoint}`, {headers});
         if (response.ok) {
@@ -98,8 +84,10 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
     const apiPost = async (endpoint: string, body: string, user: User) => {
         const headers: HeadersInit = {};
         if (user) {
-            const token = await user.token?.access_token;
-            headers['Authorization'] = `Bearer ${token}`
+            const accessToken = await getAccessTokenSilently({
+                audience: 'https://development.api.foreverrss'
+            });
+            headers['Authorization'] = `Bearer ${accessToken}`
         }
         const response = await fetch(`/.netlify/functions/${endpoint}`, {method: 'POST', body: body, headers});
         if (response.ok) {
@@ -114,7 +102,7 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
     }
 
     return (<AuthContext.Provider value={{
-        isAuthenticated, user, getUserFullName, getAvatarUrl, authenticate, logout, apiFetch, apiPost
+        isAuthenticated, user, getUserFullName, getAvatarUrl, loginWithRedirect, logout, apiFetch, apiPost
     }}>{props.children}</AuthContext.Provider>)
 }
 

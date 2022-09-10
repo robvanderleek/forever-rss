@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@auth0/auth0-react": "^1.10.2",
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.6.1",
@@ -20,6 +21,8 @@
     "@types/uuid": "^8.3.4",
     "fast-xml-parser": "^4.0.7",
     "html-react-parser": "^1.4.10",
+    "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^2.1.4",
     "loaders.css": "^0.1.2",
     "md5": "^2.3.0",
     "moment": "^2.29.3",

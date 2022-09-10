@@ -36,13 +36,13 @@ interface HeaderProps {
 export default function Header(props: HeaderProps) {
     const {mode, handleBack} = props;
     const {feeds, selectedFeed, entries, selectedEntry} = useFeeds();
-    const {isAuthenticated, authenticate, logout, getUserFullName, getAvatarUrl} = useAuth();
+    const {isAuthenticated, loginWithRedirect, logout, getUserFullName, getAvatarUrl} = useAuth();
     const [anchor, setAnchor] = useState<HTMLElement | null>(null);
     const open = Boolean(anchor);
 
     const handleAvatarClick = (event: React.MouseEvent<HTMLElement>) => {
         if (!isAuthenticated) {
-            authenticate();
+            loginWithRedirect();
         } else {
             setAnchor(event.currentTarget);
         }

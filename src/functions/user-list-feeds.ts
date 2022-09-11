@@ -2,21 +2,25 @@ import {Handler, HandlerContext, HandlerEvent} from "@netlify/functions";
 import {Feed} from "../entities/Feed";
 import fetch from "node-fetch";
 import {MongoDbService} from "../services/MongoDbService";
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
+import {logger} from "../logger";
+import {getSubject} from "../function-utils";
 
 // const {XMLParser} = require("fast-xml-parser");
 
 const handler: Handler = async function (event: HandlerEvent, context: HandlerContext) {
-    if (!context.clientContext || !context.clientContext.user) {
+    const subject = await getSubject(event);
+    if (!subject) {
+        logger.info('Loading feeds for guest user');
         const feed: Feed = {uuid: uuidv4(), title: 'Coding Horror', url: 'http://feeds.feedburner.com/codinghorror'};
         return {
             statusCode: 200,
             body: JSON.stringify([feed])
         };
     }
-    const user = context.clientContext['user'];
+    logger.info(`Loading feeds for: ${subject}`);
     const dbService = new MongoDbService();
-    const feeds = await dbService.getAllUserFeeds(user.sub);
+    const feeds = await dbService.getAllUserFeeds(subject);
 // const response = await fetch('https://raw.githubusercontent.com/robvanderleek/robvanderleek/main/my-awesome.opml');
 // if (response.ok) {
 //     const opml = await response.text();

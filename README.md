@@ -4,8 +4,14 @@ Your Internet Inbox
 
 ## Alternative RSS readers on the web
 
-* [Feedly](https://feedly.com)
-* [Feedreader](https://feedreader.com)
+* [Feedly](https://feedly.com/)
+* [Feedreader](https://feedreader.com/)
+
+## RSS feed generators
+
+* [RSS.app](https://rss.app/)
+* [Nitter](https://nitter.net/)
+* [RSS-Brige](https://rss-bridge.org/)
 
 # Development
 

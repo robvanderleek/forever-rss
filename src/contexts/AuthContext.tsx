@@ -1,8 +1,9 @@
-import React, {createContext, useContext, useEffect} from "react";
+import React, {createContext, useContext} from "react";
 import md5 from "md5";
 import {useAuth0, User} from "@auth0/auth0-react";
 
 interface AuthContextValue {
+    isLoading: boolean;
     isAuthenticated: boolean;
     user: User | undefined;
     getUserFullName: Function;
@@ -26,23 +27,8 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
         isAuthenticated,
         isLoading,
         user,
-        getAccessTokenSilently,
-        getAccessTokenWithPopup
+        getAccessTokenSilently
     } = useAuth0();
-
-    useEffect(() => {
-        const init = async () => {
-            // @ts-ignore
-            // window.netlifyIdentity = NetlifyIdentityWidget;
-            // NetlifyIdentityWidget.init();
-            // const currentUser = NetlifyIdentityWidget.currentUser()
-            // if (currentUser) {
-            //     setIsAuthenticated(true);
-            //     setUser(currentUser);
-            // }
-        }
-        init();
-    }, []);
 
     const getUserFullName = () => {
         getAvatarUrl();
@@ -102,7 +88,7 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
     }
 
     return (<AuthContext.Provider value={{
-        isAuthenticated, user, getUserFullName, getAvatarUrl, loginWithRedirect, logout, apiFetch, apiPost
+        isLoading, isAuthenticated, user, getUserFullName, getAvatarUrl, loginWithRedirect, logout, apiFetch, apiPost
     }}>{props.children}</AuthContext.Provider>)
 }
 

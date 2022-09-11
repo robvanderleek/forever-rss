@@ -11,10 +11,9 @@ export async function getSubject(event: HandlerEvent): Promise<string | undefine
     const token = bearerField.split(' ')[1]
     const client = jwksClient({jwksUri: `${AUTH0_ISSUER}.well-known/jwks.json`});
     const header = decode(token, {complete: true})?.header;
-    console.log(header);
     const keys = await client.getSigningKey(header?.kid);
     const decoded = verify(token, keys.getPublicKey(), {audience: AUTH0_AUDIENCE, issuer: AUTH0_ISSUER});
-    const result =  decoded?.sub;
+    const result = decoded?.sub;
     if (typeof result === 'function') {
         return result();
     } else {

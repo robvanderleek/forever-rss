@@ -12,7 +12,7 @@ import {
     TextField
 } from "@mui/material";
 import {useFeeds} from "../contexts/FeedsContext";
-import {useState} from "react";
+import {useState, KeyboardEvent} from "react";
 
 interface AddFeedDialogProps {
     open: boolean;
@@ -26,13 +26,21 @@ export default function AddFeedDialog(props: AddFeedDialogProps) {
     const [type, setType] = useState('url');
 
     const handleClick = async () => {
-        await saveFeed(url);
-        onClose();
+        const response = await saveFeed(url);
+        if (response.ok) {
+            onClose();
+        }
     }
 
     const handleTypeChange = (event: SelectChangeEvent) => {
         setType(event.target.value as string);
     };
+
+    const handleKeyDown = async (event: KeyboardEvent) => {
+        if (event.key === 'Enter') {
+            await handleClick();
+        }
+    }
 
     return (
         <Dialog open={open} onClose={onClose} fullWidth>
@@ -49,7 +57,7 @@ export default function AddFeedDialog(props: AddFeedDialogProps) {
                     </FormControl>
                 </div>
                 <TextField autoFocus id="feedUrl" label="Feed URL" fullWidth variant="standard" value={url}
-                           onChange={e => setUrl(e.target.value)}/>
+                           onChange={e => setUrl(e.target.value)} onKeyDown={handleKeyDown}/>
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>

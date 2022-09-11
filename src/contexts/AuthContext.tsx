@@ -67,7 +67,7 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
         }
     }
 
-    const apiPost = async (endpoint: string, body: string, user: User) => {
+    const apiPost = async (endpoint: string, body: string, user: User): Promise<Response> => {
         const headers: HeadersInit = {};
         if (user) {
             const accessToken = await getAccessTokenSilently({
@@ -75,16 +75,17 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
             });
             headers['Authorization'] = `Bearer ${accessToken}`
         }
-        const response = await fetch(`/.netlify/functions/${endpoint}`, {method: 'POST', body: body, headers});
-        if (response.ok) {
-            try {
-                return await response.json();
-            } catch {
-                return true;
-            }
-        } else {
-            return undefined;
-        }
+        return await fetch(`/.netlify/functions/${endpoint}`, {method: 'POST', body: body, headers});
+
+        // if (response.ok) {
+        //     try {
+        //         return await response.json();
+        //     } catch {
+        //         return true;
+        //     }
+        // } else {
+        //     return undefined;
+        // }
     }
 
     return (<AuthContext.Provider value={{

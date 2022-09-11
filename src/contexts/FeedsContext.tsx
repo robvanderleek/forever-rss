@@ -15,7 +15,7 @@ interface FeedsContextValue {
     setHighlightedFeed: Function;
     highlightedEntry: number;
     setHighlightedEntry: Function;
-    saveFeed: (url: string) => Promise<void>;
+    saveFeed: (url: string) => Promise<Response>;
     deleteFeed: (uuid: string) => Promise<void>;
 }
 
@@ -63,13 +63,15 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
         }
     }, [feeds, selectedFeed, apiFetch]);
 
-    const saveFeed = async (url: string) => {
-        const addedFeed = await apiPost('user-add-feed', JSON.stringify({url: url}), user);
-        if (addedFeed) {
+    const saveFeed = async (url: string): Promise<Response> => {
+        const response = await apiPost('user-add-feed', JSON.stringify({url: url}), user);
+        if (response.ok) {
+            const addedFeed = await response.json();
             const updatedFeeds = feeds.concat(addedFeed);
             const sortedFeeds = updatedFeeds.sort((a, b) => ('' + a.title).localeCompare(b.title));
             setFeeds(sortedFeeds);
         }
+        return response;
     }
 
     const deleteFeed = async (uuid: string) => {

@@ -1,5 +1,5 @@
 import {Handler, HandlerEvent} from "@netlify/functions";
-import {parseFeed} from "../feed-utils";
+import {extractFeedUrlFromHtml, parseFeed} from "../feed-utils";
 import fetch from "node-fetch";
 import {MongoDbService} from "../services/MongoDbService";
 import {logger} from "../logger";
@@ -26,13 +26,27 @@ async function addUrl(url: string, subject: string) {
     const response = await fetch(url, {redirect: 'follow'});
     if (response.ok) {
         const text = await response.text();
-        console.log(text);
-        const feed = parseFeed(text);
+        let feed = parseFeed(text);
+        if (!feed) {
+            logger.info('RSS feed not found at URL, trying HTML parsing...');
+            const htmlFeedUrl = extractFeedUrlFromHtml(text);
+            if (htmlFeedUrl) {
+                const response = await fetch(htmlFeedUrl, {redirect: 'follow'});
+                if (response.ok) {
+                    const text = await response.text();
+                    feed = parseFeed(text);
+                }
+            }
+        }
         if (feed) {
             const dbService = new MongoDbService();
             await dbService.addUserFeed(subject, feed);
         } else {
             logger.warn(`Could not find RSS feed for URL: ${url}`);
+            return {
+                statusCode: 422,
+                body: `Could not find RSS feed for URL: ${url}`
+            }
         }
         return {
             statusCode: 200,

@@ -1,4 +1,4 @@
-export const getInitials = (name: string) => {
+export function getInitials(name: string): string {
     name = name.trim()
     if (name.length <= 2) {
         return name
@@ -9,4 +9,10 @@ export const getInitials = (name: string) => {
         initials += wordLetters[wordLetters.length - 1];
     }
     return initials.toUpperCase();
+}
+
+export function parseValue(key: string, s: string): string | undefined {
+    const pattern = new RegExp(`${key}\\s*=\\s*['"](?<value>.*?)['"]`, 'i');
+    const match = pattern.exec(s);
+    return match?.groups?.value;
 }

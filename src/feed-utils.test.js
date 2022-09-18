@@ -1,4 +1,7 @@
-import {parseFeed, parseFeedEntries} from "./feed-utils";
+/**
+ * @jest-environment node
+ */
+import {extractFeedUrlFromHtml, parseFeed, parseFeedEntries} from "./feed-utils";
 
 test('parse XML RSS feed, single item', () => {
     const text = `
@@ -84,4 +87,19 @@ test('parse XML RSS feed', () => {
 
     expect(result.title).toBe('Some site');
     expect(result.url).toBe('https://www.alphens.nl/rss/alphensnl-nieuws.rss');
+});
+
+test('parse HTML', () => {
+    const text = `
+        <html>
+            <head>
+                <link rel="alternate" type="application/rss+xml" href="https://feeds.macrumors.com/MacRumors-All" title="All Mac Rumors Headlines" />
+            </head>
+            <body><h1>Hello world</h1></body>
+        </rss>
+    `;
+
+    const result = extractFeedUrlFromHtml(text);
+
+    expect(result).toBe('https://feeds.macrumors.com/MacRumors-All');
 })

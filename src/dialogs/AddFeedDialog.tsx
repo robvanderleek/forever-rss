@@ -24,11 +24,16 @@ export default function AddFeedDialog(props: AddFeedDialogProps) {
     const {saveFeed} = useFeeds();
     const [url, setUrl] = useState('');
     const [type, setType] = useState('url');
+    const [error, setError] = useState(false);
+    const [helperText, setHelperText] = useState('')
 
     const handleClick = async () => {
         const response = await saveFeed(url);
         if (response.ok) {
             onClose();
+        } else {
+            setHelperText(await response.text());
+            setError(true);
         }
     }
 
@@ -56,7 +61,7 @@ export default function AddFeedDialog(props: AddFeedDialogProps) {
                         </Select>
                     </FormControl>
                 </div>
-                <TextField autoFocus id="feedUrl" label="Feed URL" fullWidth variant="standard" value={url}
+                <TextField error={error} helperText={error ? helperText : undefined} autoFocus id="feedUrl" label="Feed URL" fullWidth variant="standard" value={url}
                            onChange={e => setUrl(e.target.value)} onKeyDown={handleKeyDown}/>
             </DialogContent>
             <DialogActions>

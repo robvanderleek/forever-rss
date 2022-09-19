@@ -102,15 +102,16 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
         handleBack();
     }, [mode, activeSection]);
 
-    const handleClick = () => {
+    const handleClick = (index: number) => {
         switch (mode) {
             case Mode.Feeds:
-                setSelectedFeed(highlightedFeed);
+                setSelectedFeed(index);
                 setSelectedEntry(-1);
                 setMode(Mode.Entries);
                 break;
             case Mode.Entries:
-                setSelectedEntry(highlightedEntry);
+                setSelectedEntry(index);
+                setHighlightedEntry(index);
                 if (!wideScreen) {
                     setMode(Mode.Content);
                 }

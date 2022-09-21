@@ -1,5 +1,5 @@
 import moment from "moment";
-import {List, ListItem, ListItemAvatar, ListItemButton, ListItemText} from "@mui/material";
+import {List, ListItemAvatar, ListItemButton, ListItemText} from "@mui/material";
 import {EntryItem, ItemAvatar} from "../styles";
 import {Article} from "@mui/icons-material";
 import {useFeeds} from "../contexts/FeedsContext";

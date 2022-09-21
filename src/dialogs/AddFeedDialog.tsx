@@ -12,7 +12,7 @@ import {
     TextField
 } from "@mui/material";
 import {useFeeds} from "../contexts/FeedsContext";
-import {useState, KeyboardEvent} from "react";
+import {KeyboardEvent, useState} from "react";
 
 interface AddFeedDialogProps {
     open: boolean;
@@ -28,7 +28,12 @@ export default function AddFeedDialog(props: AddFeedDialogProps) {
     const [helperText, setHelperText] = useState('')
 
     const handleClick = async () => {
-        const response = await saveFeed(url);
+        let response;
+        if (type === 'twitter') {
+            response = await saveFeed(`https://nitter.net/${url}/rss`);
+        } else {
+            response = await saveFeed(url);
+        }
         if (response.ok) {
             onClose();
         } else {
@@ -61,7 +66,8 @@ export default function AddFeedDialog(props: AddFeedDialogProps) {
                         </Select>
                     </FormControl>
                 </div>
-                <TextField error={error} helperText={error ? helperText : undefined} autoFocus id="feedUrl" label="Feed URL" fullWidth variant="standard" value={url}
+                <TextField error={error} helperText={error ? helperText : undefined} autoFocus id="feedUrl"
+                           label="Feed URL" fullWidth variant="standard" value={url}
                            onChange={e => setUrl(e.target.value)} onKeyDown={handleKeyDown}/>
             </DialogContent>
             <DialogActions>

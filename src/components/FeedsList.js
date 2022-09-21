@@ -22,7 +22,7 @@ import {useAppMode} from "../contexts/AppModeContext";
 
 
 export default function FeedsList() {
-    const {feeds, selectedFeed, highlightedFeed, deleteFeed} = useFeeds();
+    const {feeds, highlightedFeed, deleteFeed} = useFeeds();
     const {handleClick} = useAppMode();
     const [editMenuAnchor, setEditMenuAnchor] = useState(undefined);
     const feedContextMenuOpen = Boolean(editMenuAnchor);
@@ -72,7 +72,7 @@ export default function FeedsList() {
                                 autoFocus={highlightedFeed === index}>
                     <ListItemAvatar>
                         <Badge badgeContent={1} color="secondary" variant="dot">
-                            <ItemAvatar active={+(selectedFeed === index)}>
+                            <ItemAvatar active={+(highlightedFeed === index)}>
                                 <RssFeed fontSize="inherit"/>
                             </ItemAvatar>
                         </Badge>

@@ -14,9 +14,11 @@ export default function ControlsContent(props: ControlsContentProps) {
     const {loading} = useFeeds();
 
     if (loading) {
-        return (<CenteredArea>
-            <Loader type="line-scale-pulse-out" active/>
-        </CenteredArea>);
+        return (
+            <CenteredArea>
+                <Loader type="line-scale-pulse-out" active/>
+            </CenteredArea>
+        );
     }
     switch (props.mode) {
         default:

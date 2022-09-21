@@ -33,9 +33,13 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
     const [selectedEntry, setSelectedEntry] = useState(-1);
     const [highlightedFeed, setHighlightedFeed] = useState(0);
     const [highlightedEntry, setHighlightedEntry] = useState(0);
-    const {user, apiFetch, apiPost} = useAuth();
+    const {isLoading, user, apiFetch, apiPost} = useAuth();
 
     useEffect(() => {
+        if (isLoading) {
+            return;
+        }
+
         async function loadFeeds() {
             const fetchedFeeds: Array<Feed> = await apiFetch('user-list-feeds', user);
             if (fetchedFeeds) {
@@ -48,7 +52,7 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
         }
 
         loadFeeds();
-    }, [user, apiFetch]);
+    }, [isLoading, user, apiFetch]);
 
     useEffect(() => {
         async function loadEntries() {

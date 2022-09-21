@@ -23,38 +23,48 @@ const handler: Handler = async function (event: HandlerEvent) {
 }
 
 async function addUrl(url: string, subject: string) {
-    const response = await fetch(url, {redirect: 'follow'});
-    if (response.ok) {
-        const text = await response.text();
-        let feed = parseFeed(text);
-        if (!feed) {
-            logger.info('RSS feed not found at URL, trying HTML parsing...');
-            const htmlFeedUrl = extractFeedUrlFromHtml(text);
-            if (htmlFeedUrl) {
-                const response = await fetch(htmlFeedUrl, {redirect: 'follow'});
-                if (response.ok) {
-                    const text = await response.text();
-                    feed = parseFeed(text);
+    console.log('AND HERE');
+    try {
+        const response = await fetch(url, {redirect: 'follow'});
+        if (response.ok) {
+            const text = await response.text();
+            let feed = parseFeed(text);
+            if (!feed) {
+                logger.info('RSS feed not found at URL, trying HTML parsing...');
+                const htmlFeedUrl = extractFeedUrlFromHtml(text);
+                if (htmlFeedUrl) {
+                    const response = await fetch(htmlFeedUrl, {redirect: 'follow'});
+                    if (response.ok) {
+                        const text = await response.text();
+                        feed = parseFeed(text);
+                    }
                 }
             }
-        }
-        if (feed) {
-            const dbService = new MongoDbService();
-            await dbService.addUserFeed(subject, feed);
-        } else {
-            logger.warn(`Could not find RSS feed for URL: ${url}`);
-            return {
-                statusCode: 422,
-                body: `Could not find RSS feed for URL: ${url}`
+            if (feed) {
+                const dbService = new MongoDbService();
+                await dbService.addUserFeed(subject, feed);
+            } else {
+                logger.warn(`Could not find RSS feed for URL: ${url}`);
+                return {
+                    statusCode: 422,
+                    body: `Could not find RSS feed for URL: ${url}`
+                }
             }
+            return {
+                statusCode: 200,
+                body: JSON.stringify(feed)
+            };
+        } else {
+            return {statusCode: 400}
         }
+    } catch ({message}) {
+        const stringMessage = String(message);
         return {
-            statusCode: 200,
-            body: JSON.stringify(feed)
+            statusCode: 422,
+            body: stringMessage
         };
-    } else {
-        return {statusCode: 400}
     }
+
 }
 
 module.exports = {

@@ -106,7 +106,7 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
         switch (mode) {
             case Mode.Feeds:
                 setSelectedFeed(index);
-                setSelectedEntry(-1);
+                setSelectedEntry(0);
                 setMode(Mode.Entries);
                 break;
             case Mode.Entries:

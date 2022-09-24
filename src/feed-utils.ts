@@ -12,10 +12,24 @@ export function parseFeed(text: string): Feed | undefined {
         return {uuid: uuidv4(), title: 'aaa', url: 'bbb'}
     } else if ('rss' in obj) {
         const channel = obj.rss.channel;
-        return {uuid: uuidv4(), title: channel.title, url: channel['atom:link']['@_href']};
+        return {uuid: uuidv4(), title: channel.title, url: parseRssChannelUrl(channel)};
     } else {
         return undefined;
     }
+}
+
+function parseRssChannelUrl(channel: any) {
+    const links = channel['atom:link'];
+    if (Array.isArray(links)) {
+        for (const l of links) {
+            if (l['@_type'] === 'application/rss+xml') {
+                return l['@_href'];
+            }
+        }
+    } else {
+        return links['@_href'];
+    }
+    return undefined;
 }
 
 export function extractFeedUrlFromHtml(text: string): string | undefined {
@@ -74,7 +88,7 @@ function toEntry(obj: any): Entry {
         'title': obj['title'],
         'updated': obj['pubDate'],
         'link': obj['link'],
-        'content': obj['description'],
+        'content': obj['content'] || obj['content:encoded'] || obj['description'] || '',
         'heroImage': obj['enclosure']?.['@_url']
     }
 }

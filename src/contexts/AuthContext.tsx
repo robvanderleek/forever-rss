@@ -27,7 +27,8 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
         isAuthenticated,
         isLoading,
         user,
-        getAccessTokenSilently
+        getAccessTokenSilently,
+        getAccessTokenWithPopup
     } = useAuth0();
 
     const getUserFullName = () => {
@@ -51,12 +52,22 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
         }
     }
 
+    const getAccessToken = async (): Promise<string> => {
+        // if (AUTH0_CLIENT_ID === 'bsTnov9xAQgQqYgtgF7APCeayP2g6Tz3') {
+        //     return await getAccessTokenWithPopup({
+        //         audience: 'https://development.api.foreverrss'
+        //     });
+        // } else {
+            return await getAccessTokenSilently({
+                audience: 'https://development.api.foreverrss'
+            });
+        // }
+    }
+
     const apiFetch = async (endpoint: string, user: User) => {
         const headers: HeadersInit = {};
         if (user) {
-            const accessToken = await getAccessTokenSilently({
-                audience: 'https://development.api.foreverrss'
-            });
+            const accessToken = await getAccessToken();
             headers['Authorization'] = `Bearer ${accessToken}`
         }
         const response = await fetch(`/.netlify/functions/${endpoint}`, {headers});
@@ -70,22 +81,10 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
     const apiPost = async (endpoint: string, body: string, user: User): Promise<Response> => {
         const headers: HeadersInit = {};
         if (user) {
-            const accessToken = await getAccessTokenSilently({
-                audience: 'https://development.api.foreverrss'
-            });
+            const accessToken = await getAccessToken();
             headers['Authorization'] = `Bearer ${accessToken}`
         }
         return await fetch(`/.netlify/functions/${endpoint}`, {method: 'POST', body: body, headers});
-
-        // if (response.ok) {
-        //     try {
-        //         return await response.json();
-        //     } catch {
-        //         return true;
-        //     }
-        // } else {
-        //     return undefined;
-        // }
     }
 
     return (<AuthContext.Provider value={{

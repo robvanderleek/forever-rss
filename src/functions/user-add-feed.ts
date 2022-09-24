@@ -3,7 +3,7 @@ import {extractFeedUrlFromHtml, parseFeed} from "../feed-utils";
 import fetch from "node-fetch";
 import {MongoDbService} from "../services/MongoDbService";
 import {logger} from "../logger";
-import {getSubject} from "../function-utils";
+import {getSubject, rssFetch} from "../function-utils";
 
 const handler: Handler = async function (event: HandlerEvent) {
     const subject = await getSubject(event);
@@ -23,9 +23,8 @@ const handler: Handler = async function (event: HandlerEvent) {
 }
 
 async function addUrl(url: string, subject: string) {
-    console.log('AND HERE');
     try {
-        const response = await fetch(url, {redirect: 'follow'});
+        const response = await rssFetch(url);
         if (response.ok) {
             const text = await response.text();
             let feed = parseFeed(text);

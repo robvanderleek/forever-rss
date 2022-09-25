@@ -27,8 +27,7 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
         isAuthenticated,
         isLoading,
         user,
-        getAccessTokenSilently,
-        getAccessTokenWithPopup
+        getAccessTokenSilently
     } = useAuth0();
 
     const getUserFullName = () => {
@@ -58,9 +57,9 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
         //         audience: 'https://development.api.foreverrss'
         //     });
         // } else {
-            return await getAccessTokenSilently({
-                audience: 'https://development.api.foreverrss'
-            });
+        return await getAccessTokenSilently({
+            audience: 'https://development.api.foreverrss'
+        });
         // }
     }
 

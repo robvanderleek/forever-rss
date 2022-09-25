@@ -52,6 +52,14 @@ export default function AddFeedDialog(props: AddFeedDialogProps) {
         }
     }
 
+    const handleClose = () => {
+        setUrl('');
+        setError(false);
+        setType('url');
+        setHelperText('');
+        onClose();
+    }
+
     return (
         <Dialog open={open} onClose={onClose} fullWidth>
             <DialogTitle>Add feed</DialogTitle>
@@ -71,8 +79,8 @@ export default function AddFeedDialog(props: AddFeedDialogProps) {
                            onChange={e => setUrl(e.target.value)} onKeyDown={handleKeyDown}/>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose}>Cancel</Button>
-                <Button onClick={handleClick}>Add</Button>
+                <Button onClick={handleClose} variant="outlined">Cancel</Button>
+                <Button onClick={handleClick} variant="outlined">Add</Button>
             </DialogActions>
         </Dialog>
     )

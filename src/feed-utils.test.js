@@ -142,7 +142,7 @@ test('parse XML feed with two atom links', () => {
 
     expect(result.title).toBe('Better Programming - Medium');
     expect(result.url).toBe('https://betterprogramming.pub/feed');
-})
+});
 
 test('parse HTML', () => {
     const text = `
@@ -157,4 +157,4 @@ test('parse HTML', () => {
     const result = extractFeedUrlFromHtml(text);
 
     expect(result).toBe('https://feeds.macrumors.com/MacRumors-All');
-})
+});

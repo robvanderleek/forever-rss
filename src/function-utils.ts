@@ -24,7 +24,7 @@ export async function getSubject(event: HandlerEvent): Promise<string | undefine
 
 export async function rssFetch(url: string): Promise<Response> {
     return await fetch(url, {
-        headers: {'Host': new URL(url).host, 'user-agent': 'curl/7.79.1'},
-        redirect: 'follow'
+        headers: {'user-agent': 'curl/7.79.1'},
+        redirect: 'follow', follow: 5
     });
 }

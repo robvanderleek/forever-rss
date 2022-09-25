@@ -23,6 +23,7 @@ const handler: Handler = async function (event: HandlerEvent) {
 }
 
 async function addUrl(url: string, subject: string) {
+    logger.info(`Adding new feed: ${url}`);
     try {
         const response = await rssFetch(url);
         if (response.ok) {

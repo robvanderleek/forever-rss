@@ -11,7 +11,6 @@ const handler: Handler = async (event: HandlerEvent, _: HandlerContext) => {
     if (response.ok) {
         const text = await response.text();
         const result = parseFeedEntries(text);
-        console.log(result);
         return {
             statusCode: 200, body: JSON.stringify({message: result}),
         };

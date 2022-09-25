@@ -1,27 +1,29 @@
 import {
-    Badge, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+    Badge,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
     IconButton,
     List,
-    ListItem as MuiListItem,
     ListItemAvatar,
     ListItemButton,
     ListItemText,
     Menu,
-    MenuItem,
-    styled
+    MenuItem
 } from "@mui/material";
-import {ItemAvatar} from "../styles";
+import {FeedItem, ItemAvatar} from "../styles";
 import {MoreVert, RssFeed} from "@mui/icons-material";
 import {useFeeds} from "../contexts/FeedsContext";
 import React, {Fragment, useState} from "react";
+import {useAppMode} from "../contexts/AppModeContext";
 
-const ListItem = styled(MuiListItem)(props => ({
-    color: props.active ? '#e6772b' : 'none'
-}));
 
-export default function FeedsList(props) {
-    const {highlightedFeed, handleClick} = props;
-    const {feeds, selectedFeed, deleteFeed} = useFeeds();
+export default function FeedsList() {
+    const {feeds, highlightedFeed, deleteFeed} = useFeeds();
+    const {handleClick} = useAppMode();
     const [editMenuAnchor, setEditMenuAnchor] = useState(undefined);
     const feedContextMenuOpen = Boolean(editMenuAnchor);
     const [contextMenuFeed, setContextMenuFeed] = useState(undefined);
@@ -64,20 +66,20 @@ export default function FeedsList(props) {
 
     function getFeed(feed, index) {
         return (
-            <ListItem key={index} active={+(highlightedFeed === index)} secondaryAction={feedContextMenu(feed)}
+            <FeedItem key={index} active={+(highlightedFeed === index)} secondaryAction={feedContextMenu(feed)}
                       disablePadding>
                 <ListItemButton selected={highlightedFeed === index} onClick={() => handleClick(index)}
                                 autoFocus={highlightedFeed === index}>
                     <ListItemAvatar>
                         <Badge badgeContent={1} color="secondary" variant="dot">
-                            <ItemAvatar active={+(selectedFeed === index)}>
+                            <ItemAvatar active={+(highlightedFeed === index)}>
                                 <RssFeed fontSize="inherit"/>
                             </ItemAvatar>
                         </Badge>
                     </ListItemAvatar>
                     <ListItemText primary={feed.title}/>
                 </ListItemButton>
-            </ListItem>
+            </FeedItem>
         );
     }
 

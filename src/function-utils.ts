@@ -2,6 +2,7 @@ import jwksClient from "jwks-rsa";
 import {decode, verify} from "jsonwebtoken";
 import {HandlerEvent} from "@netlify/functions";
 import {AUTH0_AUDIENCE, AUTH0_ISSUER} from "./config";
+import fetch, {Response} from "node-fetch";
 
 export async function getSubject(event: HandlerEvent): Promise<string | undefined> {
     const bearerField = event.headers['authorization'];
@@ -19,4 +20,11 @@ export async function getSubject(event: HandlerEvent): Promise<string | undefine
     } else {
         return result;
     }
+}
+
+export async function rssFetch(url: string): Promise<Response> {
+    return await fetch(url, {
+        headers: {'user-agent': 'curl/7.79.1'},
+        redirect: 'follow', follow: 5
+    });
 }

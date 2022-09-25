@@ -12,7 +12,7 @@ import {
     TextField
 } from "@mui/material";
 import {useFeeds} from "../contexts/FeedsContext";
-import {useState} from "react";
+import {KeyboardEvent, useState} from "react";
 
 interface AddFeedDialogProps {
     open: boolean;
@@ -24,15 +24,41 @@ export default function AddFeedDialog(props: AddFeedDialogProps) {
     const {saveFeed} = useFeeds();
     const [url, setUrl] = useState('');
     const [type, setType] = useState('url');
+    const [error, setError] = useState(false);
+    const [helperText, setHelperText] = useState('')
 
     const handleClick = async () => {
-        await saveFeed(url);
-        onClose();
+        let response;
+        if (type === 'twitter') {
+            response = await saveFeed(`https://nitter.net/${url}/rss`);
+        } else {
+            response = await saveFeed(url);
+        }
+        if (response.ok) {
+            onClose();
+        } else {
+            setHelperText(await response.text());
+            setError(true);
+        }
     }
 
     const handleTypeChange = (event: SelectChangeEvent) => {
         setType(event.target.value as string);
     };
+
+    const handleKeyDown = async (event: KeyboardEvent) => {
+        if (event.key === 'Enter') {
+            await handleClick();
+        }
+    }
+
+    const handleClose = () => {
+        setUrl('');
+        setError(false);
+        setType('url');
+        setHelperText('');
+        onClose();
+    }
 
     return (
         <Dialog open={open} onClose={onClose} fullWidth>
@@ -48,12 +74,13 @@ export default function AddFeedDialog(props: AddFeedDialogProps) {
                         </Select>
                     </FormControl>
                 </div>
-                <TextField autoFocus id="feedUrl" label="Feed URL" fullWidth variant="standard" value={url}
-                           onChange={e => setUrl(e.target.value)}/>
+                <TextField error={error} helperText={error ? helperText : undefined} autoFocus id="feedUrl"
+                           label="Feed URL" fullWidth variant="standard" value={url}
+                           onChange={e => setUrl(e.target.value)} onKeyDown={handleKeyDown}/>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose}>Cancel</Button>
-                <Button onClick={handleClick}>Add</Button>
+                <Button onClick={handleClose} variant="outlined">Cancel</Button>
+                <Button onClick={handleClick} variant="outlined">Add</Button>
             </DialogActions>
         </Dialog>
     )

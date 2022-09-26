@@ -28,7 +28,7 @@ async function addUrl(url: string, subject: string) {
         const response = await rssFetch(url);
         if (response.ok) {
             const text = await response.text();
-            let feed = parseFeed(text);
+            let feed = parseFeed(url, text);
             if (!feed) {
                 logger.info('RSS feed not found at URL, trying HTML parsing...');
                 const htmlFeedUrl = extractFeedUrlFromHtml(text);
@@ -36,7 +36,7 @@ async function addUrl(url: string, subject: string) {
                     const response = await fetch(htmlFeedUrl, {redirect: 'follow'});
                     if (response.ok) {
                         const text = await response.text();
-                        feed = parseFeed(text);
+                        feed = parseFeed(htmlFeedUrl, text);
                     }
                 }
             }

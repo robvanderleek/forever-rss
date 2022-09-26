@@ -120,7 +120,7 @@ test('parse XML RSS feed', () => {
         </rss>
     `;
 
-    const result = parseFeed(text);
+    const result = parseFeed('https://www.alphens.nl/rss/alphensnl-nieuws.rss', text);
 
     expect(result.title).toBe('Some site');
     expect(result.url).toBe('https://www.alphens.nl/rss/alphensnl-nieuws.rss');
@@ -138,7 +138,7 @@ test('parse XML feed with two atom links', () => {
         </rss>
     `;
 
-    const result = parseFeed(text);
+    const result = parseFeed('https://betterprogramming.pub/feed', text);
 
     expect(result.title).toBe('Better Programming - Medium');
     expect(result.url).toBe('https://betterprogramming.pub/feed');

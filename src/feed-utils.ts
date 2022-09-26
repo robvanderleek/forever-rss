@@ -4,15 +4,15 @@ import {Feed} from "./entities/Feed";
 import {v4 as uuidv4} from 'uuid';
 import {parseValue} from "./utils";
 
-export function parseFeed(text: string): Feed | undefined {
+export function parseFeed(url: string, text: string): Feed | undefined {
     const options = {ignoreAttributes: false};
     const xmlParser = new XMLParser(options);
     const obj = xmlParser.parse(text);
     if ('feed' in obj) {
-        return {uuid: uuidv4(), title: 'aaa', url: 'bbb'}
+        return {uuid: uuidv4(), title: 'aaa', url: url}
     } else if ('rss' in obj) {
         const channel = obj.rss.channel;
-        return {uuid: uuidv4(), title: channel.title, url: parseRssChannelUrl(channel)};
+        return {uuid: uuidv4(), title: channel.title, url: url};
     } else {
         return undefined;
     }

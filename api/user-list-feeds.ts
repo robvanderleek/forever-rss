@@ -1,22 +1,20 @@
-import {Handler, HandlerContext, HandlerEvent} from "@netlify/functions";
-import {Feed} from "../entities/Feed";
+import {Feed} from "../src/entities/Feed";
 import fetch from "node-fetch";
-import {MongoDbService} from "../services/MongoDbService";
+import {MongoDbService} from "../src/services/MongoDbService";
 import {v4 as uuidv4} from 'uuid';
-import {logger} from "../logger";
-import {getSubject} from "../function-utils";
+import {logger} from "../src/logger";
+import {getSubject} from "../src/function-utils";
+import {VercelRequest, VercelResponse} from "@vercel/node";
 
 // const {XMLParser} = require("fast-xml-parser");
 
-const handler: Handler = async function (event: HandlerEvent, context: HandlerContext) {
-    const subject = await getSubject(event);
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+    const subject = await getSubject(req);
     if (!subject) {
         logger.info('Loading feeds for guest user');
         const feed: Feed = {uuid: uuidv4(), title: 'Coding Horror', url: 'http://feeds.feedburner.com/codinghorror'};
-        return {
-            statusCode: 200,
-            body: JSON.stringify([feed])
-        };
+        res.status(200).json([feed])
+        return;
     }
     logger.info(`Loading feeds for: ${subject}`);
     const dbService = new MongoDbService();
@@ -73,8 +71,4 @@ async function getFavIconUrl(htmlUrl: string): Promise<string | undefined> {
         }
     }
     return undefined;
-}
-
-module.exports = {
-    handler: handler
 }

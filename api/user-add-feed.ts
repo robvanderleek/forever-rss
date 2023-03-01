@@ -1,24 +1,24 @@
-import {Handler, HandlerEvent} from "@netlify/functions";
-import {extractFeedUrlFromHtml, parseFeed} from "../feed-utils";
+import {extractFeedUrlFromHtml, parseFeed} from "../src/feed-utils";
 import fetch from "node-fetch";
-import {MongoDbService} from "../services/MongoDbService";
-import {logger} from "../logger";
-import {getSubject, rssFetch} from "../function-utils";
+import {MongoDbService} from "../src/services/MongoDbService";
+import {logger} from "../src/logger";
+import {getSubject, rssFetch} from "../src/function-utils";
+import {VercelRequest, VercelResponse} from "@vercel/node";
 
-const handler: Handler = async function (event: HandlerEvent) {
-    const subject = await getSubject(event);
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+    const subject = await getSubject(req);
     if (!subject) {
-        return {statusCode: 401};
+        return res.status(401);
     }
-    if (!event.body) {
-        return {statusCode: 400}
+    if (!req.body) {
+        return res.status(400);
     }
-    const {url} = JSON.parse(event.body);
+    const {url} = JSON.parse(req.body);
     try {
         return await addUrl(url, subject);
     } catch (e) {
         console.log(e);
-        return {statusCode: 422}
+        return res.status(422);
     }
 }
 
@@ -65,8 +65,4 @@ async function addUrl(url: string, subject: string) {
         };
     }
 
-}
-
-module.exports = {
-    handler: handler
 }

@@ -1,11 +1,11 @@
 import jwksClient from "jwks-rsa";
 import {decode, verify} from "jsonwebtoken";
-import {HandlerEvent} from "@netlify/functions";
 import {AUTH0_AUDIENCE, AUTH0_ISSUER} from "./config";
 import fetch, {Response} from "node-fetch";
+import {VercelRequest} from "@vercel/node";
 
-export async function getSubject(event: HandlerEvent): Promise<string | undefined> {
-    const bearerField = event.headers['authorization'];
+export async function getSubject(req: VercelRequest): Promise<string | undefined> {
+    const bearerField = req.headers['authorization'];
     if (!bearerField) {
         return undefined;
     }

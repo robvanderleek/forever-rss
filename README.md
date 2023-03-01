@@ -16,5 +16,5 @@ Your Internet Inbox
 
 # Development
 
-Run the app in development mode: `yarn dev`
+Run the app in development mode: `vercel dev`
 Run the unit-tests: `yarn test`

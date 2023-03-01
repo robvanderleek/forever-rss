@@ -69,7 +69,7 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
             const accessToken = await getAccessToken();
             headers['Authorization'] = `Bearer ${accessToken}`
         }
-        const response = await fetch(`/.netlify/functions/${endpoint}`, {headers});
+        const response = await fetch(`/api/${endpoint}`, {headers});
         if (response.ok) {
             return await response.json();
         } else {
@@ -83,7 +83,7 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
             const accessToken = await getAccessToken();
             headers['Authorization'] = `Bearer ${accessToken}`
         }
-        return await fetch(`/.netlify/functions/${endpoint}`, {method: 'POST', body: body, headers});
+        return await fetch(`/api/${endpoint}`, {method: 'POST', body: body, headers});
     }
 
     return (<AuthContext.Provider value={{

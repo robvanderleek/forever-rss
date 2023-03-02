@@ -69,9 +69,9 @@ export default function Header(props: HeaderProps) {
                 <Tooltip title={`Forever RSS version ${version.revision}`}>
                     <LogoImg src={logo} alt="logo" width={32} height={32}/>
                 </Tooltip>
-                <IconButton onClick={handleAvatarClick} color={isAuthenticated ? "secondary" : "primary"}>
-                    {avatar()}
-                </IconButton>
+                {/*<IconButton onClick={handleAvatarClick} color={isAuthenticated ? "secondary" : "primary"}>*/}
+                {/*    {avatar()}*/}
+                {/*</IconButton>*/}
                 <Menu open={open} anchorEl={anchor} onClick={handleMenuClose} onClose={handleMenuClose}>
                     {isAuthenticated && <MenuItem onClick={() => logout()}>Logout</MenuItem>}
                 </Menu>

@@ -16,6 +16,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const result = parseFeedEntries(text);
         return res.status(200).json({message: result});
     } else {
-        return res.status(204).json({message: []});
+        return res.status(200).json({message: []});
     }
 }

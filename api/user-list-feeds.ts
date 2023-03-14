@@ -34,6 +34,7 @@ const guestUserFeeds: Array<Feed> = [
     {uuid: uuidv4(), title: 'Los Techies', url: 'https://feeds.feedburner.com/LosTechies'},
     {uuid: uuidv4(), title: 'InfoQ', url: 'https://feed.infoq.com/'},
     {uuid: uuidv4(), title: 'The RISKS Digest', url: 'http://catless.ncl.ac.uk/risksatom.xml'},
+    {uuid: uuidv4(), title: 'Jason Etcovitch blog', url: 'https://jasonet.co/rss.xml'},
 ];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

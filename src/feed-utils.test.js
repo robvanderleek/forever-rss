@@ -144,9 +144,9 @@ test('parse XML feed with two atom links', () => {
     expect(result.url).toBe('https://betterprogramming.pub/feed');
 });
 
-test('parse HTML', () => {
+test('extract feed from HTML', () => {
     const text = `
-        <html>
+        <html lang="en">
             <head>
                 <link rel="alternate" type="application/rss+xml" href="https://feeds.macrumors.com/MacRumors-All" title="All Mac Rumors Headlines" />
             </head>
@@ -157,4 +157,40 @@ test('parse HTML', () => {
     const result = extractFeedUrlFromHtml(text);
 
     expect(result).toBe('https://feeds.macrumors.com/MacRumors-All');
+});
+
+test('parse XML feed with single entry', () => {
+    const text = `
+        <feed>
+            <entry>
+                <title>Hello world</title>
+                <content type="html"><![CDATA[<h4>This is content</h4>]]></content>
+            </entry>
+        </feed>
+    `;
+
+    const result = parseFeedEntries(text);
+
+    expect(result.length).toBe(1);
+    expect(result[0].content).toBe('<h4>This is content</h4>');
+});
+
+test('parse XML feed with two entries', () => {
+    const text = `
+        <feed>
+            <entry>
+                <title>Hello world</title>
+                <content type="html"><![CDATA[<h4>This is content</h4>]]></content>
+            </entry>
+            <entry>
+                <title>Hello world</title>
+                <content type="html"><![CDATA[<h4>This is content</h4>]]></content>
+            </entry>
+        </feed>
+    `;
+
+    const result = parseFeedEntries(text);
+
+    expect(result.length).toBe(2);
+    expect(result[0].content).toBe('<h4>This is content</h4>');
 });

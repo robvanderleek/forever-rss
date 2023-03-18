@@ -60,10 +60,26 @@ export function parseFeedEntries(text: string): Array<Entry> {
 
 function parseXmlEntries(xmlObject: any): Array<Entry> {
     const result = [];
-    for (const e of xmlObject.feed.entry) {
-        result.push({'id': e.id, 'title': e.title, 'updated': e.updated, 'link': e['link'], 'content': e.content});
+    const feed = xmlObject.feed;
+    if (feed) {
+        if (Array.isArray(feed.entry)) {
+            for (const e of feed.entry) {
+                result.push(parseXmlEntry(e));
+            }
+        } else {
+            result.push(parseXmlEntry(feed.entry))
+        }
     }
     return result;
+}
+
+function parseXmlEntry(e: any): Entry {
+    const id = e.id;
+    const title = e.title;
+    const updated = e.updated;
+    const link = e['link'];
+    const content = e.content['#text']
+    return {id, title, updated, link, content};
 }
 
 function parseRssEntries(o: any): Array<Entry> {

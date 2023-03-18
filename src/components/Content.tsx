@@ -8,10 +8,14 @@ const ContentArea = styled(Area)({
     padding: '20px'
 });
 
-export default function Content(props) {
+interface ContentProps {
+    active: boolean;
+}
+
+export default function Content(props: ContentProps) {
     const {active} = props;
     const {entries, selectedEntry} = useFeeds();
-    const refDiv = useRef(null);
+    const refDiv = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (active && refDiv.current) {
@@ -29,6 +33,7 @@ export default function Content(props) {
                     <h1>{entry.title}</h1>
                 </a>
                 {entry.heroImage && <img src={entry.heroImage} alt="Headline"/>}
+
 
                 {entries.length >= 1 && htmlParse(entry.content)}
             </ContentArea>

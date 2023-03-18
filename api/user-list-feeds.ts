@@ -29,7 +29,7 @@ const guestUserFeeds: Array<Feed> = [
     {
         uuid: uuidv4(),
         title: 'Tweakers.net Nieuws',
-        url: 'Tweakers.net Nieuwshttp://feeds.feedburner.com/tweakers/nieuws'
+        url: 'http://feeds.feedburner.com/tweakers/nieuws'
     },
     {uuid: uuidv4(), title: 'Los Techies', url: 'https://feeds.feedburner.com/LosTechies'},
     {uuid: uuidv4(), title: 'InfoQ', url: 'https://feed.infoq.com/'},

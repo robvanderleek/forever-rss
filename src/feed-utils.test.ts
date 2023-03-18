@@ -2,6 +2,7 @@
  * @jest-environment node
  */
 import {extractFeedUrlFromHtml, parseFeed, parseFeedEntries} from "./feed-utils";
+import {Feed} from "./entities/Feed";
 
 test('parse XML RSS feed, single item', () => {
     const text = `
@@ -120,7 +121,8 @@ test('parse XML RSS feed', () => {
         </rss>
     `;
 
-    const result = parseFeed('https://www.alphens.nl/rss/alphensnl-nieuws.rss', text);
+    const result = parseFeed('https://www.alphens.nl/rss/alphensnl-nieuws.rss', text) as Feed;
+
 
     expect(result.title).toBe('Some site');
     expect(result.url).toBe('https://www.alphens.nl/rss/alphensnl-nieuws.rss');
@@ -138,8 +140,9 @@ test('parse XML feed with two atom links', () => {
         </rss>
     `;
 
-    const result = parseFeed('https://betterprogramming.pub/feed', text);
+    const result = parseFeed('https://betterprogramming.pub/feed', text) as Feed;
 
+    ;
     expect(result.title).toBe('Better Programming - Medium');
     expect(result.url).toBe('https://betterprogramming.pub/feed');
 });
@@ -193,4 +196,20 @@ test('parse XML feed with two entries', () => {
 
     expect(result.length).toBe(2);
     expect(result[0].content).toBe('<h4>This is content</h4>');
+});
+
+test('parse XML feed with text title', () => {
+    const text = `
+        <feed>
+            <entry>
+                <title type="text">This is the title</title>
+                <content type="html"><![CDATA[<h4>This is content</h4>]]></content>
+            </entry>
+        </feed>
+    `;
+
+    const result = parseFeedEntries(text);
+
+    expect(result.length).toBe(1);
+    expect(result[0].title).toBe('This is the title');
 });

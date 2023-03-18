@@ -75,11 +75,19 @@ function parseXmlEntries(xmlObject: any): Array<Entry> {
 
 function parseXmlEntry(e: any): Entry {
     const id = e.id;
-    const title = e.title;
+    const title = parseXmlEntryTitle(e);
     const updated = e.updated;
     const link = e['link'];
     const content = e.content['#text']
     return {id, title, updated, link, content};
+}
+
+function parseXmlEntryTitle(e: any): string {
+    if (typeof e.title === 'object') {
+        return e.title['#text'];
+    } else {
+        return e.title;
+    }
 }
 
 function parseRssEntries(o: any): Array<Entry> {

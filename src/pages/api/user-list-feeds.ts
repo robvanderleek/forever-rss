@@ -1,9 +1,9 @@
-import {Feed} from "../src/entities/Feed";
+import {Feed} from "@/entities/Feed";
 import fetch from "node-fetch";
-import {MongoDbService} from "../src/services/MongoDbService";
+import {MongoDbService} from "@/services/MongoDbService";
 import {v4 as uuidv4} from 'uuid';
-import {logger} from "../src/logger";
-import {getSubject} from "../src/function-utils";
+import {logger} from "@/logger";
+import {getSubject} from "@/function-utils";
 import {VercelRequest, VercelResponse} from "@vercel/node";
 
 // const {XMLParser} = require("fast-xml-parser");

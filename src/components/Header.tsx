@@ -1,12 +1,13 @@
 import {Fragment, useState} from "react";
 import {Avatar, Divider, IconButton, Menu, MenuItem, styled, Toolbar, Tooltip} from "@mui/material";
 import {AccountBox, ArrowBack} from "@mui/icons-material";
-import {useFeeds} from "../contexts/FeedsContext";
-import logo from '../static/forever-rss-logo.svg';
-import {version} from "../version";
+import {useFeeds} from "@/contexts/FeedsContext";
+import logo from '../../public/forever-rss-logo.svg';
+import {version} from "@/version";
 import {Mode} from "../entities/Mode";
 import {useAuth} from "../contexts/AuthContext";
 import {getInitials} from "../utils";
+import Image from "next/image";
 
 const Title = styled('span')({
     marginLeft: '12px',
@@ -22,7 +23,7 @@ const HeaderToolbar = styled(Toolbar)`
   justify-content: space-between;
 `;
 
-const LogoImg = styled('img')`
+const LogoImg = styled(Image)`
   border-radius: 4px;
   margin-left: 16px;
   margin-right: 16px;
@@ -67,7 +68,7 @@ export default function Header(props: HeaderProps) {
         return (<Fragment>
             <HeaderToolbar disableGutters>
                 <Tooltip title={`Forever RSS version ${version.revision}`}>
-                    <LogoImg src={logo} alt="logo" width={32} height={32}/>
+                    <LogoImg priority src="/forever-rss-logo.svg" alt="logo" width={32} height={32}/>
                 </Tooltip>
                 {/*<IconButton onClick={handleAvatarClick} color={isAuthenticated ? "secondary" : "primary"}>*/}
                 {/*    {avatar()}*/}

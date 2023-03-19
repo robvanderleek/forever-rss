@@ -71,7 +71,7 @@ export default function FeedsList() {
                 <ListItemButton selected={highlightedFeed === index} onClick={() => handleClick(index)}
                                 autoFocus={highlightedFeed === index}>
                     <ListItemAvatar>
-                        <Badge badgeContent={1} color="secondary" variant="dot">
+                        <Badge badgeContent={1} color="primary" variant="dot">
                             <ItemAvatar active={+(highlightedFeed === index)}>
                                 <RssFeed fontSize="inherit"/>
                             </ItemAvatar>

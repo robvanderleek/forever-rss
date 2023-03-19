@@ -1,5 +1,5 @@
-import {MongoDbService} from "../src/services/MongoDbService";
-import {getSubject} from "../src/function-utils";
+import {MongoDbService} from "@/services/MongoDbService";
+import {getSubject} from "@/function-utils";
 import {VercelRequest, VercelResponse} from "@vercel/node";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

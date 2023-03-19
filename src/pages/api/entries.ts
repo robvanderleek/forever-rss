@@ -1,5 +1,5 @@
-import {parseFeedEntries} from "../src/feed-utils";
-import {rssFetch} from "../src/function-utils";
+import {parseFeedEntries} from "@/feed-utils";
+import {rssFetch} from "@/function-utils";
 import {VercelRequest, VercelResponse} from "@vercel/node";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

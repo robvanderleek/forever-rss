@@ -18,10 +18,17 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "preserve",
+    "incremental": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": [
     "src",
     "src/custom.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

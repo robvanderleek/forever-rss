@@ -1,8 +1,8 @@
-import {extractFeedUrlFromHtml, parseFeed} from "../src/feed-utils";
+import {extractFeedUrlFromHtml, parseFeed} from "@/feed-utils";
 import fetch from "node-fetch";
-import {MongoDbService} from "../src/services/MongoDbService";
-import {logger} from "../src/logger";
-import {getSubject, rssFetch} from "../src/function-utils";
+import {MongoDbService} from "@/services/MongoDbService";
+import {logger} from "@/logger";
+import {getSubject, rssFetch} from "@/function-utils";
 import {VercelRequest, VercelResponse} from "@vercel/node";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

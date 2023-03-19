@@ -5,7 +5,7 @@ import Content from "../components/Content";
 import {useAppMode} from "@/contexts/AppModeContext";
 import Loader from "react-loaders";
 import {useAuth} from "@/contexts/AuthContext";
-import Head from "next/Head";
+import Head from "next/head";
 
 export default function App() {
     const {activeSection, wideScreen} = useAppMode();

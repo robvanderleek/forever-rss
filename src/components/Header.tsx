@@ -2,11 +2,10 @@ import {Fragment, useState} from "react";
 import {Avatar, Divider, IconButton, Menu, MenuItem, styled, Toolbar, Tooltip} from "@mui/material";
 import {AccountBox, ArrowBack} from "@mui/icons-material";
 import {useFeeds} from "@/contexts/FeedsContext";
-import logo from '../../public/forever-rss-logo.svg';
 import {version} from "@/version";
-import {Mode} from "../entities/Mode";
-import {useAuth} from "../contexts/AuthContext";
-import {getInitials} from "../utils";
+import {Mode} from "@/entities/Mode";
+import {useAuth} from "@/contexts/AuthContext";
+import {getInitials} from "@/utils";
 import Image from "next/image";
 
 const Title = styled('span')({
@@ -70,9 +69,9 @@ export default function Header(props: HeaderProps) {
                 <Tooltip title={`Forever RSS version ${version.revision}`}>
                     <LogoImg priority src="/forever-rss-logo.svg" alt="logo" width={32} height={32}/>
                 </Tooltip>
-                {/*<IconButton onClick={handleAvatarClick} color={isAuthenticated ? "secondary" : "primary"}>*/}
-                {/*    {avatar()}*/}
-                {/*</IconButton>*/}
+                <IconButton onClick={handleAvatarClick}>
+                    {avatar()}
+                </IconButton>
                 <Menu open={open} anchorEl={anchor} onClick={handleMenuClose} onClose={handleMenuClose}>
                     {isAuthenticated && <MenuItem onClick={() => logout()}>Logout</MenuItem>}
                 </Menu>

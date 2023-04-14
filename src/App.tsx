@@ -3,7 +3,7 @@ import 'loaders.css';
 import Controls from "./components/Controls";
 import {CenteredArea, Main, Section} from "./styles";
 import Content from "./components/Content";
-import {useAppMode} from "./contexts/AppModeContext";
+import {ActiveSection, useAppMode} from "./contexts/AppModeContext";
 import Loader from "react-loaders";
 import {useAuth} from "./contexts/AuthContext";
 
@@ -23,7 +23,7 @@ export default function App() {
         if (isLoading) {
             return getLoadingScreen();
         } else {
-            return (<Controls active={true}/>);
+            return (<Controls/>);
         }
     }
 
@@ -31,17 +31,17 @@ export default function App() {
         if (isLoading) {
             return getLoadingScreen();
         } else {
-            return (<Controls active={activeSection === 0}/>);
+            return (<Controls/>);
         }
     }
 
     if (wideScreen) {
         return (
             <Main>
-                <Section sx={{width: '30%'}} active={+(activeSection === 0)}>
+                <Section sx={{width: '30%'}} active={activeSection === ActiveSection.Left}>
                     {getWideScreenControls()}
                 </Section>
-                <Section sx={{width: '70%'}} active={+(activeSection === 1)}>
+                <Section sx={{width: '70%'}} active={activeSection === ActiveSection.Right}>
                     <Content active={activeSection === 1}/>
                 </Section>
             </Main>
@@ -49,7 +49,7 @@ export default function App() {
     } else {
         return (
             <Main>
-                <Section sx={{width: '100%'}} active={1}>
+                <Section sx={{width: '100%'}} active={true}>
                     {getControls()}
                 </Section>
             </Main>

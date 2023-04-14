@@ -1,11 +1,15 @@
 import React, {createContext, useContext, useState} from "react";
-import {Mode} from "../entities/Mode";
+import {Mode} from "@/entities/Mode";
 import {useHotkeys} from "react-hotkeys-hook";
 import {useMediaQuery} from "@mui/material";
 import {useFeeds} from "./FeedsContext";
 
+export enum ActiveSection {
+    Left, Right
+}
+
 interface AppModeContextValue {
-    activeSection: number;
+    activeSection: ActiveSection;
     mode: Mode;
     setMode: Function;
     wideScreen: boolean;
@@ -20,10 +24,11 @@ interface AppModeContextProviderProps {
 }
 
 export function AppModeContextProvider(props: AppModeContextProviderProps) {
-    const [activeSection, setActiveSection] = useState(0);
+    const [activeSection, setActiveSection] = useState<ActiveSection>(ActiveSection.Left);
     const [mode, setMode] = useState(Mode.Feeds);
     const {
         feeds,
+        selectedFeed,
         setSelectedFeed,
         entries,
         selectedEntry,
@@ -36,10 +41,10 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
     const wideScreen = useMediaQuery('(min-width:900px)');
 
     useHotkeys('right', () => {
-        if (activeSection < 1) {
-            setActiveSection(activeSection + 1);
+        if (selectedFeed >= 0 && activeSection === ActiveSection.Left) {
+            setActiveSection(ActiveSection.Right);
         }
-    }, [activeSection]);
+    }, [selectedFeed, activeSection]);
 
     useHotkeys('up', () => {
         switch (mode) {
@@ -83,18 +88,18 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
 
     const handleBack = () => {
         switch (mode) {
+            case Mode.Entries:
+                if (activeSection === ActiveSection.Right) {
+                    setActiveSection(ActiveSection.Left);
+                } else {
+                    setSelectedEntry(-1);
+                    setHighlightedEntry(0);
+                    setMode(Mode.Feeds);
+                }
+                break;
             case Mode.Content:
                 setMode(Mode.Entries);
                 break;
-            case Mode.Entries:
-                setSelectedEntry(-1);
-                setHighlightedEntry(0);
-                setMode(Mode.Feeds);
-                break;
-            default:
-                if (activeSection > 0) {
-                    setActiveSection(activeSection - 1);
-                }
         }
     }
 

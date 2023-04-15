@@ -17,6 +17,7 @@ interface FeedsContextValue {
     setHighlightedEntry: Function;
     saveFeed: (url: string) => Promise<Response>;
     deleteFeed: (uuid: string) => Promise<void>;
+    clearEntries: () => void;
 }
 
 const FeedsContext = createContext({} as FeedsContextValue);
@@ -56,7 +57,7 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
 
     useEffect(() => {
         async function loadEntries() {
-            const json = await apiFetch('entries?url=' + encodeURIComponent(feeds[selectedFeed].url));
+            const json = await apiFetch('entries?url=' + encodeURIComponent(feeds[selectedFeed].url), user);
             setEntries(json.message);
             setLoading(false);
         }
@@ -65,7 +66,7 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
             setLoading(true);
             loadEntries();
         }
-    }, [feeds, selectedFeed, apiFetch]);
+    }, [feeds, selectedFeed, user, apiFetch]);
 
     const saveFeed = async (url: string): Promise<Response> => {
         const response = await apiPost('user-add-feed', JSON.stringify({url: url}), user);
@@ -89,6 +90,11 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
         setLoading(false);
     }
 
+    const clearEntries = () => {
+        setSelectedEntry(-1);
+        setEntries([]);
+    }
+
     return (<FeedsContext.Provider value={{
         loading,
         feeds,
@@ -102,7 +108,8 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
         highlightedEntry,
         setHighlightedEntry,
         saveFeed,
-        deleteFeed
+        deleteFeed,
+        clearEntries
     }}>{props.children}</FeedsContext.Provider>)
 }
 

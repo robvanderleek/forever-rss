@@ -38,10 +38,10 @@ export default function App() {
     if (wideScreen) {
         return (
             <Main>
-                <Section sx={{width: '30%'}} active={activeSection === ActiveSection.Left}>
+                <Section sx={{width: '30%'}} active={activeSection === ActiveSection.Controls}>
                     {getWideScreenControls()}
                 </Section>
-                <Section sx={{width: '70%'}} active={activeSection === ActiveSection.Right}>
+                <Section sx={{width: '70%'}} active={activeSection === ActiveSection.Content}>
                     <Content active={activeSection === 1}/>
                 </Section>
             </Main>

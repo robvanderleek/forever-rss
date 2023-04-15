@@ -10,7 +10,7 @@ interface AuthContextValue {
     getAvatarUrl: Function;
     loginWithRedirect: Function;
     logout: Function;
-    apiFetch: Function;
+    apiFetch: (endpoint: string, user: User | undefined) => Promise<any>;
     apiPost: Function;
 }
 
@@ -63,7 +63,7 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
         // }
     }
 
-    const apiFetch = async (endpoint: string, user: User) => {
+    const apiFetch = async (endpoint: string, user: User | undefined): Promise<any> => {
         const headers: HeadersInit = {};
         if (user) {
             const accessToken = await getAccessToken();

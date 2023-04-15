@@ -1,4 +1,4 @@
-import {Feed} from "../entities/Feed";
+import {Feed} from "@/entities/Feed";
 import {Db, MongoClient} from "mongodb";
 
 export class MongoDbService {
@@ -34,6 +34,31 @@ export class MongoDbService {
         }
     }
 
+    async getUserFeed(userId: string, uuid: string): Promise<Feed | undefined> {
+        const db = await this.getDatabase();
+        const collection = db.collection('user');
+        const data = await collection.findOne({'user': userId});
+        if (data) {
+            return data.feeds.find((feed: Feed) => feed.uuid === uuid);
+        }
+    }
+
+    async updateAccessTime(userId: string, url: string): Promise<number> {
+        const db = await this.getDatabase();
+        const collection = db.collection('user');
+        const data = await collection.findOne({'user': userId});
+        if (data) {
+            const feeds: Array<Feed> = data.feeds;
+            const feed = feeds.find(feed => feed.url === url);
+            if (feed) {
+                feed.accessTime = new Date();
+                const result = await collection.updateOne({'user': userId}, {$set: {'feeds': feeds}}, {});
+                return result.modifiedCount;
+            }
+        }
+        return 0;
+    }
+
     async addUserFeed(userId: string, feed: Feed): Promise<number> {
         const db = await this.getDatabase();
         const collection = db.collection('user');
@@ -41,7 +66,7 @@ export class MongoDbService {
         return result.modifiedCount;
     }
 
-    async removeUserFeed(userId: string, uuid: string) {
+    async removeUserFeed(userId: string, uuid: string): Promise<number> {
         const db = await this.getDatabase();
         const collection = db.collection('user');
         const result = await collection.updateOne({'user': userId}, {$pull: {'feeds': {'uuid': uuid}}});
@@ -51,5 +76,4 @@ export class MongoDbService {
     disconnect() {
         this.client?.close();
     }
-
 }

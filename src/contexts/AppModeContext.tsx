@@ -5,7 +5,7 @@ import {useMediaQuery} from "@mui/material";
 import {useFeeds} from "./FeedsContext";
 
 export enum ActiveSection {
-    Left, Right
+    Controls, Content
 }
 
 interface AppModeContextValue {
@@ -24,7 +24,7 @@ interface AppModeContextProviderProps {
 }
 
 export function AppModeContextProvider(props: AppModeContextProviderProps) {
-    const [activeSection, setActiveSection] = useState<ActiveSection>(ActiveSection.Left);
+    const [activeSection, setActiveSection] = useState<ActiveSection>(ActiveSection.Controls);
     const [mode, setMode] = useState(Mode.Feeds);
     const {
         feeds,
@@ -36,13 +36,14 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
         highlightedEntry,
         setHighlightedEntry,
         highlightedFeed,
-        setHighlightedFeed
+        setHighlightedFeed,
+        clearEntries
     } = useFeeds();
     const wideScreen = useMediaQuery('(min-width:900px)');
 
     useHotkeys('right', () => {
-        if (selectedFeed >= 0 && activeSection === ActiveSection.Left) {
-            setActiveSection(ActiveSection.Right);
+        if (selectedFeed >= 0 && activeSection === ActiveSection.Controls) {
+            setActiveSection(ActiveSection.Content);
         }
     }, [selectedFeed, activeSection]);
 
@@ -88,11 +89,14 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
 
     const handleBack = () => {
         switch (mode) {
+            case Mode.Feeds:
+            default:
+                break;
             case Mode.Entries:
-                if (activeSection === ActiveSection.Right) {
-                    setActiveSection(ActiveSection.Left);
+                if (activeSection === ActiveSection.Content) {
+                    setActiveSection(ActiveSection.Controls);
                 } else {
-                    setSelectedEntry(-1);
+                    clearEntries();
                     setHighlightedEntry(0);
                     setMode(Mode.Feeds);
                 }

@@ -3,23 +3,26 @@
  */
 
 import {MongoMemoryServer} from "mongodb-memory-server";
-import {MongoDbService} from "./MongoDbService";
+import {MongoDbService} from "../../src/services/MongoDbService";
 
 let mongoServer: MongoMemoryServer;
+let service: MongoDbService;
 
 beforeEach(async () => {
     mongoServer = await MongoMemoryServer.create();
+    service = new MongoDbService(mongoServer.getUri());
 });
 
 afterEach(async () => {
     if (mongoServer) {
         await mongoServer.stop();
     }
+    if (service) {
+        service.disconnect();
+    }
 });
 
-test('Add feed', async () => {
-    const service = new MongoDbService(mongoServer.getUri());
-
+test('add feed', async () => {
     let result = await service.getAllUserFeeds('robvanderleek');
 
     expect(result.length).toBe(0);
@@ -30,13 +33,9 @@ test('Add feed', async () => {
     result = await service.getAllUserFeeds('robvanderleek');
 
     expect(result.length).toBe(1);
-
-    service.disconnect();
 });
 
-test('Remove feed', async () => {
-    const service = new MongoDbService(mongoServer.getUri());
-
+test('remove feed', async () => {
     let result = await service.getAllUserFeeds('robvanderleek');
 
     expect(result.length).toBe(0);
@@ -55,8 +54,36 @@ test('Remove feed', async () => {
     result = await service.getAllUserFeeds('robvanderleek');
 
     expect(result.length).toBe(1);
+});
 
-    service.disconnect();
+test('get user feed', async () => {
+    let feed = {uuid: 'abcd1234', title: 'aap', url: 'https://noot'}
+    await service.addUserFeed('robvanderleek', feed);
+
+    let result = await service.getUserFeed('robvanderleek', 'abcd1234');
+
+    expect(result?.url).toBe('https://noot');
+
+    result = await service.getUserFeed('robvanderleek', 'efgh5678');
+
+    expect(result).toBeUndefined();
+});
+
+test('Update access time feed', async () => {
+    let feed = {uuid: 'abcd1234', title: 'aap', url: 'https://noot'}
+    await service.addUserFeed('robvanderleek', feed);
+
+    await service.updateAccessTime('robvanderleek', 'https://noot');
+    const updatedFeed = await service.getUserFeed('robvanderleek', 'abcd1234');
+    const updatedTime = updatedFeed?.accessTime?.getTime();
+
+    expect(updatedTime).toBeDefined();
+
+    if (updatedTime) {
+        const result = (new Date().getTime() - updatedTime) / 1000;
+
+        expect(result).toBeLessThan(5);
+    }
 });
 
 export {}

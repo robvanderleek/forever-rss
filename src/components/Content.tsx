@@ -1,7 +1,7 @@
 import htmlParse from "html-react-parser";
-import {useFeeds} from "../contexts/FeedsContext";
+import {useFeeds} from "@/contexts/FeedsContext";
 import {useEffect, useRef} from "react";
-import {Area} from "../styles";
+import {Area} from "@/styles";
 import {styled} from "@mui/material";
 
 const ContentArea = styled(Area)({

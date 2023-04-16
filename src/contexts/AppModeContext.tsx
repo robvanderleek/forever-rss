@@ -97,6 +97,7 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
                     setActiveSection(ActiveSection.Controls);
                 } else {
                     clearEntries();
+                    setSelectedFeed(-1);
                     setHighlightedEntry(0);
                     setMode(Mode.Feeds);
                 }

@@ -44,10 +44,10 @@ export default function App() {
                     <link rel="icon" href="/favicon.ico"/>
                 </Head>
                 <Main>
-                    <Section sx={{width: '30%'}} active={activeSection === ActiveSection.Controls}>
+                    <Section sx={{width: '30%'}} active="false">
                         {getWideScreenControls()}
                     </Section>
-                    <Section sx={{width: '70%'}} active={activeSection === ActiveSection.Content}>
+                    <Section sx={{width: '70%'}} active={activeSection === ActiveSection.Content ? 'true' : 'false'}>
                         <Content active={activeSection === 1}/>
                     </Section>
                 </Main>
@@ -62,7 +62,7 @@ export default function App() {
                     <link rel="icon" href="/favicon.ico"/>
                 </Head>
                 <Main>
-                    <Section sx={{width: '100%'}} active={true}>
+                    <Section sx={{width: '100%'}} active="true">
                         {getControls()}
                     </Section>
                 </Main>

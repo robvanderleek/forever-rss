@@ -12,11 +12,31 @@ interface ActiveProps {
 }
 
 export const Section = styled('div')((props: ActiveProps) => ({
-    borderStyle: props.active === 'true' ? 'solid' : 'none',
-    borderWidth: '2px',
-    padding: props.active ? '0px' : '2px',
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    borderColor: props.active === 'true' ? '#faf9fc' : 'rgb(0, 0, 0, 0.0)',
     overflow: 'auto'
 }));
+
+export const ContentArea = styled('div')((props: ActiveProps) => ({
+    height: '100%',
+    overflow: 'auto',
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    borderColor: props.active === 'true' ? '#faf9fc' : 'grey',
+    // borderStyle: props.active === 'true' ? 'solid' : 'none',
+}));
+
+export const LoadingArea = styled('div')`
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #faf9fc;
+`;
 
 export const Area = styled('div')({
     height: '100%',
@@ -24,21 +44,6 @@ export const Area = styled('div')({
     flexDirection: 'column',
     outline: 'none'
 });
-
-export const CenteredArea = styled('div')((props: ActiveProps) => ({
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    outline: 'none',
-    borderStyle: props.active === 'true' ? 'solid' : 'none',
-}));
-
-export const ContentArea = styled('div')((props: ActiveProps) => ({
-    height: '100%',
-    overflow: 'auto',
-    borderStyle: props.active === 'true' ? 'solid' : 'none',
-}));
 
 export const FeedItem = styled(MuiListItem)((props: ActiveProps) => ({
     color: props.active === 'true' ? '#e6772b' : 'none'

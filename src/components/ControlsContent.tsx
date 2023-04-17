@@ -1,5 +1,5 @@
 import {Mode} from "@/entities/Mode";
-import {CenteredArea, ContentArea} from "@/styles";
+import {LoadingArea, ContentArea} from "@/styles";
 import Loader from "react-loaders";
 import FeedsList from "./FeedsList";
 import EntriesList from "./EntriesList";
@@ -33,9 +33,9 @@ export default function ControlsContent(props: ControlsContentProps) {
 
     if (loading) {
         return (
-            <CenteredArea active="true">
+            <LoadingArea>
                 <Loader type="line-scale-pulse-out" active/>
-            </CenteredArea>
+            </LoadingArea>
         );
     } else {
         const active = !wideScreen || (mode === Mode.Feeds || mode === Mode.Entries);

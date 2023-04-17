@@ -1,6 +1,6 @@
 import 'loaders.css';
 import Controls from "../components/Controls";
-import {CenteredArea, Main, Section} from "@/styles";
+import {LoadingArea, Main, Section} from "@/styles";
 import Content from "../components/Content";
 import {useAppMode} from "@/contexts/AppModeContext";
 import Loader from "react-loaders";
@@ -14,9 +14,9 @@ export default function App() {
 
     const getLoadingScreen = () => {
         return (
-            <CenteredArea active="false">
+            <LoadingArea>
                 <Loader type="line-scale-pulse-out" active/>
-            </CenteredArea>
+            </LoadingArea>
         );
     }
 

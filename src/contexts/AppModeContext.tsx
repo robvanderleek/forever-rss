@@ -4,12 +4,7 @@ import {useHotkeys} from "react-hotkeys-hook";
 import {useMediaQuery} from "@mui/material";
 import {useFeeds} from "./FeedsContext";
 
-export enum ActiveSection {
-    Controls, Content
-}
-
 interface AppModeContextValue {
-    activeSection: ActiveSection;
     mode: Mode;
     setMode: Function;
     wideScreen: boolean;
@@ -24,11 +19,9 @@ interface AppModeContextProviderProps {
 }
 
 export function AppModeContextProvider(props: AppModeContextProviderProps) {
-    const [activeSection, setActiveSection] = useState<ActiveSection>(ActiveSection.Controls);
     const [mode, setMode] = useState(Mode.Feeds);
     const {
         feeds,
-        selectedFeed,
         setSelectedFeed,
         entries,
         selectedEntry,
@@ -42,10 +35,10 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
     const wideScreen = useMediaQuery('(min-width:900px)');
 
     useHotkeys('right', () => {
-        if (selectedFeed >= 0 && activeSection === ActiveSection.Controls) {
-            setActiveSection(ActiveSection.Content);
+        if (mode === Mode.Entries) {
+            setMode(Mode.Content);
         }
-    }, [selectedFeed, activeSection]);
+    }, [mode]);
 
     useHotkeys('up', () => {
         switch (mode) {
@@ -93,14 +86,10 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
             default:
                 break;
             case Mode.Entries:
-                if (activeSection === ActiveSection.Content) {
-                    setActiveSection(ActiveSection.Controls);
-                } else {
-                    clearEntries();
-                    setSelectedFeed(-1);
-                    setHighlightedEntry(0);
-                    setMode(Mode.Feeds);
-                }
+                clearEntries();
+                setSelectedFeed(-1);
+                setHighlightedEntry(0);
+                setMode(Mode.Feeds);
                 break;
             case Mode.Content:
                 setMode(Mode.Entries);
@@ -110,7 +99,7 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
 
     useHotkeys('left', () => {
         handleBack();
-    }, [mode, activeSection]);
+    }, [mode]);
 
     const handleClick = (index: number) => {
         switch (mode) {
@@ -122,16 +111,14 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
             case Mode.Entries:
                 setSelectedEntry(index);
                 setHighlightedEntry(index);
-                if (!wideScreen) {
-                    setMode(Mode.Content);
-                }
+                setMode(Mode.Content);
                 break;
             default:
         }
     }
 
     return (<AppModeContext.Provider value={{
-        activeSection, mode, setMode, wideScreen, handleBack, handleClick
+        mode, setMode, wideScreen, handleBack, handleClick
     }}>{props.children}</AppModeContext.Provider>)
 }
 

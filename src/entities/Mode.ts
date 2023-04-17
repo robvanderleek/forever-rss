@@ -1,5 +1,5 @@
 export enum Mode {
-    Feeds,
-    Entries,
-    Content
+    Feeds = 'Feeds',
+    Entries = 'Entries',
+    Content = 'Content'
 }

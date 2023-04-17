@@ -1,7 +1,7 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import {useAuth} from "./AuthContext";
-import {Feed} from "../entities/Feed";
-import {Entry} from "../entities/Entry";
+import {Feed} from "@/entities/Feed";
+import {Entry} from "@/entities/Entry";
 
 interface FeedsContextValue {
     loading: boolean;

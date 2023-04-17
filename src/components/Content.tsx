@@ -4,9 +4,14 @@ import {useEffect, useRef} from "react";
 import {Area} from "@/styles";
 import {styled} from "@mui/material";
 
-const ContentArea = styled(Area)({
-    padding: '20px'
-});
+const ContentArea = styled(Area)`
+  padding: 20px;
+`;
+
+const DefaultContentArea = styled(ContentArea)`
+  align-items: center;
+  justify-content: center;
+`;
 
 interface ContentProps {
     active: boolean;
@@ -25,7 +30,7 @@ export default function Content(props: ContentProps) {
 
     const entry = entries[selectedEntry];
     if (!entry) {
-        return null;
+        return (<DefaultContentArea>Forever RSS</DefaultContentArea>);
     } else {
         return (
             <ContentArea tabIndex={-1} ref={refDiv}>
@@ -33,8 +38,6 @@ export default function Content(props: ContentProps) {
                     <h1>{entry.title}</h1>
                 </a>
                 {entry.heroImage && <img src={entry.heroImage} alt="Headline"/>}
-
-
                 {entries.length >= 1 && htmlParse(entry.content)}
             </ContentArea>
         );

@@ -1,11 +1,11 @@
 import {Avatar, ListItem as MuiListItem, styled} from "@mui/material";
 
-export const Main = styled('div')({
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    outline: 'none'
-});
+export const Main = styled('div')`
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    outline: none;
+`;
 
 interface ActiveProps {
     active: 'true' | 'false'

@@ -2,18 +2,19 @@ import 'loaders.css';
 import Controls from "../components/Controls";
 import {CenteredArea, Main, Section} from "@/styles";
 import Content from "../components/Content";
-import {ActiveSection, useAppMode} from "@/contexts/AppModeContext";
+import {useAppMode} from "@/contexts/AppModeContext";
 import Loader from "react-loaders";
 import {useAuth} from "@/contexts/AuthContext";
 import Head from "next/head";
+import {Mode} from "@/entities/Mode";
 
 export default function App() {
-    const {activeSection, wideScreen} = useAppMode();
+    const {mode, wideScreen} = useAppMode();
     const {isLoading} = useAuth();
 
     const getLoadingScreen = () => {
         return (
-            <CenteredArea>
+            <CenteredArea active="false">
                 <Loader type="line-scale-pulse-out" active/>
             </CenteredArea>
         );
@@ -47,8 +48,8 @@ export default function App() {
                     <Section sx={{width: '30%'}} active="false">
                         {getWideScreenControls()}
                     </Section>
-                    <Section sx={{width: '70%'}} active={activeSection === ActiveSection.Content ? 'true' : 'false'}>
-                        <Content active={activeSection === 1}/>
+                    <Section sx={{width: '70%'}} active={mode === Mode.Content ? 'true' : 'false'}>
+                        <Content active={mode === Mode.Content}/>
                     </Section>
                 </Main>
             </>
@@ -62,7 +63,7 @@ export default function App() {
                     <link rel="icon" href="/favicon.ico"/>
                 </Head>
                 <Main>
-                    <Section sx={{width: '100%'}} active="true">
+                    <Section sx={{width: '100%'}} active="false">
                         {getControls()}
                     </Section>
                 </Main>

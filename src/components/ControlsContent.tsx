@@ -5,7 +5,7 @@ import FeedsList from "./FeedsList";
 import EntriesList from "./EntriesList";
 import {useFeeds} from "@/contexts/FeedsContext";
 import Content from "./Content";
-import {ActiveSection, useAppMode} from "@/contexts/AppModeContext";
+import {useAppMode} from "@/contexts/AppModeContext";
 
 interface ControlsContentProps {
     mode: Mode;
@@ -13,7 +13,7 @@ interface ControlsContentProps {
 
 export default function ControlsContent(props: ControlsContentProps) {
     const {loading} = useFeeds();
-    const {activeSection} = useAppMode();
+    const {mode, wideScreen} = useAppMode();
 
     const getContentElement = () => {
         switch (props.mode) {
@@ -23,7 +23,11 @@ export default function ControlsContent(props: ControlsContentProps) {
             case Mode.Entries:
                 return (<EntriesList/>);
             case Mode.Content:
-                return (<Content active={false}/>);
+                if (wideScreen) {
+                    return (<EntriesList/>);
+                } else {
+                    return (<Content active={false}/>);
+                }
         }
     }
 
@@ -34,8 +38,9 @@ export default function ControlsContent(props: ControlsContentProps) {
             </CenteredArea>
         );
     } else {
+        const active = !wideScreen || (mode === Mode.Feeds || mode === Mode.Entries);
         return (
-            <ContentArea active={activeSection === ActiveSection.Controls ? 'true' : 'false'}>
+            <ContentArea active={active ? 'true' : 'false'}>
                 {getContentElement()}
             </ContentArea>
         );

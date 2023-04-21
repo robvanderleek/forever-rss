@@ -41,6 +41,7 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
                 break;
             case Mode.Entries:
                 handleClick(highlightedEntry);
+                setMode(Mode.Content);
                 break;
             default:
         }
@@ -110,14 +111,14 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
     const handleClick = (index: number) => {
         switch (mode) {
             case Mode.Feeds:
+                setHighlightedFeed(index);
                 setSelectedFeed(index);
                 setSelectedEntry(0);
                 setMode(Mode.Entries);
                 break;
             case Mode.Entries:
-                setSelectedEntry(index);
                 setHighlightedEntry(index);
-                setMode(Mode.Content);
+                setSelectedEntry(index);
                 break;
             default:
         }

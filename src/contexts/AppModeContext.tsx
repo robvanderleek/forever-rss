@@ -35,10 +35,16 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
     const wideScreen = useMediaQuery('(min-width:900px)');
 
     useHotkeys('right', () => {
-        if (mode === Mode.Entries) {
-            setMode(Mode.Content);
+        switch (mode) {
+            case Mode.Feeds:
+                handleClick(highlightedFeed);
+                break;
+            case Mode.Entries:
+                handleClick(highlightedEntry);
+                break;
+            default:
         }
-    }, [mode]);
+    }, [mode, highlightedFeed, highlightedEntry]);
 
     useHotkeys('up', () => {
         switch (mode) {
@@ -62,6 +68,11 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
 
     useHotkeys('down', () => {
         switch (mode) {
+            case Mode.Feeds:
+                if (highlightedFeed < feeds.length - 1) {
+                    setHighlightedFeed(highlightedFeed + 1);
+                }
+                break;
             case Mode.Entries:
                 if (highlightedEntry < entries.length - 1) {
                     const nextEntry = highlightedEntry + 1;
@@ -69,11 +80,6 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
                     if (selectedEntry >= 0) {
                         setSelectedEntry(nextEntry);
                     }
-                }
-                break;
-            case Mode.Feeds:
-                if (highlightedFeed < feeds.length - 1) {
-                    setHighlightedFeed(highlightedFeed + 1);
                 }
                 break;
             default:

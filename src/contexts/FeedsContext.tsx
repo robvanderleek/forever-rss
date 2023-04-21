@@ -27,14 +27,14 @@ interface FeedsContextProviderProps {
 }
 
 export function FeedsContextProvider(props: FeedsContextProviderProps) {
+    const {isLoading, user, apiFetch, apiPost} = useAuth();
     const [loading, setLoading] = useState(true);
     const [feeds, setFeeds] = useState(Array<Feed>());
+    const [highlightedFeed, setHighlightedFeed] = useState(0);
     const [selectedFeed, setSelectedFeed] = useState(-1);
     const [entries, setEntries] = useState(Array<Entry>());
-    const [selectedEntry, setSelectedEntry] = useState(-1);
-    const [highlightedFeed, setHighlightedFeed] = useState(0);
     const [highlightedEntry, setHighlightedEntry] = useState(0);
-    const {isLoading, user, apiFetch, apiPost} = useAuth();
+    const [selectedEntry, setSelectedEntry] = useState(-1);
 
     useEffect(() => {
         if (isLoading) {

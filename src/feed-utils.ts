@@ -106,10 +106,26 @@ function parseRssEntries(o: any): Array<Entry> {
     return result;
 }
 
+export function decodeHTMLEntities(text: string) {
+    const entities: { [key: string]: string } = {
+        'amp': '&',
+        'apos': '\'',
+        '#x27': '\'',
+        '#x2F': '/',
+        '#39': '\'',
+        '#47': '/',
+        'lt': '<',
+        'gt': '>',
+        'nbsp': ' ',
+        'quot': '"'
+    }
+    return text.replace(/&([^;]+);/gm, (match, entity) => entities[entity] || match)
+}
+
 function toEntry(obj: any): Entry {
     return {
         'id': obj['guid'],
-        'title': obj['title'],
+        'title': decodeHTMLEntities(obj['title']),
         'updated': obj['pubDate'],
         'link': obj['link'],
         'content': obj['content'] || obj['content:encoded'] || obj['description'] || '',

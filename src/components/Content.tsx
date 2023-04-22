@@ -1,17 +1,9 @@
 import htmlParse from "html-react-parser";
 import {useFeeds} from "@/contexts/FeedsContext";
-import {useEffect, useRef} from "react";
-import {Area} from "@/styles";
-import {styled} from "@mui/material";
+import React, {useEffect, useRef} from "react";
+import {ContentArea, ContentFrame, DefaultContentArea} from "@/components/Content.style";
+import Hyperlink from "@/components/Hyperlink";
 
-const ContentArea = styled(Area)`
-  padding: 20px;
-`;
-
-const DefaultContentArea = styled(ContentArea)`
-  align-items: center;
-  justify-content: center;
-`;
 
 interface ContentProps {
     active: boolean;
@@ -34,11 +26,10 @@ export default function Content(props: ContentProps) {
     } else {
         return (
             <ContentArea tabIndex={-1} ref={refDiv}>
-                <a href={entry.link}>
-                    <h1>{entry.title}</h1>
-                </a>
+                <h1><Hyperlink href={entry.link}>{entry.title}</Hyperlink></h1>
                 {entry.heroImage && <img src={entry.heroImage} alt="Headline"/>}
                 {entries.length >= 1 && htmlParse(entry.content)}
+                <ContentFrame src={entry.link}></ContentFrame>
             </ContentArea>
         );
     }

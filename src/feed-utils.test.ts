@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-import {extractFeedUrlFromHtml, parseFeed, parseFeedEntries} from "./feed-utils";
+import {decodeHTMLEntities, extractFeedUrlFromHtml, parseFeed, parseFeedEntries} from "./feed-utils";
 import {Feed} from "./entities/Feed";
 
 test('parse XML RSS feed, single item', () => {
@@ -212,4 +212,9 @@ test('parse XML feed with text title', () => {
 
     expect(result.length).toBe(1);
     expect(result[0].title).toBe('This is the title');
+});
+
+test('decode HTML entities', () => {
+    expect(decodeHTMLEntities('hello world')).toBe('hello world');
+    expect(decodeHTMLEntities('hello &#x2F; world')).toBe('hello / world');
 });

@@ -12,14 +12,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!url) {
         return res.status(400);
     }
-
     const subject = await getSubject(req);
     if (subject) {
         const dbService = new MongoDbService();
         logger.info(`Updating access time for user: ${subject}, url: ${url}`);
         await dbService.updateAccessTime(subject, url);
     }
-
     const response = await rssFetch(url);
     if (response.ok) {
         const text = await response.text();

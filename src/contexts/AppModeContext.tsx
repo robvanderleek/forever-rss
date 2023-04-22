@@ -119,6 +119,9 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
             case Mode.Entries:
                 setHighlightedEntry(index);
                 setSelectedEntry(index);
+                if (!wideScreen) {
+                    setMode(Mode.Content);
+                }
                 break;
             default:
         }

@@ -77,7 +77,7 @@ function parseXmlEntry(e: any): Entry {
     const id = e.id;
     const title = parseXmlEntryTitle(e);
     const updated = e.updated;
-    const link = e['link'];
+    const link = parseXmlEntryLink(e);
     const content = e.content['#text']
     return {id, title, updated, link, content};
 }
@@ -87,6 +87,15 @@ function parseXmlEntryTitle(e: any): string {
         return e.title['#text'];
     } else {
         return e.title;
+    }
+}
+
+function parseXmlEntryLink(e: any): string {
+    const linkValue = e['link'];
+    if (typeof linkValue === 'object') {
+        return linkValue['@_href'];
+    } else {
+        return linkValue;
     }
 }
 

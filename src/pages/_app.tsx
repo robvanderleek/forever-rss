@@ -10,7 +10,7 @@ import React from "react";
 
 const theme = createTheme({
     palette: {
-        mode: 'dark',
+        mode: 'light',
         primary: {
             main: 'rgb(241, 158, 49)'
         },

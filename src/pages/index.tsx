@@ -1,12 +1,13 @@
 import 'loaders.css';
 import Controls from "../components/Controls";
-import {LoadingArea, Main, Section} from "@/styles";
+import {DesktopContent, DesktopControls, MobileControls, LoadingArea, Main} from "@/styles";
 import Content from "../components/Content";
 import {useAppMode} from "@/contexts/AppModeContext";
 import Loader from "react-loaders";
 import {useAuth} from "@/contexts/AuthContext";
 import Head from "next/head";
 import {Mode} from "@/entities/Mode";
+import React from "react";
 
 export default function App() {
     const {mode, wideScreen} = useAppMode();
@@ -45,12 +46,12 @@ export default function App() {
                     <link rel="icon" href="/favicon.ico"/>
                 </Head>
                 <Main>
-                    <Section sx={{width: '30%'}} active="false">
+                    <DesktopControls>
                         {getWideScreenControls()}
-                    </Section>
-                    <Section sx={{width: '70%'}} active={mode === Mode.Content ? 'true' : 'false'}>
+                    </DesktopControls>
+                    <DesktopContent>
                         <Content active={mode === Mode.Content}/>
-                    </Section>
+                    </DesktopContent>
                 </Main>
             </>
         );
@@ -63,9 +64,9 @@ export default function App() {
                     <link rel="icon" href="/favicon.ico"/>
                 </Head>
                 <Main>
-                    <Section sx={{width: '100%'}} active="false">
+                    <MobileControls>
                         {getControls()}
-                    </Section>
+                    </MobileControls>
                 </Main>
             </>
         );

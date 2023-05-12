@@ -7,23 +7,28 @@ export const Main = styled('div')`
     outline: none;
 `;
 
+export const DesktopControls = styled('div')`
+  width: 30%;
+`;
+
+export const DesktopContent = styled('div')`
+  width: 70%;
+`;
+
+export const MobileControls = styled('div')`
+  width: 100%;
+`;
+
 interface ActiveProps {
     active: 'true' | 'false'
 }
-
-export const Section = styled('div')((props: ActiveProps) => ({
-    borderStyle: 'solid',
-    borderWidth: '1px',
-    borderColor: props.active === 'true' ? '#faf9fc' : 'rgb(0, 0, 0, 0.0)',
-    overflow: 'auto'
-}));
 
 export const ContentArea = styled('div')((props: ActiveProps) => ({
     height: '100%',
     overflow: 'auto',
     borderStyle: 'solid',
-    borderWidth: '1px',
-    borderColor: props.active === 'true' ? '#faf9fc' : 'grey',
+    borderWidth: '2px',
+    borderColor: props.active === 'true' ? '#e6772b' : 'transparent',
     // borderStyle: props.active === 'true' ? 'solid' : 'none',
 }));
 
@@ -56,5 +61,5 @@ export const EntryItem = styled(MuiListItem)((props: ActiveProps) => ({
 export const ItemAvatar = styled(Avatar)((props: ActiveProps) => ({
     width: '24px',
     height: '24px',
-    backgroundColor: props.active === 'true' ? '#faf9fc' : 'none'
+    backgroundColor: props.active === 'true' ? '#e6772b' : 'none'
 }));

@@ -49,6 +49,11 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
 
     useHotkeys('up', () => {
         switch (mode) {
+            case Mode.Feeds:
+                if (highlightedFeed > 0) {
+                    setHighlightedFeed(highlightedFeed - 1);
+                }
+                break;
             case Mode.Entries:
                 if (highlightedEntry > 0) {
                     const previousEntry = highlightedEntry - 1;
@@ -58,14 +63,9 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
                     }
                 }
                 break;
-            case Mode.Feeds:
-                if (highlightedFeed > 0) {
-                    setHighlightedFeed(highlightedFeed - 1);
-                }
-                break;
             default:
         }
-    }, [highlightedEntry, highlightedFeed, selectedEntry]);
+    }, [mode, highlightedEntry, highlightedFeed, selectedEntry]);
 
     useHotkeys('down', () => {
         switch (mode) {

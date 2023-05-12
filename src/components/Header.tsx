@@ -23,7 +23,6 @@ const HeaderToolbar = styled(Toolbar)`
 `;
 
 const LogoImg = styled(Image)`
-  border-radius: 4px;
   margin-left: 16px;
   margin-right: 16px;
 `;
@@ -67,7 +66,7 @@ export default function Header(props: HeaderProps) {
         return (<Fragment>
             <HeaderToolbar disableGutters>
                 <Tooltip title={`Forever RSS version ${version.revision}`}>
-                    <LogoImg priority src="/forever-rss-logo.svg" alt="logo" width={32} height={32}/>
+                    <LogoImg priority src="/forever-rss-logo-light.svg" alt="logo" width={32} height={32}/>
                 </Tooltip>
                 <IconButton onClick={handleAvatarClick}>
                     {avatar()}

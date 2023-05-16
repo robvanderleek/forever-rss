@@ -14,6 +14,7 @@ const guestUserFeeds: Array<Feed> = [
     {uuid: uuidv4(), title: 'The Daily WTF', url: 'http://syndication.thedailywtf.com/TheDailyWtf'},
     {uuid: uuidv4(), title: 'The GitHub Blog', url: 'https://github.com/blog/all.atom'},
     {uuid: uuidv4(), title: 'Hacker News', url: 'https://news.ycombinator.com/rss'},
+    {uuid: uuidv4(), title: 'Better Programming - Medium', url: 'https://betterprogramming.pub/feed'}
     // {uuid: uuidv4(), title: 'iCulture.nl: Apple-nieuws met een bite!', url: 'https://feedpress.me/iculture'},
     // {uuid: uuidv4(), title: 'existential type crisis', url: 'https://www.seancassidy.me/atom.xml'},
     // {uuid: uuidv4(), title: 'Diomidis D. Spinellis Web Log', url: 'https://www.spinellis.gr/blog/dds-blog-rss.xml'},

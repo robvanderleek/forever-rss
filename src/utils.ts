@@ -16,3 +16,7 @@ export function parseValue(key: string, s: string): string | undefined {
     const match = pattern.exec(s);
     return match?.groups?.value;
 }
+
+export function unescapeMarkdown(markdown: string): string {
+    return markdown.replaceAll(/\\([^\\])/g, '$1').replaceAll(/\\/g, '\\\\');
+}

@@ -67,12 +67,13 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
         }
     }, [mode, highlightedEntry, highlightedFeed, selectedEntry]);
 
-    useHotkeys('down', () => {
+    useHotkeys('down', (event) => {
         switch (mode) {
             case Mode.Feeds:
                 if (highlightedFeed < feeds.length - 1) {
                     setHighlightedFeed(highlightedFeed + 1);
                 }
+                event.preventDefault();
                 break;
             case Mode.Entries:
                 if (highlightedEntry < entries.length - 1) {
@@ -82,6 +83,7 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
                         setSelectedEntry(nextEntry);
                     }
                 }
+                event.preventDefault();
                 break;
             default:
         }
@@ -116,14 +118,14 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
                 setSelectedEntry(0);
                 setMode(Mode.Entries);
                 break;
-            case Mode.Entries:
+            default:
                 setHighlightedEntry(index);
                 setSelectedEntry(index);
                 if (!wideScreen) {
                     setMode(Mode.Content);
                 }
                 break;
-            default:
+
         }
     }
 

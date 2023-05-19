@@ -1,13 +1,12 @@
-import 'loaders.css';
 import Controls from "../components/Controls";
-import {DesktopContent, DesktopControls, MobileControls, LoadingArea, Main} from "@/styles";
+import {DesktopContent, DesktopControls, LoadingArea, Main, MobileControls} from "@/styles";
 import Content from "../components/Content";
 import {useAppMode} from "@/contexts/AppModeContext";
-import Loader from "react-loaders";
 import {useAuth} from "@/contexts/AuthContext";
 import Head from "next/head";
 import {Mode} from "@/entities/Mode";
 import React from "react";
+import {Bars} from "react-loader-spinner";
 
 export default function App() {
     const {mode, wideScreen} = useAppMode();
@@ -16,7 +15,7 @@ export default function App() {
     const getLoadingScreen = () => {
         return (
             <LoadingArea>
-                <Loader type="line-scale-pulse-out" active/>
+                <Bars height="50" width="60" color="#e6772b" ariaLabel="bars-loading"/>
             </LoadingArea>
         );
     }

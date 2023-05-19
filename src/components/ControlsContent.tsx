@@ -1,11 +1,11 @@
 import {Mode} from "@/entities/Mode";
-import {LoadingArea, ContentArea} from "@/styles";
-import Loader from "react-loaders";
+import {ContentArea, LoadingArea} from "@/styles";
 import FeedsList from "./FeedsList";
 import EntriesList from "./EntriesList";
-import {useFeeds} from "@/contexts/FeedsContext";
 import Content from "./Content";
 import {useAppMode} from "@/contexts/AppModeContext";
+import {Bars} from "react-loader-spinner";
+import {useFeeds} from "@/contexts/FeedsContext";
 
 interface ControlsContentProps {
     mode: Mode;
@@ -34,7 +34,7 @@ export default function ControlsContent(props: ControlsContentProps) {
     if (loading) {
         return (
             <LoadingArea>
-                <Loader type="line-scale-pulse-out" active/>
+                <Bars height="50" width="60" color="#e6772b" ariaLabel="bars-loading"/>
             </LoadingArea>
         );
     } else {

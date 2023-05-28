@@ -1,6 +1,6 @@
 import {extractFeedUrlFromHtml, parseFeed} from "@/feed-utils";
 import fetch from "node-fetch";
-import {MongoDbService} from "@/services/MongoDbService";
+import {DatabaseService} from "@/services/DatabaseService";
 import {logger} from "@/logger";
 import {getSubject, rssFetch} from "@/function-utils";
 import {VercelRequest, VercelResponse} from "@vercel/node";
@@ -41,7 +41,7 @@ async function addUrl(url: string, subject: string) {
                 }
             }
             if (feed) {
-                const dbService = new MongoDbService();
+                const dbService = new DatabaseService();
                 await dbService.addUserFeed(subject, feed);
             } else {
                 logger.warn(`Could not find RSS feed for URL: ${url}`);

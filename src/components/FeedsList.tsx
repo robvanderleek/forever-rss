@@ -38,7 +38,7 @@ export default function FeedsList() {
     const handleConfirmationDialogOK = async () => {
         setConfirmationDialogOpen(false);
         if (contextMenuFeed) {
-            await deleteFeed(contextMenuFeed.uuid);
+            await deleteFeed(contextMenuFeed.id);
         }
     }
 

@@ -1,8 +1,9 @@
 import {Feed} from "@/entities/Feed";
-import {Kysely, PostgresDialect} from "kysely";
+import {Kysely, Migration, Migrator, PostgresDialect} from "kysely";
 import {Database} from "@/entities/schemas/Database";
 import {createKysely} from "@vercel/postgres-kysely";
 import {Pool} from 'pg'
+import {migrations} from "@/services/migrations";
 
 export class DatabaseService {
     db: Kysely<Database> | undefined;
@@ -20,6 +21,14 @@ export class DatabaseService {
                         pool: new Pool({connectionString: this.connectionString})
                     })
                 });
+                const migrator = new Migrator({
+                    db: this.db, provider: {
+                        async getMigrations(): Promise<Record<string, Migration>> {
+                            return migrations;
+                        }
+                    }
+                });
+                await migrator.migrateToLatest();
             } else {
                 this.db = createKysely<Database>();
             }
@@ -36,13 +45,7 @@ export class DatabaseService {
         return feeds as Array<Feed>;
     }
 
-    async getFeed(feed_id: string): Promise<Feed | undefined> {
-        const db = await this.getDatabase();
-        return await db.selectFrom('feed')
-            .where('feed.id', '=', feed_id)
-            .select(['feed.id', 'feed.title', 'feed.url'])
-            .executeTakeFirst();
-    }
+
 
     async deleteFeed(feed_id: string): Promise<void> {
         const db = await this.getDatabase();
@@ -73,6 +76,22 @@ export class DatabaseService {
     async addFeed(title: string, url: string): Promise<Feed> {
         const db = await this.getDatabase();
         return await db.insertInto('feed').values({title, url}).returningAll().executeTakeFirstOrThrow();
+    }
+
+    async getFeedById(feed_id: string): Promise<Feed | undefined> {
+        const db = await this.getDatabase();
+        return await db.selectFrom('feed')
+            .where('feed.id', '=', feed_id)
+            .select(['feed.id', 'feed.title', 'feed.url'])
+            .executeTakeFirst();
+    }
+
+    async getFeedByUrl(url: string): Promise<Feed | undefined> {
+        const db = await this.getDatabase();
+        return await db.selectFrom('feed')
+            .where('feed.url', '=', url)
+            .select(['feed.id', 'feed.title', 'feed.url'])
+            .executeTakeFirst();
     }
 
     async subscribe(user: string, feed_id: string): Promise<void> {

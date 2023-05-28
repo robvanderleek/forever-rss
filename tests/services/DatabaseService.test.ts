@@ -4,7 +4,6 @@
 
 import {DatabaseService} from "../../src/services/DatabaseService";
 import {PostgreSqlContainer, StartedPostgreSqlContainer} from "testcontainers";
-import {setupDatabase} from "../../src/pages/api/setupdb";
 
 let container: StartedPostgreSqlContainer;
 let service: DatabaseService;
@@ -12,7 +11,6 @@ let service: DatabaseService;
 beforeEach(async () => {
     container = await new PostgreSqlContainer().start();
     service = new DatabaseService(container.getConnectionUri());
-    await setupDatabase(await service.getDatabase());
 });
 
 afterEach(async () => {
@@ -70,11 +68,11 @@ test('get user feed', async () => {
     const otherFeed = await service.addFeed('noot', 'https://noot');
     await service.deleteFeed(otherFeed.id);
 
-    let result = await service.getFeed(feed.id);
+    let result = await service.getFeedById(feed.id);
 
     expect(result?.url).toBe('https://aap');
 
-    result = await service.getFeed(otherFeed.id);
+    result = await service.getFeedById(otherFeed.id);
 
     expect(result).toBeUndefined();
 });
@@ -91,6 +89,12 @@ test('Update access time feed', async () => {
 
         expect(result).toBeLessThan(5);
     }
+});
+
+test('add duplicate feed should throw error', async () => {
+    await service.addFeed('aap', 'https://aap');
+    const f = async () => await service.addFeed('aap', 'https://aap');
+    await expect(f).rejects.toThrowError();
 });
 
 export {}

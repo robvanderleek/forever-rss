@@ -41,8 +41,14 @@ async function addUrl(url: string, subject: string) {
                 }
             }
             if (feed) {
-                const dbService = new DatabaseService();
-                await dbService.addUserFeed(subject, feed);
+                const databaseService = new DatabaseService();
+                const existingFeed = await databaseService.getFeedByUrl(feed.url);
+                if (existingFeed) {
+                    await databaseService.subscribe(subject, existingFeed.id);
+                } else {
+                    const dbFeed = await databaseService.addFeed(feed.title, feed.url);
+                    await databaseService.subscribe(subject, dbFeed.id);
+                }
             } else {
                 logger.warn(`Could not find RSS feed for URL: ${url}`);
                 return {

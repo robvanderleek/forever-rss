@@ -9,10 +9,10 @@ export function parseFeed(url: string, text: string): Feed | undefined {
     const xmlParser = new XMLParser(options);
     const obj = xmlParser.parse(text);
     if ('feed' in obj) {
-        return {uuid: uuidv4(), title: 'aaa', url: url}
+        return {id: uuidv4(), title: 'aaa', url: url}
     } else if ('rss' in obj) {
         const channel = obj.rss.channel;
-        return {uuid: uuidv4(), title: channel.title, url: url};
+        return {id: uuidv4(), title: channel.title, url: url};
     } else {
         return undefined;
     }

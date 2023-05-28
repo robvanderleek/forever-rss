@@ -11,7 +11,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(400);
     }
     const {uuid} = JSON.parse(req.body);
-    const dbService = new DatabaseService();
-    await dbService.removeUserFeed(subject, uuid);
+    const databaseService = new DatabaseService();
+    await databaseService.unsubscribe(subject, uuid);
     return res.status(200);
 }

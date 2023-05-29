@@ -4,6 +4,7 @@ import {Database} from "@/entities/schemas/Database";
 import {createKysely} from "@vercel/postgres-kysely";
 import {Pool} from 'pg'
 import {migrations} from "@/services/migrations";
+import {logger} from "@/logger";
 
 export class DatabaseService {
     db: Kysely<Database> | undefined;
@@ -21,19 +22,45 @@ export class DatabaseService {
                         pool: new Pool({connectionString: this.connectionString})
                     })
                 });
-                const migrator = new Migrator({
-                    db: this.db, provider: {
-                        async getMigrations(): Promise<Record<string, Migration>> {
-                            return migrations;
-                        }
-                    }
-                });
-                await migrator.migrateToLatest();
             } else {
                 this.db = createKysely<Database>();
             }
+            logger.info('Running database migrations');
+            await this.runMigrationsHandRolled(this.db);
         }
         return this.db;
+    }
+
+    async runMigrationsHandRolled(db: Kysely<Database>) {
+        for (const [key, value] of Object.entries(migrations)) {
+            const dbMigration = await db.selectFrom('kysely_migration')
+                .where('kysely_migration.name', '=', key)
+                .executeTakeFirst();
+            if (!dbMigration) {
+                logger.info(`Applying database migration: ${key} ...`);
+                await value.up(db);
+                await db.insertInto("kysely_migration").values({
+                    name: key,
+                    timestamp: `${new Date()}`
+                }).execute();
+            }
+        }
+    }
+
+    /**
+     * @TODO
+     * Transactions are not yet supported by Neon
+     * Also see: https://vercel.com/docs/errors/vercel-postgres-error-codes#kysely_transactions_not_supported
+     */
+    async runMigrations(db: Kysely<Database>) {
+        const migrator = new Migrator({
+            db: db, provider: {
+                async getMigrations(): Promise<Record<string, Migration>> {
+                    return migrations;
+                }
+            }
+        });
+        await migrator.migrateToLatest();
     }
 
     async getAllUserFeeds(userId: string): Promise<Array<Feed>> {
@@ -44,7 +71,6 @@ export class DatabaseService {
             .select(['feed.id', 'feed.title', 'feed.url']).execute();
         return feeds as Array<Feed>;
     }
-
 
 
     async deleteFeed(feed_id: string): Promise<void> {

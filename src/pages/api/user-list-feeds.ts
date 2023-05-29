@@ -44,8 +44,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return;
     }
     logger.info(`Loading feeds for: ${subject}`);
-    const dbService = new DatabaseService();
-    const feeds = await dbService.getAllUserFeeds(subject);
+    const databaseService = new DatabaseService();
+    const feeds = await databaseService.getAllUserFeeds(subject);
     res.status(200).json(feeds);
 }
 

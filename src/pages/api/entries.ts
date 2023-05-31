@@ -14,9 +14,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
     const subject = await getSubject(req);
     if (subject) {
-        const dbService = new DatabaseService();
+        const databaseService = new DatabaseService();
         logger.info(`Updating access time for user: ${subject}, url: ${url}`);
-        await dbService.updateAccessTime(subject, url);
+        const feed = await databaseService.getFeedByUrl(url);
+        if (feed) {
+            await databaseService.updateAccessTime(subject, feed.id);
+        }
     }
     const response = await rssFetch(url);
     if (response.ok) {

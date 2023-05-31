@@ -32,13 +32,20 @@ export class DatabaseService {
     }
 
     async runMigrationsHandRolled(db: Kysely<Database>) {
-        for (const [key, value] of Object.entries(migrations)) {
+        await db.schema
+            .createTable('kysely_migration')
+            .ifNotExists()
+            .addColumn('name', 'varchar', (col) => col.primaryKey())
+            .addColumn('timestamp', 'varchar', (col) => col.notNull())
+            .execute();
+        for (const key of Object.keys(migrations).sort()) {
             const dbMigration = await db.selectFrom('kysely_migration')
                 .where('kysely_migration.name', '=', key)
                 .executeTakeFirst();
             if (!dbMigration) {
                 logger.info(`Applying database migration: ${key} ...`);
-                await value.up(db);
+                const migration = migrations[key];
+                await migration.up(db);
                 await db.insertInto("kysely_migration").values({
                     name: key,
                     timestamp: `${new Date()}`

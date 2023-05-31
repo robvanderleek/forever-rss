@@ -1,11 +1,11 @@
 import React, {useState} from "react";
 import {Avatar, Divider, IconButton, Menu, MenuItem, Toolbar} from "@mui/material";
-import {AccountBox, ArrowBack, Title} from "@mui/icons-material";
+import {AccountBox, ArrowBack} from "@mui/icons-material";
 import {useFeeds} from "@/contexts/FeedsContext";
 import {Mode} from "@/entities/Mode";
 import {useAuth} from "@/contexts/AuthContext";
 import {getInitials} from "@/utils";
-import {HeaderToolbar, LogoImg} from "@/components/Header.style";
+import {HeaderToolbar, LogoImg, Title} from "@/components/Header.style";
 import Link from "next/link";
 
 interface HeaderProps {

@@ -178,6 +178,19 @@ test('parse XML feed with single entry', () => {
     expect(result[0].content).toBe('<h4>This is content</h4>');
 });
 
+test('parse XML feed with attributes', () => {
+    const text = `
+        <feed>
+           <title type="text">Hello world</title>
+        </feed>
+    `;
+
+    const result = parseFeed('https://example.com', text);
+
+    expect(result?.url).toBe('https://example.com');
+    expect(result?.title).toBe('Hello world');
+});
+
 test('parse XML feed with two entries', () => {
     const text = `
         <feed>

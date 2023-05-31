@@ -59,7 +59,7 @@ async function addUrl(url: string, subject: string) {
             }
             return {
                 statusCode: 200,
-                body: JSON.stringify(feed)
+                body: feed
             };
         } else {
             return {statusCode: 400}

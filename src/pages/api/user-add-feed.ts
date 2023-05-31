@@ -15,7 +15,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
     const {url} = JSON.parse(req.body);
     try {
-        return await addUrl(url, subject);
+        const {statusCode, body} = await addUrl(url, subject);
+        return res.status(statusCode).json(body);
     } catch (e) {
         console.log(e);
         return res.status(422);

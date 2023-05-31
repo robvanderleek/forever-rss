@@ -11,7 +11,7 @@ import {
     SelectChangeEvent,
     TextField
 } from "@mui/material";
-import {useFeeds} from "../contexts/FeedsContext";
+import {useFeeds} from "@/contexts/FeedsContext";
 import {KeyboardEvent, useState} from "react";
 
 interface AddFeedDialogProps {

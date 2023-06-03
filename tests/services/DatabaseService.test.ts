@@ -6,16 +6,16 @@ import {DatabaseService} from "../../src/services/DatabaseService";
 import {PostgreSqlContainer, StartedPostgreSqlContainer} from "testcontainers";
 
 let container: StartedPostgreSqlContainer;
-let service: DatabaseService;
+let databaseService: DatabaseService;
 
 beforeEach(async () => {
     container = await new PostgreSqlContainer().start();
-    service = new DatabaseService(container.getConnectionUri());
+    databaseService = new DatabaseService(container.getConnectionUri());
 });
 
 afterEach(async () => {
-    if (service) {
-        service.disconnect();
+    if (databaseService) {
+        databaseService.disconnect();
     }
     if (container) {
         await container.stop();
@@ -23,16 +23,16 @@ afterEach(async () => {
 });
 
 test('subscribe', async () => {
-    let result = await service.getAllUserFeeds('robvanderleek');
+    let result = await databaseService.getAllUserFeeds('robvanderleek');
 
     expect(result.length).toBe(0);
 
     const title = 'aap';
     const url = 'noot';
-    const feed = await service.addFeed(title, url);
-    await service.subscribe('robvanderleek', feed.id);
+    const feed = await databaseService.addFeed(title, url);
+    await databaseService.subscribe('robvanderleek', feed.id);
 
-    result = await service.getAllUserFeeds('robvanderleek');
+    result = await databaseService.getAllUserFeeds('robvanderleek');
 
     expect(result.length).toBe(1);
 
@@ -43,44 +43,65 @@ test('subscribe', async () => {
 });
 
 test('remove feed', async () => {
-    let result = await service.getAllUserFeeds('robvanderleek');
+    let result = await databaseService.getAllUserFeeds('robvanderleek');
 
     expect(result.length).toBe(0);
 
-    const aapFeed = await service.addFeed('aap', 'noot');
-    const nootFeed = await service.addFeed('mies', 'wim');
-    await service.subscribe('robvanderleek', aapFeed.id);
-    await service.subscribe('robvanderleek', nootFeed.id);
+    const aapFeed = await databaseService.addFeed('aap', 'noot');
+    const nootFeed = await databaseService.addFeed('mies', 'wim');
+    await databaseService.subscribe('robvanderleek', aapFeed.id);
+    await databaseService.subscribe('robvanderleek', nootFeed.id);
 
-    result = await service.getAllUserFeeds('robvanderleek');
+    result = await databaseService.getAllUserFeeds('robvanderleek');
 
     expect(result.length).toBe(2);
 
-    await service.unsubscribe('robvanderleek', aapFeed.id);
+    await databaseService.unsubscribe('robvanderleek', aapFeed.id);
 
-    result = await service.getAllUserFeeds('robvanderleek');
+    result = await databaseService.getAllUserFeeds('robvanderleek');
 
     expect(result.length).toBe(1);
 });
 
-test('get user feed', async () => {
-    const feed = await service.addFeed('aap', 'https://aap');
-    const otherFeed = await service.addFeed('noot', 'https://noot');
-    await service.deleteFeed(otherFeed.id);
+test('get all user feeds', async () => {
+    const aapFeed = await databaseService.addFeed('aap', 'noot');
+    await databaseService.subscribe('robvanderleek', aapFeed.id);
 
-    let result = await service.getFeedById(feed.id);
+    let result = await databaseService.getAllUserFeeds('robvanderleek');
+
+    expect(result[0].userAccessTime).toBeNull();
+
+    await databaseService.updateAccessTime('robvanderleek', aapFeed.id);
+
+    result = await databaseService.getAllUserFeeds('robvanderleek');
+
+    expect(result[0].userAccessTime).toBeDefined();
+
+    if (result[0].userAccessTime) {
+        const diffSeconds = (new Date().getTime() - result[0].userAccessTime.getTime()) / 1000;
+
+        expect(diffSeconds).toBeLessThan(5);
+    }
+});
+
+test('get user feed', async () => {
+    const feed = await databaseService.addFeed('aap', 'https://aap');
+    const otherFeed = await databaseService.addFeed('noot', 'https://noot');
+    await databaseService.deleteFeed(otherFeed.id);
+
+    let result = await databaseService.getFeedById(feed.id);
 
     expect(result?.url).toBe('https://aap');
 
-    result = await service.getFeedById(otherFeed.id);
+    result = await databaseService.getFeedById(otherFeed.id);
 
     expect(result).toBeUndefined();
 });
 
-test('Update access time feed', async () => {
-    const feed = await service.addFeed('aap', 'https://aap');
-    await service.updateAccessTime('robvanderleek', feed.id);
-    const updatedTime = await service.getAccessTime('robvanderleek', feed.id);
+test('update access time feed', async () => {
+    const feed = await databaseService.addFeed('aap', 'https://aap');
+    await databaseService.updateAccessTime('robvanderleek', feed.id);
+    const updatedTime = await databaseService.getAccessTime('robvanderleek', feed.id);
 
     expect(updatedTime).toBeDefined();
 
@@ -91,9 +112,25 @@ test('Update access time feed', async () => {
     }
 });
 
+test('set feed update time', async () => {
+    const feed = await databaseService.addFeed('aap', 'https://aap');
+
+    expect(feed.latestUpdate).toBeUndefined();
+
+    await databaseService.setUpdateTime(feed.id, new Date());
+
+    const updatedFeed = await databaseService.getFeedById(feed.id);
+
+    expect(updatedFeed?.latestUpdate).toBeDefined();
+
+    if (updatedFeed?.latestUpdate) {
+        expect((new Date().getTime() - updatedFeed?.latestUpdate.getTime()) / 1000).toBeLessThan(5);
+    }
+});
+
 test('add duplicate feed should throw error', async () => {
-    await service.addFeed('aap', 'https://aap');
-    const f = async () => await service.addFeed('aap', 'https://aap');
+    await databaseService.addFeed('aap', 'https://aap');
+    const f = async () => await databaseService.addFeed('aap', 'https://aap');
     await expect(f).rejects.toThrowError();
 });
 

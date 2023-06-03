@@ -28,9 +28,17 @@ export const migrations: Record<string, Migration> = {
                 .execute();
         },
         async down(db: Kysely<any>): Promise<void> {
-            await db.schema.dropTable('feedAccessTime');
-            await db.schema.dropTable('subscription');
-            await db.schema.dropTable('feed');
+            await db.schema.dropTable('feedAccessTime').execute();
+            await db.schema.dropTable('subscription').execute();
+            await db.schema.dropTable('feed').execute();
+        }
+    },
+    '20230602': {
+        async up(db: Kysely<any>): Promise<void> {
+            await db.schema.alterTable('feed').addColumn('latest_update', 'timestamp').execute();
+        },
+        async down(db: Kysely<any>): Promise<void> {
+            await db.schema.alterTable('feed').dropColumn('latest_update').execute();
         }
     }
 }

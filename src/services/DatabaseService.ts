@@ -74,11 +74,11 @@ export class DatabaseService {
         const db = await this.getDatabase();
         const feeds = await db.selectFrom('feed')
             .innerJoin('subscription', 'subscription.feed_id', 'feed.id')
+            .leftJoin('feedAccessTime', 'feedAccessTime.feed_id', 'feed.id')
             .where('subscription.user', '=', userId)
-            .select(['feed.id', 'feed.title', 'feed.url']).execute();
+            .select(['feed.id', 'feed.title', 'feed.url', 'feedAccessTime.date as userAccessTime']).execute();
         return feeds as Array<Feed>;
     }
-
 
     async deleteFeed(feed_id: string): Promise<void> {
         const db = await this.getDatabase();
@@ -106,6 +106,11 @@ export class DatabaseService {
         }).onConflict(oc => oc.columns(['user', 'feed_id']).doUpdateSet({date: new Date()})).execute();
     }
 
+    async setUpdateTime(feed_id: string, date: Date): Promise<void> {
+        const db = await this.getDatabase();
+        await db.updateTable('feed').set({latest_update: date}).where('feed.id', '=', feed_id).execute();
+    }
+
     async addFeed(title: string, url: string): Promise<Feed> {
         const db = await this.getDatabase();
         return await db.insertInto('feed').values({title, url}).returningAll().executeTakeFirstOrThrow();
@@ -115,7 +120,7 @@ export class DatabaseService {
         const db = await this.getDatabase();
         return await db.selectFrom('feed')
             .where('feed.id', '=', feed_id)
-            .select(['feed.id', 'feed.title', 'feed.url'])
+            .select(['feed.id', 'feed.title', 'feed.url', 'feed.latest_update as latestUpdate'])
             .executeTakeFirst();
     }
 
@@ -123,7 +128,7 @@ export class DatabaseService {
         const db = await this.getDatabase();
         return await db.selectFrom('feed')
             .where('feed.url', '=', url)
-            .select(['feed.id', 'feed.title', 'feed.url'])
+            .select(['feed.id', 'feed.title', 'feed.url', 'feed.latest_update as latestUpdate'])
             .executeTakeFirst();
     }
 

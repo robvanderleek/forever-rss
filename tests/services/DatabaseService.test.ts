@@ -11,7 +11,7 @@ let databaseService: DatabaseService;
 beforeEach(async () => {
     container = await new PostgreSqlContainer().start();
     databaseService = new DatabaseService(container.getConnectionUri());
-});
+}, 10000);
 
 afterEach(async () => {
     if (databaseService) {

@@ -17,7 +17,7 @@ import {
 import {FeedItem, ItemAvatar} from "@/styles";
 import {MoreVert, RssFeed} from "@mui/icons-material";
 import {useFeeds} from "@/contexts/FeedsContext";
-import React, {Fragment, useState} from "react";
+import React, {useState} from "react";
 import {useAppMode} from "@/contexts/AppModeContext";
 import {useAuth} from "@/contexts/AuthContext";
 import {Feed} from "@/entities/Feed";

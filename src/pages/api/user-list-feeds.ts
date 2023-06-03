@@ -1,6 +1,6 @@
 import {Feed} from "@/entities/Feed";
 import fetch from "node-fetch";
-import {MongoDbService} from "@/services/MongoDbService";
+import {DatabaseService} from "@/services/DatabaseService";
 import {v4 as uuidv4} from 'uuid';
 import {logger} from "@/logger";
 import {getSubject} from "@/function-utils";
@@ -11,10 +11,10 @@ const guestUserFeeds: Array<Feed> = [
     // {uuid: uuidv4(), title: 'The Clean Code Blog', url: 'http://blog.cleancoder.com/atom.xml'},
     // {uuid: uuidv4(), title: 'Code Ahoy - Articles', url: 'http://codeahoy.com/feed.xml'},
     // {uuid: uuidv4(), title: 'DI Blog', url: 'http://www.dexterindustries.com/blog/feed/'},
-    {uuid: uuidv4(), title: 'The Daily WTF', url: 'http://syndication.thedailywtf.com/TheDailyWtf'},
-    {uuid: uuidv4(), title: 'The GitHub Blog', url: 'https://github.com/blog/all.atom'},
-    {uuid: uuidv4(), title: 'Hacker News', url: 'https://news.ycombinator.com/rss'},
-    {uuid: uuidv4(), title: 'Better Programming - Medium', url: 'https://betterprogramming.pub/feed'}
+    {id: uuidv4(), title: 'The Daily WTF', url: 'http://syndication.thedailywtf.com/TheDailyWtf'},
+    {id: uuidv4(), title: 'The GitHub Blog', url: 'https://github.com/blog/all.atom'},
+    {id: uuidv4(), title: 'Hacker News', url: 'https://news.ycombinator.com/rss'},
+    {id: uuidv4(), title: 'Better Programming - Medium', url: 'https://betterprogramming.pub/feed'}
     // {uuid: uuidv4(), title: 'iCulture.nl: Apple-nieuws met een bite!', url: 'https://feedpress.me/iculture'},
     // {uuid: uuidv4(), title: 'existential type crisis', url: 'https://www.seancassidy.me/atom.xml'},
     // {uuid: uuidv4(), title: 'Diomidis D. Spinellis Web Log', url: 'https://www.spinellis.gr/blog/dds-blog-rss.xml'},
@@ -44,26 +44,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return;
     }
     logger.info(`Loading feeds for: ${subject}`);
-    const dbService = new MongoDbService();
-    const feeds = await dbService.getAllUserFeeds(subject);
+    const databaseService = new DatabaseService();
+    const feeds = await databaseService.getAllUserFeeds(subject);
     res.status(200).json(feeds);
-}
-
-async function outlineToFeed(o: any, withFavIcon = false): Promise<Feed> {
-    if (withFavIcon) {
-        return {
-            uuid: uuidv4(),
-            title: o['@_title'],
-            url: o['@_xmlUrl'],
-            favicon: await getFavIconUrl(o['@_htmlUrl'])
-        };
-    } else {
-        return {
-            uuid: uuidv4(),
-            title: o['@_title'],
-            url: o['@_xmlUrl']
-        };
-    }
 }
 
 async function getFavIconUrl(htmlUrl: string): Promise<string | undefined> {

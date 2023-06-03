@@ -9,10 +9,10 @@ export function parseFeed(url: string, text: string): Feed | undefined {
     const xmlParser = new XMLParser(options);
     const obj = xmlParser.parse(text);
     if ('feed' in obj) {
-        return {uuid: uuidv4(), title: 'aaa', url: url}
+        return {id: uuidv4(), title: parseXmlElementText(obj.feed.title), url: url}
     } else if ('rss' in obj) {
         const channel = obj.rss.channel;
-        return {uuid: uuidv4(), title: channel.title, url: url};
+        return {id: uuidv4(), title: channel.title, url: url};
     } else {
         return undefined;
     }
@@ -75,18 +75,18 @@ function parseXmlEntries(xmlObject: any): Array<Entry> {
 
 function parseXmlEntry(e: any): Entry {
     const id = e.id;
-    const title = parseXmlEntryTitle(e);
+    const title = parseXmlElementText(e.title);
     const updated = e.updated;
     const link = parseXmlEntryLink(e);
     const content = e.content['#text']
     return {id, title, updated, link, content};
 }
 
-function parseXmlEntryTitle(e: any): string {
-    if (typeof e.title === 'object') {
-        return e.title['#text'];
+function parseXmlElementText(element: any): string {
+    if (typeof element === 'object') {
+        return element['#text'];
     } else {
-        return e.title;
+        return element;
     }
 }
 

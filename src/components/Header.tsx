@@ -1,31 +1,12 @@
-import {Fragment, useState} from "react";
-import {Avatar, Divider, IconButton, Menu, MenuItem, styled, Toolbar, Tooltip} from "@mui/material";
+import React, {useState} from "react";
+import {Avatar, Divider, IconButton, Menu, MenuItem, Toolbar} from "@mui/material";
 import {AccountBox, ArrowBack} from "@mui/icons-material";
 import {useFeeds} from "@/contexts/FeedsContext";
-import {version} from "@/version";
 import {Mode} from "@/entities/Mode";
 import {useAuth} from "@/contexts/AuthContext";
 import {getInitials} from "@/utils";
-import Image from "next/image";
-
-const Title = styled('span')({
-    marginLeft: '12px',
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    fontSize: '18px',
-    fontFamily: 'Roboto, sans-serif'
-});
-
-const HeaderToolbar = styled(Toolbar)`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const LogoImg = styled(Image)`
-  margin-left: 16px;
-  margin-right: 16px;
-`;
+import {HeaderToolbar, LogoImg, Title} from "@/components/Header.style";
+import Link from "next/link";
 
 interface HeaderProps {
     mode: Mode;
@@ -63,44 +44,50 @@ export default function Header(props: HeaderProps) {
     }
 
     const feedsHeader = () => {
-        return (<Fragment>
-            <HeaderToolbar disableGutters>
-                <Tooltip title={`Forever RSS version ${version.revision}`}>
-                    <LogoImg priority src="/forever-rss-logo.svg" alt="logo" width={32} height={32}/>
-                </Tooltip>
-                <IconButton onClick={handleAvatarClick}>
-                    {avatar()}
-                </IconButton>
-                <Menu open={open} anchorEl={anchor} onClick={handleMenuClose} onClose={handleMenuClose}>
-                    {isAuthenticated && <MenuItem onClick={() => logout()}>Logout</MenuItem>}
-                </Menu>
-            </HeaderToolbar>
-            <Divider/>
-        </Fragment>);
+        return (
+            <>
+                <HeaderToolbar disableGutters>
+                    <Link href="/">
+                        <LogoImg priority src="/forever-rss-logo.svg" alt="logo" width={32} height={32}/>
+                    </Link>
+                    <IconButton onClick={handleAvatarClick}>
+                        {avatar()}
+                    </IconButton>
+                    <Menu open={open} anchorEl={anchor} onClick={handleMenuClose} onClose={handleMenuClose}>
+                        {isAuthenticated && <MenuItem onClick={() => logout()}>Logout</MenuItem>}
+                    </Menu>
+                </HeaderToolbar>
+                <Divider/>
+            </>
+        );
     }
 
     const entriesHeader = () => {
-        return (<Fragment>
-            <Toolbar>
-                <IconButton onClick={handleBack}>
-                    <ArrowBack fontSize="medium"/>
-                </IconButton>
-                <Title>{feeds[selectedFeed].title}</Title>
-            </Toolbar>
-            <Divider/>
-        </Fragment>);
+        return (
+            <>
+                <Toolbar>
+                    <IconButton onClick={handleBack}>
+                        <ArrowBack fontSize="medium"/>
+                    </IconButton>
+                    <Title>{feeds[selectedFeed].title}</Title>
+                </Toolbar>
+                <Divider/>
+            </>
+        );
     }
 
     const contentHeader = () => {
-        return (<Fragment>
-            <Toolbar>
-                <IconButton onClick={handleBack}>
-                    <ArrowBack fontSize="medium"/>
-                </IconButton>
-                <Title>{entries[selectedEntry].title}</Title>
-            </Toolbar>
-            <Divider/>
-        </Fragment>);
+        return (
+            <>
+                <Toolbar>
+                    <IconButton onClick={handleBack}>
+                        <ArrowBack fontSize="medium"/>
+                    </IconButton>
+                    <Title>{entries[selectedEntry].title}</Title>
+                </Toolbar>
+                <Divider/>
+            </>
+        );
     }
 
     switch (mode) {

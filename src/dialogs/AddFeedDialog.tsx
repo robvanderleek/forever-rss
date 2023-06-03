@@ -11,7 +11,7 @@ import {
     SelectChangeEvent,
     TextField
 } from "@mui/material";
-import {useFeeds} from "../contexts/FeedsContext";
+import {useFeeds} from "@/contexts/FeedsContext";
 import {KeyboardEvent, useState} from "react";
 
 interface AddFeedDialogProps {
@@ -64,16 +64,16 @@ export default function AddFeedDialog(props: AddFeedDialogProps) {
         <Dialog open={open} onClose={onClose} fullWidth>
             <DialogTitle>Add feed</DialogTitle>
             <DialogContent>
-                <div style={{marginTop: '8px', marginBottom: '16px'}}>
-                    <FormControl fullWidth>
-                        <InputLabel id="select-label">Type</InputLabel>
-                        <Select value={type} label="Age" labelId="select-label" onChange={handleTypeChange}>
-                            <MenuItem value="url">URL</MenuItem>
-                            <MenuItem value="opml">OPML file</MenuItem>
-                            <MenuItem value="twitter">Twitter</MenuItem>
-                        </Select>
-                    </FormControl>
-                </div>
+                {/*<div style={{marginTop: '8px', marginBottom: '16px'}}>*/}
+                {/*    <FormControl fullWidth>*/}
+                {/*        <InputLabel id="select-label">Type</InputLabel>*/}
+                {/*        <Select value={type} label="Age" labelId="select-label" onChange={handleTypeChange}>*/}
+                {/*            <MenuItem value="url">URL</MenuItem>*/}
+                {/*            <MenuItem value="opml">OPML file</MenuItem>*/}
+                {/*            <MenuItem value="twitter">Twitter</MenuItem>*/}
+                {/*        </Select>*/}
+                {/*    </FormControl>*/}
+                {/*</div>*/}
                 <TextField error={error} helperText={error ? helperText : undefined} autoFocus id="feedUrl"
                            label="Feed URL" fullWidth variant="standard" value={url}
                            onChange={e => setUrl(e.target.value)} onKeyDown={handleKeyDown}/>

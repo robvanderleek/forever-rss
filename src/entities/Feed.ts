@@ -1,7 +1,7 @@
 export interface Feed {
-    uuid: string;
+    id: string;
     title: string;
     url: string;
-    favicon?: string;
-    accessTime?: Date;
+    latestUpdate?: Date;
+    userAccessTime?: Date;
 }

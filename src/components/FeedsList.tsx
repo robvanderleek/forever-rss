@@ -17,7 +17,7 @@ import {
 import {FeedItem, ItemAvatar} from "@/styles";
 import {MoreVert, RssFeed} from "@mui/icons-material";
 import {useFeeds} from "@/contexts/FeedsContext";
-import React, {Fragment, useState} from "react";
+import React, {useState} from "react";
 import {useAppMode} from "@/contexts/AppModeContext";
 import {useAuth} from "@/contexts/AuthContext";
 import {Feed} from "@/entities/Feed";
@@ -38,7 +38,7 @@ export default function FeedsList() {
     const handleConfirmationDialogOK = async () => {
         setConfirmationDialogOpen(false);
         if (contextMenuFeed) {
-            await deleteFeed(contextMenuFeed.uuid);
+            await deleteFeed(contextMenuFeed.id);
         }
     }
 
@@ -74,14 +74,15 @@ export default function FeedsList() {
         }
     }
 
-    function getFeed(feed: Feed, index: number) {
+    const renderFeed = (feed: Feed, index: number) => {
+        const badgeCount = getBadgeCount(feed);
         return (
             <FeedItem key={index} active={highlightedFeed === index ? 'true' : 'false'} secondaryAction={feedContextMenu(feed)}
                       disablePadding>
                 <ListItemButton selected={highlightedFeed === index} onClick={() => handleClick(index)}
                                 autoFocus={highlightedFeed === index}>
                     <ListItemAvatar>
-                        <Badge badgeContent={1} color="primary" variant="dot">
+                        <Badge badgeContent={badgeCount} color="primary" variant="dot">
                             <ItemAvatar variant="square" active={highlightedFeed === index ? 'true' : 'false'}>
                                 <RssFeed fontSize="inherit"/>
                             </ItemAvatar>
@@ -93,10 +94,23 @@ export default function FeedsList() {
         );
     }
 
+    const getBadgeCount = (feed: Feed) => {
+        if (feed.latestUpdate) {
+            if (feed.userAccessTime) {
+                return feed.userAccessTime.getTime() > feed.latestUpdate.getTime() ? 0 : 1;
+            } else {
+                return 1;
+            }
+        } else if (feed.userAccessTime) {
+            return 0;
+        }
+        return 1;
+    }
+
     return (
-        <Fragment>
+        <>
             <List dense={false}>
-                {feeds.map((e, i) => getFeed(e, i))}
+                {feeds.map((e, i) => renderFeed(e, i))}
             </List>
             <Dialog open={confirmationDialogOpen} onClose={handleConfirmationDialogCancel}>
                 <DialogTitle>Are you sure?</DialogTitle>
@@ -110,6 +124,6 @@ export default function FeedsList() {
                     <Button onClick={handleConfirmationDialogOK}>OK</Button>
                 </DialogActions>
             </Dialog>
-        </Fragment>
+        </>
     )
 }

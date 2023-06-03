@@ -23,7 +23,7 @@ interface AuthContextProviderProps {
 export function AuthContextProvider(props: AuthContextProviderProps) {
     const {
         loginWithRedirect,
-        logout,
+        logout: auth0Logout,
         isAuthenticated,
         isLoading,
         user,
@@ -61,6 +61,10 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
             audience: 'https://development.api.foreverrss'
         });
         // }
+    }
+
+    const logout = () => {
+        auth0Logout({returnTo: window.location.origin});
     }
 
     const apiFetch = async (endpoint: string, user: User | undefined): Promise<any> => {

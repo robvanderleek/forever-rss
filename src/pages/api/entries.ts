@@ -1,7 +1,7 @@
 import {parseFeedEntries} from "@/feed-utils";
 import {getSubject, rssFetch} from "@/function-utils";
 import {VercelRequest, VercelResponse} from "@vercel/node";
-import {MongoDbService} from "@/services/MongoDbService";
+import {DatabaseService} from "@/services/DatabaseService";
 import {logger} from "@/logger";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -14,9 +14,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
     const subject = await getSubject(req);
     if (subject) {
-        const dbService = new MongoDbService();
+        const databaseService = new DatabaseService();
         logger.info(`Updating access time for user: ${subject}, url: ${url}`);
-        await dbService.updateAccessTime(subject, url);
+        const feed = await databaseService.getFeedByUrl(url);
+        if (feed) {
+            await databaseService.updateAccessTime(subject, feed.id);
+        }
     }
     const response = await rssFetch(url);
     if (response.ok) {

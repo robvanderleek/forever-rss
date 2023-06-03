@@ -1,6 +1,6 @@
 import {extractFeedUrlFromHtml, parseFeed} from "@/feed-utils";
 import fetch from "node-fetch";
-import {MongoDbService} from "@/services/MongoDbService";
+import {DatabaseService} from "@/services/DatabaseService";
 import {logger} from "@/logger";
 import {getSubject, rssFetch} from "@/function-utils";
 import {VercelRequest, VercelResponse} from "@vercel/node";
@@ -15,7 +15,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
     const {url} = JSON.parse(req.body);
     try {
-        return await addUrl(url, subject);
+        const {statusCode, body} = await addUrl(url, subject);
+        return res.status(statusCode).json(body);
     } catch (e) {
         console.log(e);
         return res.status(422);
@@ -41,8 +42,14 @@ async function addUrl(url: string, subject: string) {
                 }
             }
             if (feed) {
-                const dbService = new MongoDbService();
-                await dbService.addUserFeed(subject, feed);
+                const databaseService = new DatabaseService();
+                const existingFeed = await databaseService.getFeedByUrl(feed.url);
+                if (existingFeed) {
+                    await databaseService.subscribe(subject, existingFeed.id);
+                } else {
+                    const dbFeed = await databaseService.addFeed(feed.title, feed.url);
+                    await databaseService.subscribe(subject, dbFeed.id);
+                }
             } else {
                 logger.warn(`Could not find RSS feed for URL: ${url}`);
                 return {
@@ -52,7 +59,7 @@ async function addUrl(url: string, subject: string) {
             }
             return {
                 statusCode: 200,
-                body: JSON.stringify(feed)
+                body: feed
             };
         } else {
             return {statusCode: 400}

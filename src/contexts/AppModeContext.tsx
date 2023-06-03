@@ -37,7 +37,9 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
     useHotkeys('right', () => {
         switch (mode) {
             case Mode.Feeds:
-                handleClick(highlightedFeed);
+                if (feeds.length > 0) {
+                    handleClick(highlightedFeed);
+                }
                 break;
             case Mode.Entries:
                 handleClick(highlightedEntry);

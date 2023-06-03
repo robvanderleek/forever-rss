@@ -83,7 +83,7 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
         setLoading(true);
         const res = await apiPost('user-delete-feed', JSON.stringify({uuid: uuid}), user);
         if (res) {
-            feeds.splice(feeds.findIndex(f => f.uuid === uuid), 1);
+            feeds.splice(feeds.findIndex(f => f.id === uuid), 1);
             const newFeedsArray = feeds.map(x => x);
             setFeeds(newFeedsArray);
         }

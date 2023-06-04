@@ -1,5 +1,5 @@
 import React from "react";
-import {HeroArea, HeroImage, SubSubTitle, SubTitle, Text, Title} from "@/components/Content.style";
+import {HeroArea, HeroImage, SubTitle, Text, Title} from "@/components/Content.style";
 import {Container} from "@mui/material";
 import {version} from '@/version'
 
@@ -19,14 +19,24 @@ export default function TitleScreenContent() {
             </HeroArea>
             <Text>
                 <b>Tip:</b> Use the arrow keys ←, →, ↑, ↓, and <code>enter</code> to navigate this site.
-            </Text>
-            <SubTitle>Your Internet inbox</SubTitle>
-            <Text>
-
+                <SubTitle>Your Internet inbox</SubTitle>
                 <p>
-                    RSS readers reverse the flow of information on the Internet from a single-source push-model to a multi-source pull model.
+                    RSS reverses the flow of information on the Internet from a single-source push model to a
+                    multi-source pull model. Users of RSS are their own algorithm for selecting what to read from where.
+                    The technology is old but not obsolete, it just needs the right tools.
                 </p>
-                <SubSubTitle>Hello</SubSubTitle>
+                <SubTitle>Why Forever RSS?</SubTitle>
+                <p>
+                    <ul>
+                        <li>Responsive design, one app for desktop and mobile</li>
+                        <li>Keyboard navigation on desktop, swipe navigation on mobile</li>
+                        <li>Minimalistic and clean design</li>
+                        <li>Modern technology stack, open for collaborative development</li>
+                    </ul>
+                </p>
+                <SubTitle>Looking for feedback</SubTitle>
+                Find this app interesting but missing a feature? Found a bug? Have a suggestion?<br/>
+                <a href="https://github.com/robvanderleek/forever-rss">Let me know by opening an issue!</a>
                 <p>
                     Release: {version.revision}, date: {version.date}
                 </p>

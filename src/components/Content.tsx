@@ -1,7 +1,6 @@
 import {useFeeds} from "@/contexts/FeedsContext";
 import React, {useEffect, useRef} from "react";
 import {ContentArea, HeroArea, HeroImage, Text, Title} from "@/components/Content.style";
-import Hyperlink from "@/components/Hyperlink";
 import {Container} from "@mui/material";
 import TurndownService from "turndown";
 import {marked} from "marked";
@@ -72,7 +71,9 @@ export default function Content(props: ContentProps) {
         return (
             <ContentArea active={active ? 'true' : 'false'} tabIndex={-1} ref={refDiv}>
                 <Container maxWidth="md">
-                    <Title><Hyperlink href={entry.link}>{entry.title}</Hyperlink></Title>
+                    <Title>
+                        <a href={entry.link} style={{color: 'unset'}} target="_blank" rel="noopener noreferrer">{entry.title}</a>
+                    </Title>
                     {entry.heroImage &&
                         <HeroArea>
                             <HeroImage src={entry.heroImage} alt="Headline"/>

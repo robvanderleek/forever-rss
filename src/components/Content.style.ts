@@ -34,12 +34,6 @@ export const SubTitle = styled('h2')`
   font-weight: 700;
 `;
 
-export const SubSubTitle = styled('h3')`
-  font-size: 24px;
-  font-family: sohne, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 700;
-`;
-
 export const Text = styled('span')`
   font-size: 20px;
   font-family: source-serif-pro, Georgia, Cambria, "Times New Roman", Times, serif;

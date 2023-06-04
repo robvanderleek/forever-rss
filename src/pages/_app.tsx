@@ -12,7 +12,7 @@ const theme = createTheme({
     palette: {
         mode: 'light',
         primary: {
-            main: 'rgb(241, 158, 49)'
+            main: '#f19e31'
         },
         action: {
             hover: 'rgb(128, 128, 128, 0.2)'

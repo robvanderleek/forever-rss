@@ -76,27 +76,9 @@ export default function Header(props: HeaderProps) {
         );
     }
 
-    const contentHeader = () => {
-        return (
-            <>
-                <Toolbar>
-                    <IconButton onClick={handleBack}>
-                        <ArrowBack fontSize="medium"/>
-                    </IconButton>
-                    <Title>{entries[selectedEntry].title}</Title>
-                </Toolbar>
-                <Divider/>
-            </>
-        );
-    }
-
-    switch (mode) {
-        case Mode.Entries:
-            return entriesHeader();
-        case Mode.Content:
-            return contentHeader();
-        case Mode.Feeds:
-        default:
-            return feedsHeader();
+    if (selectedFeed >= 0) {
+        return entriesHeader();
+    } else {
+        return feedsHeader();
     }
 }

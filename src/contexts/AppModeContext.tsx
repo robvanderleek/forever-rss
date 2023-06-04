@@ -22,6 +22,7 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
     const [mode, setMode] = useState(Mode.Feeds);
     const {
         feeds,
+        selectedFeed,
         setSelectedFeed,
         entries,
         selectedEntry,
@@ -37,9 +38,7 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
     useHotkeys('right', () => {
         switch (mode) {
             case Mode.Feeds:
-                if (feeds.length > 0) {
-                    handleClick(highlightedFeed);
-                }
+                setMode(Mode.Content);
                 break;
             case Mode.Entries:
                 handleClick(highlightedEntry);
@@ -103,7 +102,11 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
                 setMode(Mode.Feeds);
                 break;
             case Mode.Content:
-                setMode(Mode.Entries);
+                if (selectedFeed >= 0) {
+                    setMode(Mode.Entries);
+                } else {
+                    setMode(Mode.Feeds);
+                }
                 break;
         }
     }
@@ -127,9 +130,17 @@ export function AppModeContextProvider(props: AppModeContextProviderProps) {
                     setMode(Mode.Content);
                 }
                 break;
-
         }
     }
+
+    useHotkeys('enter', () => {
+        if (mode === Mode.Content) {
+            const entry = entries[selectedEntry];
+            if (entry) {
+                window.open(entry.link, '_blank');
+            }
+        }
+    }, [mode]);
 
     return (<AppModeContext.Provider value={{
         mode, setMode, wideScreen, handleBack, handleClick

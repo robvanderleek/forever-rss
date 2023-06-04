@@ -1,30 +1,17 @@
 import {useFeeds} from "@/contexts/FeedsContext";
 import React, {useEffect, useRef} from "react";
-import {ContentArea, DefaultContentArea, HeroArea, HeroImage} from "@/components/Content.style";
+import {ContentArea, HeroArea, HeroImage, Text, Title} from "@/components/Content.style";
 import Hyperlink from "@/components/Hyperlink";
-import {Container, styled} from "@mui/material";
+import {Container} from "@mui/material";
 import TurndownService from "turndown";
 import {marked} from "marked";
 import htmlParse from 'html-react-parser';
 import {unescapeMarkdown} from "@/utils";
-
+import TitleScreenContent from "@/components/TitleScreenContent";
 
 interface ContentProps {
     active: boolean;
 }
-
-const Title = styled('h1')`
-  font-size: 42px;
-  font-family: sohne, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 700;
-`;
-
-const Text = styled('span')`
-  font-size: 20px;
-  font-family: source-serif-pro, Georgia, Cambria, "Times New Roman", Times, serif;
-  font-weight: 400;
-  word-break: break-word;
-`
 
 export default function Content(props: ContentProps) {
     const {active} = props;
@@ -63,7 +50,11 @@ export default function Content(props: ContentProps) {
     });
 
     if (!entry) {
-        return (<DefaultContentArea active={active ? 'true' : 'false'}>Forever RSS</DefaultContentArea>);
+        return (
+            <ContentArea active={active ? 'true' : 'false'} tabIndex={-1} ref={refDiv}>
+                <TitleScreenContent/>
+            </ContentArea>
+        );
     } else {
         const turndownService = new TurndownService({codeBlockStyle: "fenced"});
         turndownService.addRule('fenceAllPreformattedText', {
@@ -81,15 +72,13 @@ export default function Content(props: ContentProps) {
         return (
             <ContentArea active={active ? 'true' : 'false'} tabIndex={-1} ref={refDiv}>
                 <Container maxWidth="md">
-                    <>
-                        <Title><Hyperlink href={entry.link}>{entry.title}</Hyperlink></Title>
-                        {entry.heroImage &&
-                            <HeroArea>
-                                <HeroImage src={entry.heroImage} alt="Headline"/>
-                            </HeroArea>
-                        }
-                        {entries.length >= 1 && <Text>{htmlParse(html)}</Text>}
-                    </>
+                    <Title><Hyperlink href={entry.link}>{entry.title}</Hyperlink></Title>
+                    {entry.heroImage &&
+                        <HeroArea>
+                            <HeroImage src={entry.heroImage} alt="Headline"/>
+                        </HeroArea>
+                    }
+                    {entries.length >= 1 && <Text>{htmlParse(html)}</Text>}
                 </Container>
             </ContentArea>
         );

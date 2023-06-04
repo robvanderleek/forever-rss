@@ -12,7 +12,7 @@ interface ControlsContentProps {
 }
 
 export default function ControlsContent(props: ControlsContentProps) {
-    const {loading} = useFeeds();
+    const {loading, selectedFeed} = useFeeds();
     const {mode, wideScreen} = useAppMode();
 
     const getContentElement = () => {
@@ -24,7 +24,11 @@ export default function ControlsContent(props: ControlsContentProps) {
                 return (<EntriesList/>);
             case Mode.Content:
                 if (wideScreen) {
-                    return (<EntriesList/>);
+                    if (selectedFeed >= 0) {
+                        return (<EntriesList/>);
+                    } else {
+                        return (<FeedsList/>);
+                    }
                 } else {
                     return (<Content active={false}/>);
                 }

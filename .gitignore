@@ -24,5 +24,4 @@ yarn-error.log*
 .vercel
 .next
 
-src/version.js
-codelimit.json
+forever-rss/web/node_modules

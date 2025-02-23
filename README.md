@@ -2,10 +2,18 @@
 
 Your Internet Inbox
 
-## Alternative RSS readers on the web
+## Alternative RSS readers
+
+### Web
 
 * [Feedly](https://feedly.com/)
 * [Feedreader](https://feedreader.com/)
+* [FreshRSS](https://github.com/FreshRSS/FreshRSS)
+
+### Android
+
+* [Capy Reader](https://github.com/jocmp/capyreader)
+* [FeedMe](https://play.google.com/store/apps/details?id=com.seazon.feedme)
 
 ## RSS feed generators
 

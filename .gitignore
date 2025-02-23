@@ -24,4 +24,4 @@ yarn-error.log*
 .vercel
 .next
 
-forever-rss/web/node_modules
+forever_rss/web/node_modules

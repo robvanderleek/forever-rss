@@ -1,12 +1,12 @@
 import {useFeeds} from "../contexts/FeedsContext";
 import {useEffect, useRef} from "react";
-import {ContentArea, HeroArea, HeroImage, Text, Title} from "../components/Content.style";
+import {ContentArea, HeroArea, HeroImage, Text, Title} from "./Content.style";
 import {Container} from "@mui/material";
-import TurndownService from "turndown";
 import {marked} from "marked";
 import htmlParse from 'html-react-parser';
 import {unescapeMarkdown} from "../utils";
 import TitleScreenContent from "../components/TitleScreenContent";
+import TurndownService from "turndown";
 
 interface ContentProps {
     active: boolean;
@@ -33,19 +33,17 @@ export default function Content(props: ContentProps) {
     const entry = entries[selectedEntry];
 
     const renderer = {
-        code(code: string) {
-            return `<pre style="border: 1px solid #e5e5e5; background: #f9f9f9; font-size: 14px; overflow-x: auto;">${code}</pre>`;
-        },
-
-        image(href: string, title: string) {
-            return `<div style="display: flex; justify-content: center;"><img src=${href} style="max-width: 75%;" alt="${title}"/></div>`;
-        }
+        // code(code: Code) {
+        //     return `<pre style="border: 1px solid #e5e5e5; background: #f9f9f9; font-size: 14px; overflow-x: auto;">${code.text}</pre>`;
+        // },
+        //
+        // image(image: Image) {
+        //     return `<div style="display: flex; justify-content: center;"><img src=${image.href} style="max-width: 75%;" alt="${image.title}"/></div>`;
+        // }
     };
 
     marked.use({
-        renderer,
-        mangle: false,
-        headerIds: false
+        renderer
     });
 
     if (!entry) {
@@ -72,14 +70,15 @@ export default function Content(props: ContentProps) {
             <ContentArea active={active ? 'true' : 'false'} tabIndex={-1} ref={refDiv}>
                 <Container maxWidth="md">
                     <Title>
-                        <a href={entry.link} style={{color: 'unset'}} target="_blank" rel="noopener noreferrer">{entry.title}</a>
+                        <a href={entry.link} style={{color: 'unset'}} target="_blank"
+                           rel="noopener noreferrer">{entry.title}</a>
                     </Title>
                     {entry.heroImage &&
                         <HeroArea>
                             <HeroImage src={entry.heroImage} alt="Headline"/>
                         </HeroArea>
                     }
-                    {entries.length >= 1 && <Text>{htmlParse(html)}</Text>}
+                    {entries.length >= 1 && <Text>{htmlParse(html as string)}</Text>}
                 </Container>
             </ContentArea>
         );

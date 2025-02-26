@@ -18,7 +18,6 @@ import {FeedItem, ItemAvatar} from "../styles";
 import {MoreVert, RssFeed} from "@mui/icons-material";
 import {useFeeds} from "../contexts/FeedsContext";
 import {useAppMode} from "../contexts/AppModeContext";
-import {useAuth} from "../contexts/AuthContext";
 import {Feed} from "../entities/Feed";
 import {useState} from "react";
 
@@ -30,7 +29,7 @@ export default function FeedsList() {
     const feedContextMenuOpen = Boolean(editMenuAnchor);
     const [contextMenuFeed, setContextMenuFeed] = useState<Feed | undefined>(undefined);
     const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-    const {isAuthenticated} = useAuth();
+    const isAuthenticated = false;
 
 
     const handleConfirmationDialogCancel = () => setConfirmationDialogOpen(false);

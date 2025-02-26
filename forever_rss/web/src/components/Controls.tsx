@@ -10,7 +10,7 @@ export default function Controls() {
 
     const handlers = useSwipeable({onSwipedRight: handleBack});
 
-    const refPassthrough = (el) => {
+    const refPassthrough = (el: any) => {
         handlers.ref(el);
     }
 

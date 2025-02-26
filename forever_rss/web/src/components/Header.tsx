@@ -3,19 +3,25 @@ import {Avatar, Divider, IconButton, Link, Menu, MenuItem, Toolbar} from "@mui/m
 import {AccountBox, ArrowBack} from "@mui/icons-material";
 import {useFeeds} from "../contexts/FeedsContext";
 import {Mode} from "../entities/Mode";
-import {useAuth} from "../contexts/AuthContext";
 import {getInitials} from "../utils";
 import {HeaderToolbar, LogoImg, Title} from "../components/Header.style";
+import {SwipeEventData} from "react-swipeable";
 
 interface HeaderProps {
     mode: Mode;
-    handleBack: () => void;
+    handleBack: (_: SwipeEventData) => void;
 }
 
 export default function Header(props: HeaderProps) {
     const {mode, handleBack} = props;
     const {feeds, selectedFeed, entries, selectedEntry} = useFeeds();
-    const {isAuthenticated, loginWithRedirect, logout, getUserFullName, getAvatarUrl} = useAuth();
+    const isAuthenticated = false;
+    const loginWithRedirect = () => {
+    };
+    const logout = () => {
+    };
+    const getUserFullName = () => '';
+    const getAvatarUrl = () => '';
     const [anchor, setAnchor] = useState<HTMLElement | null>(null);
     const open = Boolean(anchor);
 
@@ -47,7 +53,7 @@ export default function Header(props: HeaderProps) {
             <>
                 <HeaderToolbar disableGutters>
                     <Link href="/">
-                        <LogoImg priority src="/forever-rss-logo.svg" alt="logo" width={32} height={32}/>
+                        <LogoImg src="/forever-rss-logo.svg" alt="logo" width={32} height={32}/>
                     </Link>
                     <IconButton onClick={handleAvatarClick}>
                         {avatar()}
@@ -65,7 +71,7 @@ export default function Header(props: HeaderProps) {
         return (
             <>
                 <Toolbar>
-                    <IconButton onClick={handleBack}>
+                    <IconButton onClick={() => {handleBack({} as SwipeEventData)}}>
                         <ArrowBack fontSize="medium"/>
                     </IconButton>
                     <Title>{feeds[selectedFeed].title}</Title>

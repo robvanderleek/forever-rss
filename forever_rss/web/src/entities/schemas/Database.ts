@@ -1,7 +1,7 @@
-import {FeedTable} from "@/entities/schemas/FeedTable";
-import {SubscriptionTable} from "@/entities/schemas/SubscriptionTable";
-import {FeedAccessTimeTable} from "@/entities/schemas/FeedAccessTimeTable";
-import {KyselyMigrationTable} from "@/entities/schemas/KyselyMigrationTable";
+import {FeedTable} from "./FeedTable";
+import {SubscriptionTable} from "./SubscriptionTable";
+import {FeedAccessTimeTable} from "./FeedAccessTimeTable";
+import {KyselyMigrationTable} from "./KyselyMigrationTable";
 
 export interface Database {
     feed: FeedTable;

@@ -25,3 +25,4 @@ yarn-error.log*
 .next
 
 forever_rss/web/node_modules
+forever_rss/web/dist

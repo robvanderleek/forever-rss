@@ -1,5 +1,4 @@
 import {createContext, useContext, useEffect, useState} from "react";
-import {useAuth} from "./AuthContext";
 import {Feed} from "../entities/Feed";
 import {Entry} from "../entities/Entry";
 
@@ -27,7 +26,10 @@ interface FeedsContextProviderProps {
 }
 
 export function FeedsContextProvider(props: FeedsContextProviderProps) {
-    const {isLoading, user, apiFetch, apiPost} = useAuth();
+    const isLoading = false;
+    const user = {};
+    const apiFetch = () => {};
+    const apiPost = () => { ok: false };
     const [loading, setLoading] = useState(true);
     const [feeds, setFeeds] = useState(Array<Feed>());
     const [highlightedFeed, setHighlightedFeed] = useState(0);
@@ -42,13 +44,13 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
         }
 
         async function loadFeeds() {
-            const fetchedFeeds: Array<Feed> = await apiFetch('user-list-feeds', user);
-            if (fetchedFeeds) {
-                const sortedFeeds = fetchedFeeds.sort((a, b) => ('' + a.title).localeCompare(b.title));
-                setFeeds(sortedFeeds);
-            } else {
-                setFeeds([]);
-            }
+            // const fetchedFeeds: Array<Feed> = await apiFetch('user-list-feeds', user);
+            // if (fetchedFeeds) {
+            //     const sortedFeeds = fetchedFeeds.sort((a, b) => ('' + a.title).localeCompare(b.title));
+            //     setFeeds(sortedFeeds);
+            // } else {
+            //     setFeeds([]);
+            // }
             setLoading(false);
         }
 
@@ -57,8 +59,8 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
 
     useEffect(() => {
         async function loadEntries() {
-            const json = await apiFetch('entries?url=' + encodeURIComponent(feeds[selectedFeed].url), user);
-            setEntries(json.message);
+            // const json = await apiFetch('entries?url=' + encodeURIComponent(feeds[selectedFeed].url), user);
+            // setEntries(json.message);
             setLoading(false);
         }
 
@@ -69,24 +71,25 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
     }, [feeds, selectedFeed, user, apiFetch]);
 
     const saveFeed = async (url: string): Promise<Response> => {
-        const response = await apiPost('user-add-feed', JSON.stringify({url: url}), user);
-        if (response.ok) {
-            const addedFeed = await response.json();
-            const updatedFeeds = feeds.concat(addedFeed);
-            const sortedFeeds = updatedFeeds.sort((a, b) => ('' + a.title).localeCompare(b.title));
-            setFeeds(sortedFeeds);
-        }
-        return response;
+        // const response = await apiPost('user-add-feed', JSON.stringify({url: url}), user);
+        // if (response.ok) {
+        //     const addedFeed = await response.json();
+        //     const updatedFeeds = feeds.concat(addedFeed);
+        //     const sortedFeeds = updatedFeeds.sort((a, b) => ('' + a.title).localeCompare(b.title));
+        //     setFeeds(sortedFeeds);
+        // }
+        // return response;
+        return Response.error();
     }
 
     const deleteFeed = async (uuid: string) => {
         setLoading(true);
-        const res = await apiPost('user-delete-feed', JSON.stringify({uuid: uuid}), user);
-        if (res) {
-            feeds.splice(feeds.findIndex(f => f.id === uuid), 1);
-            const newFeedsArray = feeds.map(x => x);
-            setFeeds(newFeedsArray);
-        }
+        // const res = await apiPost('user-delete-feed', JSON.stringify({uuid: uuid}), user);
+        // if (res) {
+        //     feeds.splice(feeds.findIndex(f => f.id === uuid), 1);
+        //     const newFeedsArray = feeds.map(x => x);
+        //     setFeeds(newFeedsArray);
+        // }
         setLoading(false);
     }
 

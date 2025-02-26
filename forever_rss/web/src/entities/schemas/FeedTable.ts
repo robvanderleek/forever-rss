@@ -1,7 +1,5 @@
-import {Generated} from "kysely";
-
 export interface FeedTable {
-    id: Generated<string>;
+    id: string;
     title: string;
     url: string;
     latest_update?: Date;

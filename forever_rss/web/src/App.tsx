@@ -1,14 +1,13 @@
-import Content from "./components/Content.tsx";
-import {DesktopContent, DesktopControls, LoadingArea, Main, MobileControls} from "./styles.ts";
-import Controls from "./components/Controls.tsx";
-import {useAppMode} from "./contexts/AppModeContext.tsx";
-import {useAuth} from "./contexts/AuthContext.tsx";
+import Content from "./components/Content";
+import {DesktopContent, DesktopControls, LoadingArea, Main, MobileControls} from "./styles";
+import Controls from "./components/Controls";
+import {useAppMode} from "./contexts/AppModeContext";
 import {Bars} from "react-loader-spinner";
-import {Mode} from "./entities/Mode.ts";
+import {Mode} from "./entities/Mode";
 
 export default function App() {
     const {mode, wideScreen} = useAppMode();
-    const {isLoading} = useAuth();
+    const isLoading = false;
 
     const getLoadingScreen = () => {
         return (

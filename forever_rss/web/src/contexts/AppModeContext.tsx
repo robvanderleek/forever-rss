@@ -3,12 +3,13 @@ import {Mode} from "../entities/Mode";
 import {useHotkeys} from "react-hotkeys-hook";
 import {useMediaQuery} from "@mui/material";
 import {useFeeds} from "./FeedsContext";
+import {SwipeEventData} from "react-swipeable";
 
 interface AppModeContextValue {
     mode: Mode;
     setMode: Function;
     wideScreen: boolean;
-    handleBack: Function;
+    handleBack: (_: SwipeEventData) => void;
     handleClick: Function;
 }
 

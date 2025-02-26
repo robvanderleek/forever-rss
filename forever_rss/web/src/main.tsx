@@ -1,10 +1,9 @@
-import {StrictMode} from 'react'
-import {createRoot} from 'react-dom/client'
-import App from './App.tsx'
+import React, {StrictMode} from 'react'
+import {createRoot} from 'react-dom/client';
+import App from './App';
 import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
-import {AppModeContextProvider} from "./contexts/AppModeContext.tsx";
-import {FeedsContextProvider} from "./contexts/FeedsContext.tsx";
-import {AuthContextProvider} from "./contexts/AuthContext.tsx";
+import {FeedsContextProvider} from "./contexts/FeedsContext";
+import {AppModeContextProvider} from "./contexts/AppModeContext";
 
 const theme = createTheme({
     palette: {
@@ -22,13 +21,11 @@ createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <ThemeProvider theme={theme}>
             <CssBaseline/>
-            <AuthContextProvider>
-                <FeedsContextProvider>
-                    <AppModeContextProvider>
-                        <App/>
-                    </AppModeContextProvider>
-                </FeedsContextProvider>
-            </AuthContextProvider>
+            <FeedsContextProvider>
+                <AppModeContextProvider>
+                    <App/>
+                </AppModeContextProvider>
+            </FeedsContextProvider>
         </ThemeProvider>
     </StrictMode>,
-)
+);

@@ -1,5 +1,4 @@
 import {getInitials, parseValue, unescapeMarkdown} from "./utils";
-import {unescape} from "querystring";
 
 test('get initials', () => {
     expect(getInitials('Rob van der Leek')).toBe('RL');

@@ -1,15 +1,11 @@
-import moment from "moment";
 import {List, ListItemAvatar, ListItemButton, ListItemText} from "@mui/material";
 import {EntryItem, ItemAvatar} from "../styles";
 import {Article} from "@mui/icons-material";
 import {useFeeds} from "../contexts/FeedsContext";
 import {useAppMode} from "../contexts/AppModeContext";
 import {Entry} from "../entities/Entry";
+import {formatDate} from "../utils";
 
-export function formatDate(dateString: string): string {
-    const date = moment(dateString);
-    return date.format('MMM Do YYYY');
-}
 
 export default function EntriesList() {
     const {handleClick} = useAppMode();

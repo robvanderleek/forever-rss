@@ -1,6 +1,7 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {Feed} from "../entities/Feed";
 import {Entry} from "../entities/Entry";
+import {ApiService} from "../services/ApiService";
 
 interface FeedsContextValue {
     loading: boolean;
@@ -30,6 +31,7 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
     const user = {};
     const apiFetch = () => {};
     const apiPost = () => { ok: false };
+    const apiService = new ApiService();
     const [loading, setLoading] = useState(true);
     const [feeds, setFeeds] = useState(Array<Feed>());
     const [highlightedFeed, setHighlightedFeed] = useState(0);
@@ -44,6 +46,9 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
         }
 
         async function loadFeeds() {
+            const loadedFeeds = await apiService.userFeeds();
+            console.log(loadedFeeds);
+            setFeeds(loadedFeeds);
             // const fetchedFeeds: Array<Feed> = await apiFetch('user-list-feeds', user);
             // if (fetchedFeeds) {
             //     const sortedFeeds = fetchedFeeds.sort((a, b) => ('' + a.title).localeCompare(b.title));
@@ -55,7 +60,7 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
         }
 
         loadFeeds();
-    }, [isLoading, user, apiFetch]);
+    }, [isLoading]);
 
     useEffect(() => {
         async function loadEntries() {

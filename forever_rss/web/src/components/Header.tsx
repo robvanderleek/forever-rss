@@ -26,6 +26,7 @@ export default function Header(props: HeaderProps) {
     const open = Boolean(anchor);
 
     const handleAvatarClick = (event: React.MouseEvent<HTMLElement>) => {
+        console.log('handleAvatarClick');
         if (!isAuthenticated) {
             loginWithRedirect();
         } else {

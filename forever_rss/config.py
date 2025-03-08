@@ -11,6 +11,9 @@ class Environment(Enum):
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file='.env', case_sensitive=False, env_file_encoding='utf-8')
     environment: Environment = Environment.PRODUCTION
+    client_id: str
+    client_secret: str
+    jwt_secret: str
 
 
 config = Settings()

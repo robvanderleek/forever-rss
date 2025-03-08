@@ -4,6 +4,7 @@ import App from './App';
 import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import {FeedsContextProvider} from "./contexts/FeedsContext";
 import {AppModeContextProvider} from "./contexts/AppModeContext";
+import {AuthContextProvider} from "./contexts/AuthContext";
 
 const theme = createTheme({
     palette: {
@@ -18,14 +19,16 @@ const theme = createTheme({
 });
 
 createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-        <ThemeProvider theme={theme}>
-            <CssBaseline/>
-            <FeedsContextProvider>
-                <AppModeContextProvider>
-                    <App/>
-                </AppModeContextProvider>
-            </FeedsContextProvider>
-        </ThemeProvider>
-    </StrictMode>,
+    <ThemeProvider theme={theme}>
+        <CssBaseline/>
+        <AuthContextProvider>
+            <StrictMode>
+                <FeedsContextProvider>
+                    <AppModeContextProvider>
+                        <App/>
+                    </AppModeContextProvider>
+                </FeedsContextProvider>
+            </StrictMode>
+        </AuthContextProvider>
+    </ThemeProvider>
 );

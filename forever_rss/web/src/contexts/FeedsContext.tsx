@@ -2,6 +2,7 @@ import {createContext, useContext, useEffect, useState} from "react";
 import {Feed} from "../entities/Feed";
 import {Entry} from "../entities/Entry";
 import {ApiService} from "../services/ApiService";
+import {useAuth} from "./AuthContext";
 
 interface FeedsContextValue {
     loading: boolean;
@@ -31,7 +32,8 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
     const user = {};
     const apiFetch = () => {};
     const apiPost = () => { ok: false };
-    const apiService = new ApiService();
+    const auth = useAuth();
+    const apiService = new ApiService(auth.getAuthToken());
     const [loading, setLoading] = useState(true);
     const [feeds, setFeeds] = useState(Array<Feed>());
     const [highlightedFeed, setHighlightedFeed] = useState(0);
@@ -47,7 +49,6 @@ export function FeedsContextProvider(props: FeedsContextProviderProps) {
 
         async function loadFeeds() {
             const loadedFeeds = await apiService.userFeeds();
-            console.log(loadedFeeds);
             setFeeds(loadedFeeds);
             // const fetchedFeeds: Array<Feed> = await apiFetch('user-list-feeds', user);
             // if (fetchedFeeds) {

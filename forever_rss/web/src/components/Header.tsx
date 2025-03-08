@@ -6,6 +6,7 @@ import {Mode} from "../entities/Mode";
 import {getInitials} from "../utils";
 import {HeaderToolbar, LogoImg, Title} from "../components/Header.style";
 import {SwipeEventData} from "react-swipeable";
+import {useAuth} from "../contexts/AuthContext";
 
 interface HeaderProps {
     mode: Mode;
@@ -15,20 +16,14 @@ interface HeaderProps {
 export default function Header(props: HeaderProps) {
     const {mode, handleBack} = props;
     const {feeds, selectedFeed, entries, selectedEntry} = useFeeds();
-    const isAuthenticated = false;
-    const loginWithRedirect = () => {
-    };
-    const logout = () => {
-    };
+    const {login, logout, isAuthenticated, user} = useAuth();
     const getUserFullName = () => '';
-    const getAvatarUrl = () => '';
     const [anchor, setAnchor] = useState<HTMLElement | null>(null);
     const open = Boolean(anchor);
 
     const handleAvatarClick = (event: React.MouseEvent<HTMLElement>) => {
-        console.log('handleAvatarClick');
         if (!isAuthenticated) {
-            loginWithRedirect();
+            login();
         } else {
             setAnchor(event.currentTarget);
         }
@@ -38,7 +33,7 @@ export default function Header(props: HeaderProps) {
 
     const avatar = () => {
         if (isAuthenticated) {
-            const avatarUrl = getAvatarUrl();
+            const avatarUrl = user?.avatar_url;
             if (avatarUrl) {
                 return (<Avatar src={avatarUrl}/>);
             } else {
@@ -72,7 +67,9 @@ export default function Header(props: HeaderProps) {
         return (
             <>
                 <Toolbar>
-                    <IconButton onClick={() => {handleBack({} as SwipeEventData)}}>
+                    <IconButton onClick={() => {
+                        handleBack({} as SwipeEventData)
+                    }}>
                         <ArrowBack fontSize="medium"/>
                     </IconButton>
                     <Title>{feeds[selectedFeed].title}</Title>

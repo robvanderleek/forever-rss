@@ -1,6 +1,14 @@
 import {Feed} from "../entities/Feed";
+import {User} from "../entities/User";
 
 export class ApiService {
+
+    constructor(private token: string) {
+    }
+
+    public async currentUser(): Promise<User> {
+        return this.apiGet('/api/v1/user/current');
+    }
 
     public async userFeeds(): Promise<Array<Feed>> {
         return this.apiGet('/api/v1/user/feeds');
@@ -16,10 +24,11 @@ export class ApiService {
     }
 
     private async apiFetch(endpoint: string, method: 'GET' | 'POST' | 'PATCH' | 'DELETE' = 'GET', data: any = undefined): Promise<Response> {
-        const requestOptions: { [key: string]: any } = {
-            'method': method,
-            // 'headers': {Authorization: `Bearer ${token}`}
-        };
+        let requestOptions: { [key: string]: any } = {};
+        requestOptions['method'] = method;
+        if (this.token !== 'Anonymous') {
+            requestOptions['headers'] = {Authorization: `Bearer ${this.token}`}
+        }
         if (data) {
             requestOptions['headers']['Content-Type'] = 'application/json';
             requestOptions['body'] = JSON.stringify(data);

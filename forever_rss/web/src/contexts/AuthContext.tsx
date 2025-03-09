@@ -32,9 +32,15 @@ export function AuthContextProvider(props: { children?: React.ReactNode }) {
     }, []);
 
     const login = () => {
-        const client_id = 'Ov23liRujHvEesAeYNGm';
-        const host = window.location.protocol + "//" + window.location.host;
-        const redirect_uri = `${host}/oauth/redirect`;
+        const host = window.location.host;
+        const location = window.location.protocol + "//" + host;
+        let client_id;
+        if (host === "localhost:3000") {
+            client_id = 'Ov23liRujHvEesAeYNGm';
+        } else {
+            client_id = 'Ov23liYri0cpt9lIOydU';
+        }
+        const redirect_uri = `${location}/oauth/redirect`;
         const scope = "user:email";
         const authUrl = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}`;
         window.location.href = authUrl;

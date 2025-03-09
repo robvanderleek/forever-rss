@@ -23,6 +23,7 @@ def oauth_redirect(code: str) -> AuthSchema:
     if res.status_code != 200:
         raise HTTPException(status_code=400, detail="Error fetching access token from GitHub.")
     token_data = res.json()
+    print(token_data)
     access_token = token_data["access_token"]
     user = github.get_current_user(access_token)
     email = get_current_user_email(access_token)

@@ -33,7 +33,7 @@ export default function Header(props: HeaderProps) {
 
     const avatar = () => {
         if (isAuthenticated) {
-            const avatarUrl = user?.avatar_url;
+            const avatarUrl = user?.avatarUrl;
             if (avatarUrl) {
                 return (<Avatar src={avatarUrl}/>);
             } else {

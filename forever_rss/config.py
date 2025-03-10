@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     client_id: str
     client_secret: str
     jwt_secret: str
+    database_url: str = "postgresql://admin:s3cr3t@localhost/foreverrss"
 
 
 config = Settings()

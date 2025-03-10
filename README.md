@@ -11,6 +11,7 @@ Your Internet Inbox
 - [Feedly](https://feedly.com/)
 - [Feedreader](https://feedreader.com/)
 - [FreshRSS](https://github.com/FreshRSS/FreshRSS)
+- [Feedify](https://feedify.app/)
 
 ### Android
 

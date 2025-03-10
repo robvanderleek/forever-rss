@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "prepare": "mkver ./src/version.ts",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "test": "vitest run",
@@ -30,7 +31,6 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^15.0.7",
     "@types/md5": "^2.3.5",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
@@ -38,6 +38,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "globals": "^15.14.0",
     "jsdom": "^25.0.1",
+    "mkver": "^3.0.2",
     "typescript": "~5.7.2",
     "vite": "^6.1.0",
     "vitest": "^3.0.6"

@@ -1,5 +1,6 @@
 import {HeroArea, HeroImage, SubTitle, Text, Title} from "../components/Content.style";
 import {Container} from "@mui/material";
+import Version from "../version";
 
 export default function TitleScreenContent() {
     return (
@@ -34,7 +35,7 @@ export default function TitleScreenContent() {
                 Find this app interesting but missing a feature? Found a bug? Have a suggestion?<br/>
                 <a href="https://github.com/robvanderleek/forever-rss">Let me know by opening an issue!</a>
                 <p>
-                    Release: SOME_VERSION, date: SOME_DATE
+                    Release: {Version.gitSha.substring(0, 8)}, date: {Version.gitDate.toISOString().substring(0, 10)}
                 </p>
             </Text>
         </Container>

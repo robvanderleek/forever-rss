@@ -26,4 +26,5 @@ yarn-error.log*
 
 forever_rss/web/node_modules
 forever_rss/web/dist
+forever_rss/web/src/version.ts
 .env*

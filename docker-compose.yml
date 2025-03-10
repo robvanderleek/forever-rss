@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      - POSTGRES_DB=foreverrss
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=s3cr3t
+    ports:
+      - "5432:5432"
+    networks:
+      - foreverrss
+networks:
+  foreverrss:
+    name: foreverrss

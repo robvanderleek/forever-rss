@@ -1,4 +1,4 @@
-FROM node:20 AS node-build
+FROM node:22 AS node-build
 RUN mkdir /app
 COPY . /app
 WORKDIR /app/forever_rss/web
